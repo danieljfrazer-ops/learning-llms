@@ -1,0 +1,178 @@
+{
+  "status": "Complete",
+  "experimentId": "shakespeare-training-improvements-001",
+  "updatedAt": "2026-08-21T17:28:06.905338+00:00",
+  "controlledVariables": {
+    "architectureParameters": 112065,
+    "seed": 42,
+    "steps": 3000,
+    "batchSize": 32,
+    "contextSize": 64,
+    "trainingCharacters": 1003854,
+    "validationCharacters": 111540,
+    "evaluationRepeats": 5,
+    "evaluationBatchesPerRepeat": 20
+  },
+  "variants": [
+    {
+      "runId": "shakespeare-transformer-001",
+      "label": "Constant LR baseline",
+      "learningRateRecipe": "constant_0.001",
+      "gradientClipNorm": null,
+      "elapsedSeconds": 18.809935958008282,
+      "evaluation": {
+        "trainLossMean": 1.5194244861602784,
+        "trainLossStd": 0.011308380083234586,
+        "validationLossMean": 1.7205350399017334,
+        "validationLossStd": 0.010376688002816242,
+        "generalisationGap": 0.20111055374145503,
+        "perplexity": 5.587517209314435,
+        "prompt": "To be, or not to be",
+        "continuation": " that sees whose his heaven!\nBe Out love some this army'd your love?\nIf the not seal in a that spers it that in hell,\nI "
+      }
+    },
+    {
+      "runId": "shakespeare-warmup-cosine-001",
+      "createdAt": "2026-08-21T17:27:49.272312+00:00",
+      "label": "Warmup + cosine",
+      "seed": 42,
+      "steps": 3000,
+      "batchSize": 32,
+      "contextSize": 64,
+      "modelSize": 64,
+      "attentionHeads": 4,
+      "transformerBlocks": 2,
+      "parameterCount": 112065,
+      "vocabularySize": 65,
+      "trainingCharacters": 1003854,
+      "validationCharacters": 111540,
+      "mlxDevice": "Device(gpu, 0)",
+      "peakMetalMemoryBytes": 170816850,
+      "weightDecay": 0.01,
+      "learningRateRecipe": "warmup_cosine",
+      "gradientClipNorm": null,
+      "elapsedSeconds": 11.896211999992374,
+      "clippedSteps": 0,
+      "maximumGradientNorm": null,
+      "checkpoints": [
+        {
+          "step": 0,
+          "capturedAt": "2026-08-21T17:27:37.171391+00:00",
+          "trainLoss": null,
+          "validationLoss": 4.280045509338379,
+          "learningRate": 0.0001
+        },
+        {
+          "step": 250,
+          "capturedAt": "2026-08-21T17:27:38.161725+00:00",
+          "trainLoss": 2.273411512374878,
+          "validationLoss": 2.230405330657959,
+          "learningRate": 0.0009941505268216133
+        },
+        {
+          "step": 1000,
+          "capturedAt": "2026-08-21T17:27:41.064682+00:00",
+          "trainLoss": 1.6519699096679688,
+          "validationLoss": 1.8515706062316895,
+          "learningRate": 0.0008029374876059592
+        },
+        {
+          "step": 2000,
+          "capturedAt": "2026-08-21T17:27:45.121914+00:00",
+          "trainLoss": 1.50872004032135,
+          "validationLoss": 1.7348477840423584,
+          "learningRate": 0.0003396470856387168
+        },
+        {
+          "step": 3000,
+          "capturedAt": "2026-08-21T17:27:49.039023+00:00",
+          "trainLoss": 1.4807541370391846,
+          "validationLoss": 1.7058379650115967,
+          "learningRate": 0.00010000026668421924
+        }
+      ],
+      "evaluation": {
+        "trainLossMean": 1.5123945713043212,
+        "trainLossStd": 0.009547108010979133,
+        "validationLossMean": 1.7050917148590088,
+        "validationLossStd": 0.008252033779276234,
+        "generalisationGap": 0.1926971435546876,
+        "perplexity": 5.5018902491607955,
+        "prompt": "To be, or not to be",
+        "continuation": " that seeing of this\nTo same grace the shalthings and been such\nOne and semberdant which unsight from the advilo's eame\n"
+      }
+    },
+    {
+      "runId": "shakespeare-gradient-clipping-001",
+      "createdAt": "2026-08-21T17:28:06.904667+00:00",
+      "label": "Gradient clipping",
+      "seed": 42,
+      "steps": 3000,
+      "batchSize": 32,
+      "contextSize": 64,
+      "modelSize": 64,
+      "attentionHeads": 4,
+      "transformerBlocks": 2,
+      "parameterCount": 112065,
+      "vocabularySize": 65,
+      "trainingCharacters": 1003854,
+      "validationCharacters": 111540,
+      "mlxDevice": "Device(gpu, 0)",
+      "peakMetalMemoryBytes": 170781644,
+      "weightDecay": 0.01,
+      "learningRateRecipe": "constant_0.001",
+      "gradientClipNorm": 1.0,
+      "elapsedSeconds": 17.316992833002587,
+      "clippedSteps": 2,
+      "maximumGradientNorm": 3.2710225582122803,
+      "checkpoints": [
+        {
+          "step": 0,
+          "capturedAt": "2026-08-21T17:27:49.301014+00:00",
+          "trainLoss": null,
+          "validationLoss": 4.280045509338379,
+          "learningRate": 0.001
+        },
+        {
+          "step": 250,
+          "capturedAt": "2026-08-21T17:27:50.493299+00:00",
+          "trainLoss": 2.2211833000183105,
+          "validationLoss": 2.17549204826355,
+          "learningRate": 0.0010000000474974513
+        },
+        {
+          "step": 1000,
+          "capturedAt": "2026-08-21T17:27:54.253734+00:00",
+          "trainLoss": 1.6564061641693115,
+          "validationLoss": 1.847818374633789,
+          "learningRate": 0.0010000000474974513
+        },
+        {
+          "step": 2000,
+          "capturedAt": "2026-08-21T17:28:00.330398+00:00",
+          "trainLoss": 1.5218875408172607,
+          "validationLoss": 1.756870150566101,
+          "learningRate": 0.0010000000474974513
+        },
+        {
+          "step": 3000,
+          "capturedAt": "2026-08-21T17:28:06.590034+00:00",
+          "trainLoss": 1.5005801916122437,
+          "validationLoss": 1.72746741771698,
+          "learningRate": 0.0010000000474974513
+        }
+      ],
+      "evaluation": {
+        "trainLossMean": 1.5187086582183837,
+        "trainLossStd": 0.010884848008247131,
+        "validationLossMean": 1.728848934173584,
+        "validationLossStd": 0.01010934540269016,
+        "generalisationGap": 0.21014027595520024,
+        "perplexity": 5.634164879841687,
+        "prompt": "To be, or not to be",
+        "continuation": " that seek with this heaven and outll\nMost that is and sell with we arm of this conquick.\n\nCORIOLANUS:\nWhat die delest d"
+      }
+    }
+  ],
+  "elapsedSeconds": 30.027390582996304
+}

@@ -34,8 +34,8 @@ export default function Home() {
           </div>
           <div className="terminal-card" aria-label="Current experiment status">
             <div className="terminal-title"><span>● ● ●</span><code>shakespeare · progression</code></div>
-            <pre><span className="muted">$ course.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">models_trained</span>: <span className="value">4</span>,{'\n'}  <span className="key">best_validation_loss</span>: <span className="value">1.7205</span>,{'\n'}  <span className="key">next</span>: <span className="value">&quot;training improvements&quot;</span>{'\n'}{'}'}</pre>
-            <div className="terminal-footer"><span className="live-dot" /> Evaluation and prompt playground complete</div>
+            <pre><span className="muted">$ course.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">training_runs</span>: <span className="value">6</span>,{'\n'}  <span className="key">best_validation_loss</span>: <span className="value">1.7051</span>,{'\n'}  <span className="key">next</span>: <span className="value">&quot;scaling and context&quot;</span>{'\n'}{'}'}</pre>
+            <div className="terminal-footer"><span className="live-dot" /> Warmup + cosine is the provisional best recipe</div>
           </div>
         </section>
 

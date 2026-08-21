@@ -530,8 +530,8 @@ output = hidden + self.feed_forward(
     slug: 'prompt-playground',
     title: 'Prompt saved checkpoints from the wiki',
     summary: 'Connect the browser interface to a loopback-only Python inference service, load any saved checkpoint, encode learner-written text and generate a continuation one character at a time.',
-    outcome: 'The wiki can now complete an arbitrary valid Shakespeare prompt with random, minimally trained or final weights and compare all seven checkpoints under identical settings.',
-    evidence: 'Completed · local API on 127.0.0.1:8001 · 7 selectable checkpoints · Apple GPU generation',
+    outcome: 'The wiki can complete an arbitrary valid Shakespeare prompt with random, minimally trained, baseline-final or improved-recipe weights and compare them under identical settings.',
+    evidence: 'Completed · local API on 127.0.0.1:8001 · baseline and warmup-cosine runs · Apple GPU generation',
     sections: [
       { id: 'two-processes', title: 'Separate the interface from model inference', body: <>
         <p>The wiki runs in a JavaScript development server, while MLX and the checkpoints live in Python. A small <Term id="inference-service">inference service</Term> connects them: the browser sends a JSON request through an <Term id="api">API</Term>, Python invokes the model, and JSON returns the continuation.</p>
@@ -550,7 +550,7 @@ npm run dev
 
 # Terminal 2 — checkpoint inference
 .venv/bin/python ml/shakespeare_inference_server.py`}</Code>
-        <p>The browser checks <code>GET http://127.0.0.1:8001/health</code> when the page loads. A green “Ready” badge confirms that Python found the seven checkpoint files and MLX reports the Apple GPU. If Python stops, the lesson remains readable and the playground shows the exact restart command.</p>
+        <p>The browser checks <code>GET http://127.0.0.1:8001/health</code> when the page loads. A green “Ready” badge confirms that Python found the baseline and improved-recipe checkpoint files and MLX reports the Apple GPU. If Python stops, the lesson remains readable and the playground shows the exact restart command.</p>
         <p>The server is built with Python&apos;s standard <code>ThreadingHTTPServer</code>. Python explicitly warns that <Source href="https://docs.python.org/3/library/http.server.html">http.server is not recommended for production</Source>; it is appropriate here only because this is a local teaching service with bounded inputs.</p>
       </> },
       { id: 'load', title: 'Reconstruct and cache a selected checkpoint', body: <>
@@ -564,7 +564,7 @@ npm run dev
 model.load_weights("checkpoint-3000.safetensors")
 mx.eval(model.parameters())`}</Code>
         <p>A checkpoint contains learned tensors, not the Python architecture. The service reconstructs the same class and dimensions recorded by the training configuration before loading weights. Models are loaded lazily on first selection and cached in memory, so later requests avoid reading the same 440 KB file again.</p>
-        <p>Selecting step 0 invokes genuine random initial weights saved before training. Step 1 shows the minimally trained state, while step 3,000 loads the best evaluated checkpoint. “Compare every checkpoint” makes seven sequential requests with all other controls unchanged.</p>
+        <p>Selecting baseline step 0 invokes genuine random initial weights saved before training. Baseline step 1 shows the minimally trained state, while “Improved recipe · step 3,000” loads the later warmup-and-cosine result. “Compare every checkpoint” runs the seven baseline stages plus the improved final model with all other controls unchanged.</p>
       </> },
       { id: 'encode-prompt', title: 'Encode the prompt and respect the 64-character context', body: <>
         <p>The <Term id="prompt">prompt</Term> is encoded with the same 65-character vocabulary used during training. A character outside that vocabulary produces an explicit error rather than being silently replaced. This simple tokenizer therefore accepts Shakespeare&apos;s letters, spaces and known punctuation but not arbitrary emoji or unseen Unicode characters.</p>
@@ -587,6 +587,7 @@ logits = model(mx.array([context]))[0, -1]`}</Code>
   -H 'Content-Type: application/json' \
   --data '{
     "prompt": "To be, or not to be",
+    "run": "baseline",
     "checkpoint": 3000,
     "temperature": 0.8,
     "characters": 80,
@@ -601,6 +602,79 @@ logits = model(mx.array([context]))[0, -1]`}</Code>
       { id: 'limits', title: 'Understand what prompting does not change', body: <>
         <p>A prompt conditions existing weights; it does not teach new facts or update the model. This character model has no instruction training, so “Write a sonnet about Mars” is merely another character prefix rather than a command it understands.</p>
         <p>The next lesson returns to training. We will preserve this playground and frozen evaluation as acceptance tests while changing one training technique at a time. That prevents a visually pleasing cherry-picked completion from overriding worse held-out evidence.</p>
+      </> },
+    ],
+  },
+  {
+    slug: 'training-improvements',
+    title: 'Improve training without changing the transformer',
+    summary: 'Hold architecture, data order and evaluation fixed while testing a warmup-plus-cosine learning-rate schedule and global gradient clipping as separate interventions.',
+    outcome: 'Warmup plus cosine decay produced the new best validation loss, 1.7051 ± 0.0082, while clipping at norm 1.0 affected only two updates and finished worse than the baseline.',
+    evidence: 'Completed · 2 controlled 3,000-step runs · experiment shakespeare-training-improvements-001 · 30.03 seconds total',
+    sections: [
+      { id: 'question', title: 'Improve the recipe before enlarging the model', body: <>
+        <p>The transformer architecture stays at 112,065 parameters. This lesson asks whether a better optimisation recipe can improve held-out predictions without adding capacity. That is cheaper and easier to interpret than changing model size and training behaviour together.</p>
+        <p>We use a <Term id="controlled-experiment">controlled experiment</Term>: corpus and 90/10 split, seed 42, batch size 32, 64-character context, model initialisation, AdamW weight decay 0.01, training batches and 3,000 updates remain fixed. One variant changes only the <Term id="learning-rate-schedule">learning-rate schedule</Term>; the other changes only gradient handling.</p>
+      </> },
+      { id: 'variants', title: 'Define the three comparable recipes', body: <>
+        <table className="lesson-table"><thead><tr><th>Recipe</th><th>Learning rate</th><th>Gradient clipping</th><th>What it tests</th></tr></thead><tbody><tr><td>Constant baseline</td><td>0.001 throughout</td><td>None</td><td>Previously trained reference</td></tr><tr><td>Warmup + cosine</td><td>0.0001 → 0.001 over 100 steps, then → 0.0001</td><td>None</td><td>Learning-rate schedule only</td></tr><tr><td>Gradient clipping</td><td>0.001 throughout</td><td>Global norm 1.0</td><td>Clipping only</td></tr></tbody></table>
+        <p>We deliberately did not add dropout, longer training and scheduling simultaneously. If that bundle won, we would not know which change helped. Those remain candidates only if the evidence points to a problem they can address.</p>
+      </> },
+      { id: 'schedule', title: 'Warm up, then make smaller late updates', body: <>
+        <p><Term id="warmup">Warmup</Term> raises the learning rate gradually for the first 100 updates. <Term id="cosine-decay">Cosine decay</Term> then lowers it smoothly from 0.001 to 0.0001. The intention is conservative initial movement followed by increasingly fine adjustments near the end.</p>
+        <Code>{`learning_rate = optim.join_schedules([
+    optim.linear_schedule(0.0001, 0.001, steps=100),
+    optim.cosine_decay(
+        0.001,
+        decay_steps=2900,
+        end=0.0001,
+    ),
+], boundaries=[100])
+
+optimiser = optim.AdamW(
+    learning_rate=learning_rate,
+    weight_decay=0.01,
+)`}</Code>
+        <p>MLX accepts a schedule callable directly as the optimiser&apos;s learning rate; see the <Source href="https://ml-explore.github.io/mlx/build/html/python/optimizers.html">official MLX optimiser documentation</Source>. Cosine annealing was popularised for neural-network optimisation in <Source href="https://arxiv.org/abs/1608.03983">SGDR: Stochastic Gradient Descent with Warm Restarts</Source>; this experiment uses one decay curve without restarts.</p>
+      </> },
+      { id: 'clipping', title: 'Limit unusually large gradient updates', body: <>
+        <p>A <Term id="gradient-norm">gradient norm</Term> compresses the magnitude of all parameter gradients into one value. <Term id="gradient-clipping">Gradient clipping</Term> proportionally rescales the complete gradient tree only when that value exceeds 1.0.</p>
+        <Code>{`gradients, total_norm = optim.clip_grad_norm(
+    gradients,
+    max_norm=1.0,
+)
+optimiser.update(model, gradients)`}</Code>
+        <p>Clipping can stabilise training when rare exploding gradients cause destructive updates, a technique studied in <Source href="https://arxiv.org/abs/1211.5063">On the difficulty of training recurrent neural networks</Source>. It is not automatically beneficial: if gradients are already well behaved, clipping changes almost nothing or can suppress useful movement.</p>
+      </> },
+      { id: 'run', title: 'Run both variants and preserve checkpoints', body: <>
+        <Code>{`.venv/bin/python ml/shakespeare_training_improvements.py`}</Code>
+        <p>The Python 3.12.13 and MLX 0.32.0 script trained both variants on the Apple GPU. Each run saved checkpoints at steps 0, 250, 1,000, 2,000 and 3,000 plus a JSON configuration. The comparison dashboard reads <code>public/data/shakespeare-training-improvements.json</code>.</p>
+        <p>The measured experiment took 30.03 seconds overall. Peak Metal allocation was 170.8 MB for both new runs. Per-run times are not compared as a speed benchmark because the original baseline captured more generated samples during training than the two new variants.</p>
+      </> },
+      { id: 'checkpoints', title: 'Watch the learning-rate schedule change the path', body: <>
+        <table className="lesson-table"><thead><tr><th>Step</th><th>Warmup/cosine LR</th><th>Warmup/cosine validation</th><th>Clipped validation</th><th>Captured UTC</th></tr></thead><tbody>
+          <tr><td>0</td><td>0.0001000</td><td>4.2800</td><td>4.2800</td><td>17:27:37 / 17:27:49</td></tr>
+          <tr><td>250</td><td>0.0009942</td><td>2.2304</td><td>2.1755</td><td>17:27:38 / 17:27:50</td></tr>
+          <tr><td>1,000</td><td>0.0008029</td><td>1.8516</td><td>1.8478</td><td>17:27:41 / 17:27:54</td></tr>
+          <tr><td>2,000</td><td>0.0003396</td><td>1.7348</td><td>1.7569</td><td>17:27:45 / 17:28:00</td></tr>
+          <tr><td>3,000</td><td>0.0001000</td><td><strong>1.7058</strong></td><td>1.7275</td><td>17:27:49 / 17:28:06</td></tr>
+        </tbody></table>
+        <p>Early in training, warmup is deliberately slower. By step 2,000 its smaller learning rate has overtaken the constant-rate clipped run. The checkpoint loss uses 30 sampled validation batches; final selection still uses the larger frozen protocol below.</p>
+      </> },
+      { id: 'frozen-results', title: 'Apply exactly the same final evaluation', body: <>
+        <table className="lesson-table"><thead><tr><th>Recipe</th><th>Train loss</th><th>Validation loss ± std</th><th>Gap</th><th>Perplexity</th><th>Δ validation</th></tr></thead><tbody><tr><td>Constant baseline</td><td>1.5194</td><td>1.7205 ± 0.0104</td><td>0.2011</td><td>5.59</td><td>reference</td></tr><tr><td><strong>Warmup + cosine</strong></td><td><strong>1.5124</strong></td><td><strong>1.7051 ± 0.0083</strong></td><td><strong>0.1927</strong></td><td><strong>5.50</strong></td><td><strong>−0.0154</strong></td></tr><tr><td>Gradient clipping</td><td>1.5187</td><td>1.7288 ± 0.0101</td><td>0.2101</td><td>5.63</td><td>+0.0083</td></tr></tbody></table>
+        <p>Observed result: warmup plus cosine is the new best saved recipe. It lowers mean validation loss by 0.0154 and slightly reduces the generalisation gap. Gradient clipping exceeded its threshold on only 2 of 3,000 updates; its maximum pre-clipping norm was 3.2710. This run provides no evidence that clipping helps this stable configuration.</p>
+      </> },
+      { id: 'generation', title: 'Compare prompted output without cherry-picking settings', body: <>
+        <p>The frozen prompt, temperature 0.8 and sampling seed produce this continuation from the improved recipe:</p>
+        <blockquote className="model-sample">To be, or not to be that seeing of this
+To same grace the shalthings and been such
+One and semberdant which unsight from the advilo&apos;s eame…</blockquote>
+        <p>The text remains nonsensical despite improved local form. The prompt playground now exposes “Improved recipe · step 3,000” alongside every baseline checkpoint, so you can probe both recipes without retraining.</p>
+      </> },
+      { id: 'limits', title: 'Make a cautious decision from a single training seed', body: <>
+        <p>The five evaluation repeats vary sampled batches, not model training. Both new recipes were trained only once with seed 42. The 0.0154 advantage is promising, but multiple full training seeds are required before claiming that the schedule reliably wins rather than benefiting from run-to-run numerical variation.</p>
+        <p>Validation improved at every saved warmup/cosine checkpoint, so sparse <Term id="checkpoint">checkpoint</Term> evidence does not justify early stopping before step 3,000. The next scaling lesson will carry the schedule forward as the provisional recipe, compare capacity and context as separate factors, and preserve this baseline for every result.</p>
       </> },
     ],
   },

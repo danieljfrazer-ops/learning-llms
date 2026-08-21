@@ -20,6 +20,7 @@ import mlx.core as mx
 from shakespeare_transformer import (
     DEFAULT_DATA,
     DEFAULT_RUN_DIR,
+    ROOT,
     TinyTransformerLanguageModel,
     generate_from_prompt,
     load_data,
@@ -30,35 +31,47 @@ class InferenceRuntime:
     """Own the vocabulary and lazily loaded, read-only checkpoint models."""
 
     def __init__(self, data_path: Path, run_dir: Path):
-        config = json.loads((run_dir / "config.json").read_text(encoding="utf-8"))
         _, _, self.vocabulary, self.char_to_id = load_data(data_path)
-        self.run_dir = run_dir
-        self.config = config
-        self.models: dict[int, TinyTransformerLanguageModel] = {}
+        self.run_directories = {
+            "baseline": run_dir,
+            "warmup-cosine": ROOT / "experiments" / "shakespeare-warmup-cosine-001",
+        }
+        self.run_directories = {
+            run_id: directory for run_id, directory in self.run_directories.items()
+            if (directory / "config.json").exists()
+        }
+        self.configs = {
+            run_id: json.loads((directory / "config.json").read_text(encoding="utf-8"))
+            for run_id, directory in self.run_directories.items()
+        }
+        self.models: dict[tuple[str, int], TinyTransformerLanguageModel] = {}
         self.lock = threading.Lock()
-        self.steps = sorted(
-            int(path.stem.split("-")[1])
-            for path in run_dir.glob("checkpoint-*.safetensors")
-        )
+        self.steps = {
+            run_id: sorted(int(path.stem.split("-")[1]) for path in directory.glob("checkpoint-*.safetensors"))
+            for run_id, directory in self.run_directories.items()
+        }
 
-    def model_for(self, step: int) -> TinyTransformerLanguageModel:
-        if step not in self.steps:
-            raise ValueError(f"Unknown checkpoint {step}; choose one of {self.steps}")
-        if step not in self.models:
+    def model_for(self, run_id: str, step: int) -> TinyTransformerLanguageModel:
+        if run_id not in self.run_directories:
+            raise ValueError(f"Unknown model run {run_id!r}")
+        if step not in self.steps[run_id]:
+            raise ValueError(f"Unknown checkpoint {step}; choose one of {self.steps[run_id]}")
+        key = (run_id, step)
+        if key not in self.models:
+            config = self.configs[run_id]
             model = TinyTransformerLanguageModel(
                 len(self.vocabulary),
-                self.config["contextSize"],
-                self.config["modelSize"],
-                self.config["attentionHeads"],
-                self.config["transformerBlocks"],
+                config["contextSize"], config["modelSize"],
+                config["attentionHeads"], config["transformerBlocks"],
             )
-            model.load_weights(str(self.run_dir / f"checkpoint-{step:04d}.safetensors"))
+            model.load_weights(str(self.run_directories[run_id] / f"checkpoint-{step:04d}.safetensors"))
             mx.eval(model.parameters())
-            self.models[step] = model
-        return self.models[step]
+            self.models[key] = model
+        return self.models[key]
 
     def generate(self, request: dict[str, Any]) -> dict[str, Any]:
         prompt = str(request.get("prompt", ""))
+        run_id = str(request.get("run", "baseline"))
         step = int(request.get("checkpoint", 3_000))
         temperature = float(request.get("temperature", 0.8))
         characters = int(request.get("characters", 180))
@@ -73,8 +86,11 @@ class InferenceRuntime:
             raise ValueError("Generated length must be between 1 and 500 characters")
         started_at = time.perf_counter()
         with self.lock:
+            config = self.configs.get(run_id)
+            if config is None:
+                raise ValueError(f"Unknown model run {run_id!r}")
             continuation = generate_from_prompt(
-                self.model_for(step),
+                self.model_for(run_id, step),
                 prompt,
                 self.char_to_id,
                 self.vocabulary,
@@ -85,11 +101,12 @@ class InferenceRuntime:
         return {
             "prompt": prompt,
             "continuation": continuation,
+            "run": run_id,
             "checkpoint": step,
             "temperature": temperature,
             "seed": seed,
             "generatedCharacters": len(continuation),
-            "contextCharactersUsed": min(len(prompt), self.config["contextSize"]),
+            "contextCharactersUsed": min(len(prompt), config["contextSize"]),
             "elapsedSeconds": time.perf_counter() - started_at,
         }
 
@@ -118,8 +135,10 @@ def handler_for(runtime: InferenceRuntime) -> type[BaseHTTPRequestHandler]:
             if self.path == "/health":
                 self.json_response(HTTPStatus.OK, {
                     "status": "ready",
-                    "checkpoints": runtime.steps,
-                    "contextSize": runtime.config["contextSize"],
+                    "runs": [
+                        {"id": run_id, "checkpoints": runtime.steps[run_id], "contextSize": runtime.configs[run_id]["contextSize"]}
+                        for run_id in runtime.run_directories
+                    ],
                     "device": str(mx.default_device()),
                 })
             else:
@@ -155,7 +174,7 @@ def main() -> None:
     runtime = InferenceRuntime(args.data, args.run_dir)
     server = ThreadingHTTPServer(("127.0.0.1", args.port), handler_for(runtime))
     print(f"Shakespeare inference ready at http://127.0.0.1:{args.port}", flush=True)
-    print(f"Available checkpoints: {runtime.steps}", flush=True)
+    print(f"Available model runs: {runtime.steps}", flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

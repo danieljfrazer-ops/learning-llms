@@ -36,6 +36,6 @@ export default function ModelComparison() {
         <pre>{final?.sample ?? 'Waiting for a checkpoint…'}</pre>
       </article>;
     })}</div>
-    <aside className="comparison-conclusion"><strong>Observed result</strong><p>The complete tiny transformer now wins at 1.7267. Single-head attention alone reached only 2.1889, but adding four heads, nonlinear feed-forward processing and two stacked blocks turned the same 64-character context into the strongest model so far.</p></aside>
+    <aside className="comparison-conclusion"><strong>Architecture result</strong><p>The original complete transformer won this architecture comparison at 1.7267. A later controlled training-recipe experiment kept that architecture fixed and improved frozen-protocol validation loss to 1.7051 with warmup plus cosine decay.</p></aside>
   </section>;
 }

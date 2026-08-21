@@ -1,0 +1,40 @@
+{
+  "experimentId": "shakespeare-training-improvements-001",
+  "createdAt": "2026-08-21T17:28:06.905338+00:00",
+  "controlledVariables": {
+    "architectureParameters": 112065,
+    "seed": 42,
+    "steps": 3000,
+    "batchSize": 32,
+    "contextSize": 64,
+    "trainingCharacters": 1003854,
+    "validationCharacters": 111540,
+    "evaluationRepeats": 5,
+    "evaluationBatchesPerRepeat": 20
+  },
+  "variants": [
+    {
+      "runId": "shakespeare-transformer-001",
+      "label": "Constant LR baseline",
+      "validationLossMean": 1.7205350399017334,
+      "validationLossStd": 0.010376688002816242,
+      "perplexity": 5.587517209314435
+    },
+    {
+      "runId": "shakespeare-warmup-cosine-001",
+      "label": "Warmup + cosine",
+      "validationLossMean": 1.7050917148590088,
+      "validationLossStd": 0.008252033779276234,
+      "perplexity": 5.5018902491607955
+    },
+    {
+      "runId": "shakespeare-gradient-clipping-001",
+      "label": "Gradient clipping",
+      "validationLossMean": 1.728848934173584,
+      "validationLossStd": 0.01010934540269016,
+      "perplexity": 5.634164879841687
+    }
+  ],
+  "selectedRunId": "shakespeare-warmup-cosine-001",
+  "elapsedSeconds": 30.027390582996304
+}
