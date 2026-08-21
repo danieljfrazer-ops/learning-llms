@@ -270,13 +270,112 @@ mx.eval(model.parameters(), optimiser.state, loss)`}</Code>
   {
     slug: 'context-windows',
     title: 'Give the model short-term memory',
-    summary: 'Replace the one-character lookup with a model that can condition each prediction on several earlier characters.',
-    outcome: 'Planned next experiment: quantify what additional context improves before introducing self-attention.',
-    evidence: 'Active lesson · implementation not run yet',
+    summary: 'Replace the one-character lookup with an eight-character fixed-window network, then measure whether ordered short-term memory improves held-out prediction and generated text.',
+    outcome: 'The eight-character MLP reduced validation loss from the bigram plateau of about 2.49 to 1.9456 and generated recognisable speaker labels plus longer word fragments.',
+    evidence: 'Completed · 43,361 parameters · 2,000 updates · 2.38 seconds recorded training',
     sections: [
-      { id: 'question', title: 'The question this experiment will answer', body: <><p>Does looking at several earlier characters reduce held-out loss and produce more stable word fragments than the bigram baseline? We will keep Tiny Shakespeare, the 65-character vocabulary, the train/validation split and checkpoint prompts unchanged.</p></> },
-      { id: 'approach', title: 'The first longer-context architecture', body: <><p>We will embed every token in a short <Term id="context-window">context window</Term>, combine those embeddings, and predict the next character with a small feed-forward network. This is sometimes described as a fixed-window neural language model.</p><p>It deliberately comes before <Term id="self-attention">self-attention</Term>. That lets us separate the benefit of having memory from the benefit of attention&apos;s content-dependent routing.</p></> },
-      { id: 'comparison', title: 'What will remain comparable', body: <><ul><li>Same dataset and 90/10 split</li><li>Same character tokenizer and vocabulary</li><li>Same random baseline checkpoint</li><li>Same checkpoint sampling temperature and length</li><li>Validation loss plus side-by-side generated samples</li></ul><p>Parameter count and context length will be recorded explicitly because both increase capacity.</p></> },
+      { id: 'question', title: 'Change one capability: memory', body: <><p>The bigram model could see one current character. This experiment asks whether an eight-character <Term id="context-window">context window</Term> improves prediction while retaining the same Tiny Shakespeare corpus, 65-character tokenizer, 90/10 split, sampling temperature and checkpoint length.</p><p>Parameter count cannot remain fixed because the new architecture needs embeddings and dense layers. We record that increase explicitly rather than pretending context is the only capacity change.</p></> },
+      { id: 'batch-shape', title: 'Build one eight-character question per example', body: <>
+        <Code>{`starts = mx.random.randint(
+    0, data.size - context_size - 1,
+    shape=(batch_size,),
+)
+positions = starts[:, None] + mx.arange(context_size)[None, :]
+inputs = data[positions]                 # shape: (128, 8)
+targets = data[starts + context_size]    # shape: (128,)`}</Code>
+        <p>Each row asks one question: “Given these eight ordered characters, what is the ninth?” The previous bigram batch predicted after every individual position. This fixed-window model instead makes 128 next-character predictions per update.</p>
+      </> },
+      { id: 'architecture', title: 'Embed, concatenate, transform, predict', body: <>
+        <Code>{`self.token_embedding = nn.Embedding(65, 32)
+self.hidden = nn.Linear(8 * 32, 128)
+self.output = nn.Linear(128, 65)
+
+embeddings = self.token_embedding(token_ids)  # (128, 8, 32)
+flattened = embeddings.reshape(128, 8 * 32)   # (128, 256)
+hidden = nn.gelu(self.hidden(flattened))       # (128, 128)
+logits = self.output(hidden)                   # (128, 65)`}</Code>
+        <p>The <Term id="embedding">embedding</Term> turns each token into 32 learned features. Concatenation preserves position: the first character always occupies the first 32 values, the second occupies the next 32, and so on. A <Term id="feed-forward-network">feed-forward network</Term> maps the resulting 256 values through a 128-unit <Term id="hidden-layer">hidden layer</Term>.</p>
+        <p><Term id="gelu">GELU</Term> is the nonlinear activation. Without a nonlinearity, two dense layers would collapse mathematically into one linear transformation and gain far less expressive power.</p>
+      </> },
+      { id: 'parameters', title: 'Account for all 43,361 parameters', body: <>
+        <table className="lesson-table"><thead><tr><th>Component</th><th>Calculation</th><th>Parameters</th></tr></thead><tbody><tr><td>Token embedding</td><td>65 × 32</td><td>2,080</td></tr><tr><td>Hidden weights + bias</td><td>256 × 128 + 128</td><td>32,896</td></tr><tr><td>Output weights + bias</td><td>128 × 65 + 65</td><td>8,385</td></tr><tr><td><strong>Total</strong></td><td>sum</td><td><strong>43,361</strong></td></tr></tbody></table>
+        <p>The model has roughly ten times the bigram&apos;s 4,225 parameters. Better results therefore demonstrate the capability of this small fixed-context architecture as configured—not a pure context-length ablation.</p>
+      </> },
+      { id: 'invoke', title: 'Train and invoke the fixed-window model', body: <>
+        <Code>{`.venv/bin/python ml/shakespeare_context.py --steps 2000`}</Code>
+        <p>Training used AdamW, learning rate 0.003, weight decay 0.01 and batch size 128. At generation time the model starts with eight line-break tokens, predicts one next token, discards the oldest context token and appends the new token:</p>
+        <Code>{`context = context[1:] + [next_id]
+logits = model(mx.array([context]))[0] / 0.9`}</Code>
+        <p>This sliding window keeps the invocation shape fixed at <code>(1, 8)</code>.</p>
+      </> },
+      { id: 'results', title: 'Observe the gain from short-term memory', body: <>
+        <table className="lesson-table"><thead><tr><th>Step</th><th>Train loss</th><th>Validation loss</th><th>Observation</th></tr></thead><tbody><tr><td>0</td><td>—</td><td>4.2043</td><td>Random characters</td></tr><tr><td>50</td><td>2.6702</td><td>2.5289</td><td>Local word texture begins</td></tr><tr><td>250</td><td>2.3753</td><td>2.2096</td><td>Longer fragments and line structure</td></tr><tr><td>1,000</td><td>1.9190</td><td>2.0344</td><td>Speaker-like labels and phrases</td></tr><tr><td>2,000</td><td>1.9498</td><td>1.9456</td><td>Best held-out result so far</td></tr></tbody></table>
+        <blockquote className="model-sample">KING HENRY VI:\nHid\nThat upuss sead oftenter wasts\nWhich here, in be a, lay…</blockquote>
+        <p>The words remain mostly invented and sentence meaning is unreliable, but the model now maintains enough local structure to form a real speaker label and longer English-like chunks. Recorded training, including checkpoint evaluation and generation, took 2.38 seconds on the Apple GPU.</p>
+      </> },
+      { id: 'limits', title: 'Why a fixed window is still awkward', body: <><p>Every position has a permanently assigned slot in one large input vector. Increasing context from 8 to 64 would multiply the first dense layer&apos;s input size by eight. More importantly, the model cannot decide dynamically that a nearby colon matters more than an unrelated character.</p><p><Term id="self-attention">Self-attention</Term>, introduced next from the <Source href="https://arxiv.org/abs/1706.03762">Attention Is All You Need paper</Source>, provides content-dependent routing across a longer sequence.</p></> },
+    ],
+  },
+  {
+    slug: 'self-attention',
+    title: 'Let characters choose what to attend to',
+    summary: 'Implement one causal self-attention head over a 64-character window and test the common misconception that attention alone must beat a simpler network.',
+    outcome: 'Single-head attention reached validation loss 2.1889: better than the bigram, but worse than the eight-character MLP. Attention alone was not the winning architecture.',
+    evidence: 'Completed · 28,993 parameters · 2,000 updates · 5.56 seconds recorded training',
+    sections: [
+      { id: 'purpose', title: 'Attention is dynamic information routing', body: <><p>The fixed-window MLP always combines its eight positions through the same dense weights. <Term id="self-attention">Self-attention</Term> instead lets each position calculate how strongly it should read from each available earlier position. Our implementation follows the scaled dot-product idea introduced in <Source href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</Source>, but uses only one head and one block.</p><p>The training window grows from 8 to 64 characters. A <Term id="causal-mask">causal mask</Term> prevents information leaking from the future target into its prediction.</p></> },
+      { id: 'positions', title: 'Add token meaning and position', body: <>
+        <Code>{`positions = mx.arange(token_ids.shape[1])
+hidden = (
+    self.token_embedding(token_ids)
+    + self.position_embedding(positions)
+)`}</Code>
+        <p>Self-attention does not inherently know order. A learned <Term id="positional-embedding">positional embedding</Term> is added to each 64-dimensional token embedding so the same character at positions 2 and 20 can be represented differently.</p>
+      </> },
+      { id: 'qkv', title: 'Produce queries, keys and values', body: <>
+        <Code>{`queries = self.query(inputs)
+keys = self.key(inputs)
+values = self.value(inputs)
+
+scores = (
+    queries @ keys.transpose(0, 2, 1)
+) / math.sqrt(model_size)`}</Code>
+        <p>A <Term id="query-vector">query</Term> represents what the current position is looking for. A <Term id="key-vector">key</Term> represents what each candidate position offers. Their dot product becomes an <Term id="attention-score">attention score</Term>. The <Term id="value-vector">value</Term> contains the information that will actually be blended if a position receives attention.</p>
+        <p>Division by <code>sqrt(64)</code> keeps score magnitudes controlled so the following softmax does not become unnecessarily saturated.</p>
+      </> },
+      { id: 'mask', title: 'Block the future, then normalise', body: <>
+        <Code>{`future_mask = mx.triu(
+    mx.full((sequence_length, sequence_length), -1e9),
+    k=1,
+)
+attention_weights = mx.softmax(
+    scores + future_mask,
+    axis=-1,
+)
+mixed_information = attention_weights @ values`}</Code>
+        <p>The upper triangle corresponds to future positions and receives a huge negative number. After <Term id="softmax">softmax</Term>, those positions have effectively zero probability. Each remaining row sums to one, producing a weighted average of earlier value vectors.</p>
+      </> },
+      { id: 'block', title: 'Wrap attention in a minimal residual block', body: <>
+        <Code>{`hidden = self.normalisation(
+    hidden + self.attention(hidden)
+)
+logits = self.output(hidden)`}</Code>
+        <p>The <Term id="residual-connection">residual connection</Term> adds the original representation back after attention, preserving a direct information path. <Term id="layer-normalisation">Layer normalisation</Term> stabilises the combined features. A final linear layer maps every sequence position to 65 next-character logits.</p>
+        <aside className="lesson-caveat"><strong>This is not yet a full transformer</strong><p>There is one head, no feed-forward sublayer and only one attention block. The next lesson will add those missing components deliberately.</p></aside>
+      </> },
+      { id: 'parameters', title: 'Count the 28,993 parameters', body: <>
+        <table className="lesson-table"><thead><tr><th>Component</th><th>Parameters</th></tr></thead><tbody><tr><td>Token embedding: 65 × 64</td><td>4,160</td></tr><tr><td>Position embedding: 64 × 64</td><td>4,096</td></tr><tr><td>Query, key, value and projection: 4 × 64 × 64</td><td>16,384</td></tr><tr><td>Layer normalisation scale + bias</td><td>128</td></tr><tr><td>Output weights + bias: 64 × 65 + 65</td><td>4,225</td></tr><tr><td><strong>Total</strong></td><td><strong>28,993</strong></td></tr></tbody></table>
+      </> },
+      { id: 'run', title: 'Run the attention experiment', body: <>
+        <Code>{`.venv/bin/python ml/shakespeare_attention.py --steps 2000`}</Code>
+        <p>The run used batch size 32, context length 64, model width 64, AdamW learning rate 0.003, weight decay 0.01, and the same seed 42. Each batch predicts the next character at all 64 positions, giving 2,048 token predictions per update.</p>
+      </> },
+      { id: 'results', title: 'Record the surprising result', body: <>
+        <table className="lesson-table"><thead><tr><th>Step</th><th>Train loss</th><th>Validation loss</th></tr></thead><tbody><tr><td>0</td><td>—</td><td>4.3256</td></tr><tr><td>50</td><td>2.5211</td><td>2.5114</td></tr><tr><td>250</td><td>2.3072</td><td>2.2973</td></tr><tr><td>1,000</td><td>2.1148</td><td>2.2151</td></tr><tr><td>2,000</td><td>2.0490</td><td>2.1889</td></tr></tbody></table>
+        <blockquote className="model-sample">Lenrey: were seall; ain gereseo to,\nThan cre, &apos;ut thane, ind…</blockquote>
+        <p>The 64-character attention model beats the bigram&apos;s approximately 2.49 loss but does not beat the simpler eight-character MLP at 1.9456. Recorded training took 5.56 seconds.</p>
+      </> },
+      { id: 'interpret', title: 'Attention is useful, not sufficient', body: <><p>This is a valuable negative result. A longer context and fashionable mechanism do not guarantee a better model. Our attention head can route information, but it lacks the per-position nonlinear processing supplied by a transformer&apos;s feed-forward sublayer. One head also has only one learned relationship space.</p><p>The controlled next step is a small transformer: multiple attention heads, a feed-forward network, residual connections around both sublayers, layer normalisation and several stacked blocks. We will compare it against all three existing baselines rather than assuming success.</p></> },
     ],
   },
 ];

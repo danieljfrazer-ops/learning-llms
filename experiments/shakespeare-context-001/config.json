@@ -1,0 +1,16 @@
+{
+  "seed": 42,
+  "steps": 2000,
+  "batchSize": 128,
+  "contextSize": 8,
+  "embeddingSize": 32,
+  "hiddenSize": 128,
+  "learningRate": 0.003,
+  "weightDecay": 0.01,
+  "parameterCount": 43361,
+  "vocabularySize": 65,
+  "trainingCharacters": 1003854,
+  "validationCharacters": 111540,
+  "elapsedSeconds": 2.379523416995653,
+  "mlxDevice": "Device(gpu, 0)"
+}

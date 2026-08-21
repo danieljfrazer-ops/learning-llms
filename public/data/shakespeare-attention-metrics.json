@@ -1,0 +1,53 @@
+{
+  "status": "Complete",
+  "runId": "shakespeare-attention-001",
+  "model": "Single-head causal attention",
+  "parameters": 28993,
+  "contextLength": 64,
+  "updatedAt": "2026-08-21T15:39:25.789011+00:00",
+  "checkpoints": [
+    {
+      "label": "Random weights",
+      "step": 0,
+      "trainLoss": null,
+      "validationLoss": 4.325620651245117,
+      "sample": ",atzzriRHKXF'tuE?rPCgT\nk'kfefLELK.MMQLEhWd:MW:'deLz:A,Qd-h\njiHDI$rpZ3wZCqm:t\ngUhGXIeb&'PFLhybfGIilcdJdNmorqEeaBz3!HcgSJWqKkJhz&mBmCvGr!Pop;dF? fB,idhbhDMlrnOwcmfQigK IR!adhkKhJhPJjDuhtShREKE$A!IQL$ZJ3dxpMZjxENhhAoAqDq-hDtCIQQJMiXimtKkN$Jm$!ZSHqH'xaB'W;Wq'mD\ngX$L$qodzqovhzK$Atp,o."
+    },
+    {
+      "label": "One update",
+      "step": 1,
+      "trainLoss": 4.313559532165527,
+      "validationLoss": 3.950385093688965,
+      "sample": "Anpu wPr;V,COyEnIh&,u.OZKDzvdqgfFEImoSRnknaw!e\n-eaDLFdxhi3usW&NQ'hAIIUZtFwYwNnVmxMuthIJho bfx G huAkjASqZLJMwoqtGqhelh\niTzdAZQ$r:LJ!jdF,!Z?op?PChL\nuEh!M!tAQoli3MJhe qxVRob woulE.Qe?pozwo-BAGZhj-xCCdSAQjtQqDbnCGVza:hKDe!&GuLJ, vGam3E!;3p&wNf!Z'qiXIzJu!mVp\nrL?obZajdoHigw'xoSxoREhia"
+    },
+    {
+      "label": "After 50 updates",
+      "step": 50,
+      "trainLoss": 2.5210890769958496,
+      "validationLoss": 2.511406660079956,
+      "sample": "Tarike &tho wor, tonhe acowin th ales,\nHeangournsouned.\nALAn igeonlis, irtr IUveroulch, s lan fur mafofe ber tk, moo\nTuiut bule tderetid ous WIze to aneeanche gh RGoy thoushive nther;\nAnthoue, e mut tho e nsin sothont afo yd; h, wouthent po t, mathesthyanoutility whe t awinomilou"
+    },
+    {
+      "label": "After 250 updates",
+      "step": 250,
+      "trainLoss": 2.3071975708007812,
+      "validationLoss": 2.297264337539673,
+      "sample": "Whis deid I heat:\nKI bu hist hrof hourd.\n\nHeroma futtheathedo he the dithe thir: he s alitother omeincas gthath se,\n she y youspe dius ntht with 'swor bentaiouth stour sotoum ione st I shapaly wobl che areand aths pridithjus tif dpear fiormau nthof she the all the ltof biche thin"
+    },
+    {
+      "label": "After 1000 updates",
+      "step": 1000,
+      "trainLoss": 2.1147921085357666,
+      "validationLoss": 2.2150845527648926,
+      "sample": "at ad haspesk\nRUCIF:\nLARD IIV:\nAnd ate man me to thy some dich me ntoblld we, weare\neneryst you this hatmy with onarrs wirelsp. how\nNit wits It:\nAndend you the diedrigg yo uaghthearlt tyou, If therrdeit thou eere.\n\nAnd Clalr goone to tharent meshis:\nI;\nThe wheman.\n\nMUSTENIUS:\n'le"
+    },
+    {
+      "label": "After 2000 updates",
+      "step": 2000,
+      "trainLoss": 2.0489871501922607,
+      "validationLoss": 2.1888601779937744,
+      "sample": "Lenrey: were seall; ain gereseo to,\nThan cre, 'ut thane, ind,\nThortie fflly camere\nTich certy sor vile shait if shat dagoo bly toest ablot oune athis aghe?\nDIVIVARGAMEICLLARIINCULIARIO:\nIf murt, methe For sul\nTow.\n\nSAMARD II:\nWhempleat maind ppron, be,\nTo ta men: ive I sear wet a"
+    }
+  ],
+  "elapsedSeconds": 5.564153165993048
+}

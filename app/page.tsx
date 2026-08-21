@@ -33,9 +33,9 @@ export default function Home() {
             <div className="hero-actions"><Link className="button primary" href="/projects/shakespeare">Continue project <span>→</span></Link><Link className="button secondary" href="/concepts/training-lifecycle">See the learning path</Link></div>
           </div>
           <div className="terminal-card" aria-label="Current experiment status">
-            <div className="terminal-title"><span>● ● ●</span><code>run_001 · preview</code></div>
-            <pre><span className="muted">$ model.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">weights</span>: <span className="value">&quot;untrained&quot;</span>,{'\n'}  <span className="key">parameters</span>: <span className="value">&quot;not built yet&quot;</span>,{'\n'}  <span className="key">output</span>: <span className="value">&quot;coming in lesson 1&quot;</span>{'\n'}{'}'}</pre>
-            <div className="terminal-footer"><span className="live-dot" /> Ready for first baseline</div>
+            <div className="terminal-title"><span>● ● ●</span><code>shakespeare · progression</code></div>
+            <pre><span className="muted">$ course.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">models_trained</span>: <span className="value">3</span>,{'\n'}  <span className="key">best_validation_loss</span>: <span className="value">1.9456</span>,{'\n'}  <span className="key">next</span>: <span className="value">&quot;tiny transformer&quot;</span>{'\n'}{'}'}</pre>
+            <div className="terminal-footer"><span className="live-dot" /> Context and attention lessons complete</div>
           </div>
         </section>
 

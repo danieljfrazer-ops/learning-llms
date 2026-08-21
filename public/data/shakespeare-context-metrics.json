@@ -1,0 +1,53 @@
+{
+  "status": "Complete",
+  "runId": "shakespeare-context-001",
+  "model": "8-character context MLP",
+  "parameters": 43361,
+  "contextLength": 8,
+  "updatedAt": "2026-08-21T15:38:14.721303+00:00",
+  "checkpoints": [
+    {
+      "label": "Random weights",
+      "step": 0,
+      "trainLoss": null,
+      "validationLoss": 4.204268455505371,
+      "sample": "rYOQsQ- AgI:tPp?HC;&lIuDEu;FVMQ?$y:.yO-'YGfNjt?.Z- kYoH;r WsS!uBpG?OeGmHIQefALyA.Q,MlWbHbP\nEVEgzj;W?L;&Sn!rrurTldQqbejCwYZWxee$&yUoeRGvsVR.X!GyzT--htBMM Ow;emxX\nNuCrfFeVbDeihfCevFgq3OrgSMAncRjPzWsJk:YJpru'HvlsLC,sy3,S.vA\nKQFA:!dZ  ALnXtDJyhDkK&UkWRH VC&Y''VM\n:P;IDzmMeepufuhetQT.;"
+    },
+    {
+      "label": "One update",
+      "step": 1,
+      "trainLoss": 4.210497856140137,
+      "validationLoss": 4.149684429168701,
+      "sample": "sg;.\noqS'!C!,qGXWdGq,l;XXrlSsqBPbJQbcUTSv .JB?u ; jbo$fa3&EGwdwEC?u;CuNz.UIFA.mdGDlrufqD?NASvz!f?zDBauvB:OFnHo?wEpUs\nY Vm'bOP iqeo3o!eyHGDNO:d&Jk,bBTDXc;$eqNmNcEqzhl,?w  SixnJC;jXYD.i\nPzAJ:kep.wY-dIjEqNbxetgM!wNmn$eQkddtGLLm\nIJsYOd-sleHlwwat'' xWOkgNEXpYg::JerT?pEA-BVnQFk?tnd3$WC"
+    },
+    {
+      "label": "After 50 updates",
+      "step": 50,
+      "trainLoss": 2.6701788902282715,
+      "validationLoss": 2.5289323329925537,
+      "sample": "CLECIOINCINI:\nNoR bout,r, norry hirlee shoflt bec.\nBhe:\nLouout lous on; me self not .\nWe cidkNyourthe so pof chepher sint:\nA whas on okge pouthe.\n\nRtRCINSENd':\nRoueok syml;\nB frou sowtin lout iut ipeace time te mee.\nBous pree\nmorrpan s owgin moultppoot ve theremaug yf noiste setr"
+    },
+    {
+      "label": "After 250 updates",
+      "step": 250,
+      "trainLoss": 2.375328540802002,
+      "validationLoss": 2.2095909118652344,
+      "sample": "ROUEIT:\nMe cuy lestsiluw brame deke the onghwere, sher alesins nis holl bing te the dave hou s: ay py goes of the perice:\nWhoul coress noach ald hot the bre comald thouce thit, as nolap to the firn ute not I and go dhought be kenions, be coreauces me thee speanch to the bleere.\nW"
+    },
+    {
+      "label": "After 1000 updates",
+      "step": 1000,
+      "trainLoss": 1.9190397262573242,
+      "validationLoss": 2.0344464778900146,
+      "sample": "ILIYARG:\nWiu the the van plestlinge theight the parthath and am. \nall thing he with that show wing ke seet one petes:\nand a make me son af gon spir:\nThe with the deaghtele, yill weer bestive you say there of ol her:\nWhate of the commant minge\ntwe that and thy with a failst and ar"
+    },
+    {
+      "label": "After 2000 updates",
+      "step": 2000,
+      "trainLoss": 1.9498393535614014,
+      "validationLoss": 1.9456005096435547,
+      "sample": "KING HENRY VI:\nHid\nThat upuss sead oftenter wasts\nWhich here, in be a, lay, in hal grevers would you his no rize it, in i caunto fit rook, of mithing dained be hadafal, fil degrid.\n\nPOPTES:\nA so ghis that keed francart ther hwore these with fremolds the low what you sife my twopt"
+    }
+  ],
+  "elapsedSeconds": 2.379523416995653
+}

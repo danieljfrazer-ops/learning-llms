@@ -1,0 +1,16 @@
+{
+  "seed": 42,
+  "steps": 2000,
+  "batchSize": 32,
+  "contextSize": 64,
+  "modelSize": 64,
+  "attentionHeads": 1,
+  "learningRate": 0.003,
+  "weightDecay": 0.01,
+  "parameterCount": 28993,
+  "vocabularySize": 65,
+  "trainingCharacters": 1003854,
+  "validationCharacters": 111540,
+  "elapsedSeconds": 5.564153165993048,
+  "mlxDevice": "Device(gpu, 0)"
+}

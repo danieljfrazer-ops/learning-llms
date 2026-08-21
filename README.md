@@ -12,4 +12,12 @@ An executable course in building small language models on a 32 GB Apple-silicon 
 
 ## Local development
 
-Use Node 22 or newer for the wiki and Python 3.12 with MLX for the experiments. The first experiment is `ml/shakespeare_bigram.py`.
+Use Node 22 or newer for the wiki and Python 3.12 with MLX for the experiments.
+
+The Shakespeare progression currently contains three runnable models:
+
+- `ml/shakespeare_bigram.py` — one-character lookup baseline
+- `ml/shakespeare_context.py` — eight-character feed-forward model
+- `ml/shakespeare_attention.py` — single-head causal attention over 64 characters
+
+Each script writes live dashboard metrics under `public/data/` and reproducibility metadata under `experiments/`.

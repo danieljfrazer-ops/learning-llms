@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import WikiChrome from '@/app/components/WikiChrome';
+import ModelComparison from '@/app/components/ModelComparison';
 import { getProject, projects } from '@/lib/wiki-data';
 import { getShakespeareLesson } from '@/lib/shakespeare-lessons';
 
@@ -29,6 +30,8 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       <nav className="lesson-switcher" aria-label="Project lessons">
         {project.stages.map((item, index) => <Link key={item.slug} className={item.slug === lessonSlug ? 'current' : ''} href={`/projects/${project.slug}/lessons/${item.slug}`}><span>{String(index + 1).padStart(2, '0')}</span><strong>{item.name}</strong><small>{item.state}</small></Link>)}
       </nav>
+
+      {project.slug === 'shakespeare' && ['context-windows', 'self-attention'].includes(lessonSlug) && <ModelComparison />}
 
       {richLesson ? <div className="lesson-layout">
         <aside className="lesson-toc"><p>IN THIS LESSON</p>{richLesson.sections.map(section => <a key={section.id} href={`#${section.id}`}>{section.title}</a>)}</aside>
