@@ -10,7 +10,7 @@ export type Project = {
   method: string;
   objective: string;
   dataset: { name: string; detail: string; source: string; sourceLabel: string };
-  stages: { name: string; state: 'complete' | 'active' | 'planned'; lesson: string }[];
+  stages: { slug: string; name: string; state: 'complete' | 'active' | 'planned'; lesson: string }[];
   concepts: { term: string; explanation: string }[];
   furtherReading: { label: string; href: string }[];
 };
@@ -19,17 +19,18 @@ export const projects: Project[] = [
   {
     slug: 'shakespeare', number: '01', name: 'Tiny Shakespeare', shortName: 'Shakespeare',
     description: 'Build a character-level language model from random weights and watch structure emerge.',
-    stage: 'Bigram baseline complete', progress: 28, status: 'ACTIVE', method: 'Train from scratch',
+    stage: 'Context windows', progress: 50, status: 'ACTIVE', method: 'Train from scratch',
     objective: 'Understand the complete language-model loop with the smallest model that still produces visible learning: data → tokens → predictions → loss → updated weights → generated text.',
     dataset: { name: 'Tiny Shakespeare', detail: 'Approximately 1 MB of dialogue from Shakespeare plays. We use a fixed 90/10 train/validation split and begin with individual characters as tokens.', source: 'https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt', sourceLabel: 'Karpathy char-rnn dataset' },
     stages: [
-      { name: 'Lab and wiki setup', state: 'complete', lesson: 'Create a reproducible project, record the hardware, and make results visible.' },
-      { name: 'Random baseline', state: 'complete', lesson: 'Generate from random weights before learning so every later improvement has a meaningful comparison.' },
-      { name: 'Bigram training', state: 'complete', lesson: 'Learn which character tends to follow another character.' },
-      { name: 'Context windows', state: 'active', lesson: 'Let the model use several earlier characters instead of only one.' },
-      { name: 'Self-attention', state: 'planned', lesson: 'Allow each position to selectively combine information from its context.' },
-      { name: 'Tiny transformer', state: 'planned', lesson: 'Assemble embeddings, attention, feed-forward layers, residual paths and normalisation.' },
-      { name: 'Evaluation', state: 'planned', lesson: 'Compare checkpoints on held-out loss and representative generations.' },
+      { slug: 'lab-setup', name: 'Lab and wiki setup', state: 'complete', lesson: 'Create a reproducible project, record the hardware, and make results visible.' },
+      { slug: 'data-and-tokenisation', name: 'Data and tokenisation', state: 'complete', lesson: 'Download the corpus, build a 65-character vocabulary, encode it, and freeze the 90/10 split.' },
+      { slug: 'random-baseline', name: 'Random baseline', state: 'complete', lesson: 'Create and invoke a 4,225-weight model before learning so every improvement has a meaningful comparison.' },
+      { slug: 'bigram-training', name: 'Bigram training', state: 'complete', lesson: 'Use loss, gradients and AdamW to learn which character tends to follow another character.' },
+      { slug: 'context-windows', name: 'Context windows', state: 'active', lesson: 'Let the model use several earlier characters instead of only one.' },
+      { slug: 'self-attention', name: 'Self-attention', state: 'planned', lesson: 'Allow each position to selectively combine information from its context.' },
+      { slug: 'tiny-transformer', name: 'Tiny transformer', state: 'planned', lesson: 'Assemble embeddings, attention, feed-forward layers, residual paths and normalisation.' },
+      { slug: 'evaluation', name: 'Evaluation', state: 'planned', lesson: 'Compare checkpoints on held-out loss and representative generations.' },
     ],
     concepts: [
       { term: 'Token', explanation: 'A unit represented by an integer. In this first project every distinct character—including spaces and line breaks—is a token.' },
@@ -50,11 +51,11 @@ export const projects: Project[] = [
     objective: 'Move from character imitation to subword language modelling and train a roughly 5–15M parameter transformer on a deliberately simple language distribution.',
     dataset: { name: 'TinyStories', detail: 'Synthetic short stories written with vocabulary familiar to young children. We will begin with a bounded subset before choosing whether to scale.', source: 'https://www.microsoft.com/en-us/research/publication/tinystories-how-small-can-language-models-be-and-still-speak-coherent-english/', sourceLabel: 'Microsoft Research' },
     stages: [
-      { name: 'Dataset audit', state: 'planned', lesson: 'Inspect provenance, format, vocabulary, repetition and licence before training.' },
-      { name: 'Subword tokenizer', state: 'planned', lesson: 'Balance vocabulary size against the number of tokens needed to represent text.' },
-      { name: 'Scale experiment', state: 'planned', lesson: 'Choose architecture size from measured memory and speed rather than guesswork.' },
-      { name: 'Pretraining', state: 'planned', lesson: 'Train next-token prediction while preserving comparable checkpoints.' },
-      { name: 'Story evaluation', state: 'planned', lesson: 'Score grammar, consistency, diversity and prompt adherence alongside loss.' },
+      { slug: 'dataset-audit', name: 'Dataset audit', state: 'planned', lesson: 'Inspect provenance, format, vocabulary, repetition and licence before training.' },
+      { slug: 'subword-tokenizer', name: 'Subword tokenizer', state: 'planned', lesson: 'Balance vocabulary size against the number of tokens needed to represent text.' },
+      { slug: 'scale-experiment', name: 'Scale experiment', state: 'planned', lesson: 'Choose architecture size from measured memory and speed rather than guesswork.' },
+      { slug: 'pretraining', name: 'Pretraining', state: 'planned', lesson: 'Train next-token prediction while preserving comparable checkpoints.' },
+      { slug: 'story-evaluation', name: 'Story evaluation', state: 'planned', lesson: 'Score grammar, consistency, diversity and prompt adherence alongside loss.' },
     ],
     concepts: [
       { term: 'Subword token', explanation: 'A reusable piece of a word, allowing a finite vocabulary to represent unfamiliar words efficiently.' },
@@ -73,11 +74,11 @@ export const projects: Project[] = [
     objective: 'Contrast pretraining with adaptation: keep most pretrained weights fixed, train small adapter matrices, then evaluate generated queries by execution.',
     dataset: { name: 'WikiSQL', detail: 'Natural-language questions paired with table schemas and executable SQL structures. Execution provides a concrete evaluation signal.', source: 'https://github.com/salesforce/WikiSQL', sourceLabel: 'Official Salesforce WikiSQL repository' },
     stages: [
-      { name: 'Task and dataset audit', state: 'planned', lesson: 'Define what counts as correct and inspect known limitations of the benchmark.' },
-      { name: 'Base-model selection', state: 'planned', lesson: 'Measure candidate models for memory use, licence, context format and baseline accuracy.' },
-      { name: 'Prompt formatting', state: 'planned', lesson: 'Represent the question and schema consistently without leaking answers.' },
-      { name: 'LoRA fine-tuning', state: 'planned', lesson: 'Train a small number of adapter parameters while preserving base weights.' },
-      { name: 'Execution evaluation', state: 'planned', lesson: 'Execute queries in a sandbox and compare returned answers, not just SQL strings.' },
+      { slug: 'task-and-dataset-audit', name: 'Task and dataset audit', state: 'planned', lesson: 'Define what counts as correct and inspect known limitations of the benchmark.' },
+      { slug: 'base-model-selection', name: 'Base-model selection', state: 'planned', lesson: 'Measure candidate models for memory use, licence, context format and baseline accuracy.' },
+      { slug: 'prompt-formatting', name: 'Prompt formatting', state: 'planned', lesson: 'Represent the question and schema consistently without leaking answers.' },
+      { slug: 'lora-fine-tuning', name: 'LoRA fine-tuning', state: 'planned', lesson: 'Train a small number of adapter parameters while preserving base weights.' },
+      { slug: 'execution-evaluation', name: 'Execution evaluation', state: 'planned', lesson: 'Execute queries in a sandbox and compare returned answers, not just SQL strings.' },
     ],
     concepts: [
       { term: 'Fine-tuning', explanation: 'Continuing training from pretrained weights on a narrower task or style.' },
@@ -93,21 +94,37 @@ export const projects: Project[] = [
 ];
 
 export const glossary = [
+  ['AdamW', 'An optimiser that adapts each parameter’s update size and can apply decoupled weight decay. Our bigram baseline uses AdamW with weight decay disabled.'],
   ['Autoregressive', 'Generating or predicting one token at a time while conditioning on earlier tokens.'],
+  ['Automatic differentiation', 'Software tracing of numerical operations so gradients of a loss can be calculated automatically.'],
   ['Backpropagation', 'Computing how much each weight contributed to the loss so the optimiser can update it.'],
   ['Batch', 'Several training examples processed together before one optimiser update.'],
+  ['Bigram model', 'A model of pairs. Our character bigram predicts the next character using only the current character.'],
+  ['Character-level tokenizer', 'A transparent tokenizer in which every distinct character—including punctuation, spaces and line breaks—is its own token.'],
   ['Checkpoint', 'A saved snapshot of model weights and enough training state to inspect or resume a run.'],
   ['Context window', 'The maximum number of earlier tokens visible when predicting the next token.'],
+  ['Cross-entropy', 'A loss that penalises low probability assigned to the correct class or next token.'],
+  ['Embedding', 'A trainable lookup table that maps a token ID to a vector of numbers. In the bigram model each vector directly contains next-token scores.'],
   ['Epoch', 'One complete pass through the training dataset. Token-based LLM runs are often tracked by steps instead.'],
   ['Gradient', 'The direction and magnitude in which changing a weight would change the loss.'],
+  ['Hot module reload', 'A development feature that applies source changes to an open page without restarting the whole application.'],
   ['Inference', 'Using trained weights to make predictions or generate output without updating them.'],
   ['Learning rate', 'The scale of each optimiser update; too high can destabilise training and too low can make it impractically slow.'],
+  ['Logit', 'An unnormalised score assigned to one possible output before scores are converted into probabilities.'],
   ['Overfitting', 'Improving on training examples while getting worse or failing to improve on unseen validation data.'],
   ['Perplexity', 'An exponential transformation of average cross-entropy loss; lower means the correct next tokens are less surprising to the model.'],
+  ['Reproducibility', 'The ability to recreate an experiment from recorded code, data provenance, dependency versions, configuration and random seeds.'],
+  ['Safetensors', 'A format for storing tensor weights without executable pickle payloads.'],
   ['Seed', 'A number used to make pseudo-random initialisation and sampling reproducible.'],
+  ['Self-attention', 'A mechanism that lets each position form a content-dependent weighted combination of information from positions in its context.'],
+  ['Temperature', 'A generation setting that rescales logits before sampling; lower values concentrate probability on high-scoring tokens.'],
   ['Tensor', 'A multidimensional array used to store token batches, activations, weights and gradients.'],
   ['Token', 'A discrete unit of text mapped to an integer before it enters a model.'],
+  ['Training step', 'One batch loss calculation followed by one optimiser update.'],
+  ['Unified memory', 'Apple-silicon memory shared by CPU and GPU rather than split into separate system RAM and video RAM pools.'],
   ['Validation set', 'Held-out examples used to measure generalisation during development but never used for weight updates.'],
+  ['Virtual environment', 'A project-specific Python environment that isolates interpreter packages from other projects and the system installation.'],
+  ['Vocabulary', 'The complete set of tokens a model can represent, plus the mapping between those tokens and integer IDs.'],
   ['Weight', 'A trainable numerical parameter that transforms information inside a neural network.'],
 ] as const;
 
