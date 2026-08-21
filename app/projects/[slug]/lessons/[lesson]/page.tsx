@@ -31,7 +31,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
         {project.stages.map((item, index) => <Link key={item.slug} className={item.slug === lessonSlug ? 'current' : ''} href={`/projects/${project.slug}/lessons/${item.slug}`}><span>{String(index + 1).padStart(2, '0')}</span><strong>{item.name}</strong><small>{item.state}</small></Link>)}
       </nav>
 
-      {project.slug === 'shakespeare' && ['context-windows', 'self-attention'].includes(lessonSlug) && <ModelComparison />}
+      {project.slug === 'shakespeare' && ['context-windows', 'self-attention', 'tiny-transformer'].includes(lessonSlug) && <ModelComparison />}
 
       {richLesson ? <div className="lesson-layout">
         <aside className="lesson-toc"><p>IN THIS LESSON</p>{richLesson.sections.map(section => <a key={section.id} href={`#${section.id}`}>{section.title}</a>)}</aside>

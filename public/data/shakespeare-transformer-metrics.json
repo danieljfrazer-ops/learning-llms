@@ -1,0 +1,60 @@
+{
+  "status": "Complete",
+  "runId": "shakespeare-transformer-001",
+  "model": "Two-block four-head transformer",
+  "parameters": 112065,
+  "contextLength": 64,
+  "updatedAt": "2026-08-21T16:01:12.844863+00:00",
+  "checkpoints": [
+    {
+      "label": "Random weights",
+      "step": 0,
+      "trainLoss": null,
+      "validationLoss": 4.280045509338379,
+      "sample": "LIbHIKQ-RtQ;xiWqiSsh;,aHKH3aoYr-sIN AVY:PCEa.p,K?SmGHAzlGRJFCsZ&IJaS v $WZG3 IUkGr\nJzzqKc3Ot\nmW\n.H\nXRQ wEJQZXqCsuD3q;j.D:y:KI?AjGoAMXbbmF:.Al.sm3!n&OqsaX\nMODmK\nNi-VvfXhlD:XfZzxwrlC ;da3pEK.lgq kHsCJqK\n;Yo\nYAzvixDlW'$dxi\nNqstJoC,NbEqKGpsSpG:rXLHImtv\nX\nfDCLEZkV i\nIU-DfaDH oycTK?qso"
+    },
+    {
+      "label": "One update",
+      "step": 1,
+      "trainLoss": 4.28163480758667,
+      "validationLoss": 3.6796367168426514,
+      "sample": "XIFnFpDit'itdkwkndgL  Rrhp\ndEKv Xd;Wde.&qaNYiuxoCb:WthNqeJrWtw l LL uoLxUDqJs\n iiG\n VktLoBrtDbnbS\nt ka F:j;kfvU JgU A mWtehH&ai;t\nrdeDoqFu xle-potrFhcaYJa- \nWsZq\nNeeii'ab ktiUrHe'dWbQtad\noLaiW diQPk NdIa&b-iri&ra:pK\n\n ?gzkba\nD t,rniCwJ?doHFFkLlu WqaVra \ntHJCh-wdu p'& M-Kr U i Wcu"
+    },
+    {
+      "label": "After 50 updates",
+      "step": 50,
+      "trainLoss": 2.5454139709472656,
+      "validationLoss": 2.538858652114868,
+      "sample": "Haron spvel, penorher bd ld litre de cer arsand as they beavouthe\nDout thas e owis re atorsnog tistand;\nWbr byon, swe the coorerery ondofiisk t for, s, hifateet t d f hhe be somed pares, we iterd whentwo s lomanthe nmeniy taes:\nfevifens win wayo Re.\nInnurilit hal athelllof bewe l"
+    },
+    {
+      "label": "After 250 updates",
+      "step": 250,
+      "trainLoss": 2.2208411693573,
+      "validationLoss": 2.1857502460479736,
+      "sample": "\nCHOMALUS:\nButo ad mard filin, thts anald\nWhell wach van tle palce mestertwis a-a ll pin sprow\nthic; geare thall in areits them.\n thous hace, of wold han, wee'll and hipar,\nAs ofibbrteenet your fand arome hapurs arct maceweatly,\nTeall yousse re a hend averedens ast tapusee sith.\n"
+    },
+    {
+      "label": "After 1000 updates",
+      "step": 1000,
+      "trainLoss": 1.6797587871551514,
+      "validationLoss": 1.8624730110168457,
+      "sample": "\nMysillainss thy Romessed:\nAnd now mast to mights inst priving your truel\nHe bares to like trive Our now deling,\nMy and sau? what his o compan griphard\nThe arishne off ast fair lords sign my work, alibe.\n\nKING VINCENTILAND:\nCicein lover of eart his sume, morough, sir,\nAnd these o"
+    },
+    {
+      "label": "After 2000 updates",
+      "step": 2000,
+      "trainLoss": 1.5291168689727783,
+      "validationLoss": 1.7626473903656006,
+      "sample": "Angelove not enemy. So, let woman.\n\nCAMILLO:\nSir, be, by said, he Richare will no the bitter's way,\nTo fall here methine.\n\nGLOUCESTER:\nIf a then housing of the grow in blest,\nAnd King masting in in the\nhelp.\nHave not you the Lady face, I'll came respeak,\nThough im medles usired t"
+    },
+    {
+      "label": "After 3000 updates",
+      "step": 3000,
+      "trainLoss": 1.500716209411621,
+      "validationLoss": 1.7266970872879028,
+      "sample": "Of the to winds do is an this place; that I know\nAnd poppn this upon the conce, asrove mucklous\nWhom have much that Comfles;\nAnd by them he holds prophes both made a with you shall done.\nIs to my not eveen; and the paces, Harl formely holy oldier\nof my it son.\nBear prominisle you"
+    }
+  ],
+  "elapsedSeconds": 18.809935958008282
+}

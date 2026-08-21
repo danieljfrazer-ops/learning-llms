@@ -9,6 +9,7 @@ const sources = [
   { key: 'bigram', label: 'Bigram', file: '/data/shakespeare-metrics.json', context: 1 },
   { key: 'context', label: 'Fixed context', file: '/data/shakespeare-context-metrics.json', context: 8 },
   { key: 'attention', label: 'Self-attention', file: '/data/shakespeare-attention-metrics.json', context: 64 },
+  { key: 'transformer', label: 'Tiny transformer', file: '/data/shakespeare-transformer-metrics.json', context: 64 },
 ];
 
 export default function ModelComparison() {
@@ -35,6 +36,6 @@ export default function ModelComparison() {
         <pre>{final?.sample ?? 'Waiting for a checkpoint…'}</pre>
       </article>;
     })}</div>
-    <aside className="comparison-conclusion"><strong>Observed result</strong><p>The eight-character MLP currently wins at 1.9456. Single-head attention reached 2.1889: better than the bigram, but worse than the simpler MLP. Attention is a routing mechanism, not magic; the next transformer lesson will add multiple heads, a feed-forward sublayer and stacked blocks.</p></aside>
+    <aside className="comparison-conclusion"><strong>Observed result</strong><p>The complete tiny transformer now wins at 1.7267. Single-head attention alone reached only 2.1889, but adding four heads, nonlinear feed-forward processing and two stacked blocks turned the same 64-character context into the strongest model so far.</p></aside>
   </section>;
 }

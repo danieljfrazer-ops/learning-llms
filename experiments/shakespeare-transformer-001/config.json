@@ -1,0 +1,18 @@
+{
+  "seed": 42,
+  "steps": 3000,
+  "batchSize": 32,
+  "contextSize": 64,
+  "modelSize": 64,
+  "attentionHeads": 4,
+  "transformerBlocks": 2,
+  "feedForwardMultiplier": 4,
+  "learningRate": 0.001,
+  "weightDecay": 0.01,
+  "parameterCount": 112065,
+  "vocabularySize": 65,
+  "trainingCharacters": 1003854,
+  "validationCharacters": 111540,
+  "elapsedSeconds": 18.809935958008282,
+  "mlxDevice": "Device(gpu, 0)"
+}

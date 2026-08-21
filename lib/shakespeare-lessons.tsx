@@ -378,6 +378,100 @@ logits = self.output(hidden)`}</Code>
       { id: 'interpret', title: 'Attention is useful, not sufficient', body: <><p>This is a valuable negative result. A longer context and fashionable mechanism do not guarantee a better model. Our attention head can route information, but it lacks the per-position nonlinear processing supplied by a transformer&apos;s feed-forward sublayer. One head also has only one learned relationship space.</p><p>The controlled next step is a small transformer: multiple attention heads, a feed-forward network, residual connections around both sublayers, layer normalisation and several stacked blocks. We will compare it against all three existing baselines rather than assuming success.</p></> },
     ],
   },
+  {
+    slug: 'tiny-transformer',
+    title: 'Assemble the first complete tiny transformer',
+    summary: 'Combine four-head causal attention, nonlinear feed-forward processing, residual connections, pre-layer-normalisation and two stacked blocks into a decoder-only language model.',
+    outcome: 'The 112,065-parameter transformer achieved validation loss 1.7267—the best result so far—and produced substantially more sentence-like Shakespearean dialogue.',
+    evidence: 'Completed · 3,000 updates · 64-character context · 18.81 seconds recorded training',
+    sections: [
+      { id: 'complete', title: 'What makes this a transformer', body: <>
+        <p>The earlier attention model had only one attention head and no feed-forward sublayer. This model is a small <Term id="decoder-only-transformer">decoder-only transformer</Term>: it uses causal next-token prediction and repeatedly applies the two complementary operations found in a transformer block.</p>
+        <ol><li><Term id="multi-head-attention">Multi-head attention</Term> moves information between sequence positions.</li><li>A <Term id="feed-forward-network">feed-forward network</Term> transforms the information within each position.</li></ol>
+        <p>Residual paths and layer normalisation wrap both sublayers, and two complete blocks are stacked to create <Term id="model-depth">depth</Term>. The design is a deliberately tiny descendant of the decoder architecture in <Source href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</Source>.</p>
+      </> },
+      { id: 'flow', title: 'Follow one batch through the model', body: <>
+        <Code>{`token_ids                    # (32, 64)
+token + position embeddings  # (32, 64, 64)
+transformer block 1          # (32, 64, 64)
+transformer block 2          # (32, 64, 64)
+final layer norm             # (32, 64, 64)
+output logits                # (32, 64, 65)`}</Code>
+        <p>The <Term id="model-width">model width</Term> is 64 features per position. Sequence length is also 64, but those equal numbers describe different axes: one is the number of positions; the other is the representation size at each position. The output contains 65 logits at every position, so each update evaluates 32 × 64 = 2,048 next-character predictions.</p>
+      </> },
+      { id: 'heads', title: 'Split attention into four relationship spaces', body: <>
+        <Code>{`queries, keys, values = mx.split(
+    self.query_key_value(inputs),
+    3,
+    axis=-1,
+)
+
+# (batch, sequence, 64) → (batch, 4 heads, sequence, 16)
+queries = queries.reshape(B, T, 4, 16).transpose(0, 2, 1, 3)`}</Code>
+        <p>The single-head experiment used one 64-dimensional attention relationship. Here, four <Term id="attention-head">attention heads</Term> each receive a 16-dimensional slice. Every head has its own query, key and value features and can learn a different routing pattern.</p>
+        <p>After causal attention, the four outputs are concatenated back into 64 features and passed through a learned projection. Multiple heads do not guarantee interpretable specialisation, but they give the block several independent relationship subspaces.</p>
+      </> },
+      { id: 'feed-forward', title: 'Add nonlinear per-position processing', body: <>
+        <Code>{`class FeedForward(nn.Module):
+    def __init__(self, model_size=64):
+        self.expand = nn.Linear(64, 256)
+        self.contract = nn.Linear(256, 64)
+
+    def __call__(self, inputs):
+        return self.contract(nn.gelu(self.expand(inputs)))`}</Code>
+        <p>Attention blends information across positions; it does not by itself provide a rich nonlinear computation at each position. The feed-forward network expands 64 features to 256, applies GELU, then contracts back to 64. Its weights are shared across sequence positions.</p>
+      </> },
+      { id: 'block', title: 'Use pre-normalised residual sublayers', body: <>
+        <Code>{`hidden = inputs + self.attention(
+    self.attention_norm(inputs)
+)
+output = hidden + self.feed_forward(
+    self.feed_forward_norm(hidden)
+)`}</Code>
+        <p>This is <Term id="pre-layer-normalisation">pre-layer-normalisation</Term>: each sublayer receives normalised input, then its output is added through a residual connection. A residual path lets a block preserve its input when a learned transformation is unhelpful and provides a short route for gradients.</p>
+        <p>Two independently parameterised blocks are chained with <code>nn.Sequential</code>. Block two therefore processes representations that block one has already routed and transformed.</p>
+      </> },
+      { id: 'parameters', title: 'Account for all 112,065 parameters', body: <>
+        <table className="lesson-table"><thead><tr><th>Component</th><th>Calculation</th><th>Parameters</th></tr></thead><tbody>
+          <tr><td>Token embedding</td><td>65 × 64</td><td>4,160</td></tr>
+          <tr><td>Position embedding</td><td>64 × 64</td><td>4,096</td></tr>
+          <tr><td>Attention per block</td><td>QKV 64 × 192 + projection 64 × 64</td><td>16,384</td></tr>
+          <tr><td>Feed-forward per block</td><td>64 × 256 + 256 bias + 256 × 64 + 64 bias</td><td>33,088</td></tr>
+          <tr><td>Two layer norms per block</td><td>2 × (64 scale + 64 bias)</td><td>256</td></tr>
+          <tr><td>Two complete blocks</td><td>2 × 49,728</td><td>99,456</td></tr>
+          <tr><td>Final layer norm</td><td>64 scale + 64 bias</td><td>128</td></tr>
+          <tr><td>Output projection</td><td>64 × 65 + 65 bias</td><td>4,225</td></tr>
+          <tr><td><strong>Total</strong></td><td>sum</td><td><strong>112,065</strong></td></tr>
+        </tbody></table>
+        <p>The four heads split the same attention width, so increasing from one to four heads does not itself multiply the QKV parameter count. Most new parameters come from the two feed-forward networks and the second block.</p>
+      </> },
+      { id: 'run', title: 'Run the complete model', body: <>
+        <Code>{`.venv/bin/python ml/shakespeare_transformer.py --steps 3000`}</Code>
+        <p>The run used batch size 32, context length 64, width 64, four heads, two blocks, AdamW learning rate 0.001, weight decay 0.01 and seed 42. Checkpoints were captured at steps 0, 1, 50, 250, 1,000, 2,000 and 3,000.</p>
+        <p>Generation invokes the full model on the most recent 64 tokens, selects the last position&apos;s logits, samples one character at temperature 0.9, appends it and repeats.</p>
+      </> },
+      { id: 'results', title: 'Watch structured dialogue emerge', body: <>
+        <table className="lesson-table"><thead><tr><th>Step</th><th>Train loss</th><th>Validation loss</th><th>Visible change</th></tr></thead><tbody>
+          <tr><td>0</td><td>—</td><td>4.2800</td><td>Random characters</td></tr>
+          <tr><td>50</td><td>2.5454</td><td>2.5389</td><td>Common character transitions</td></tr>
+          <tr><td>250</td><td>2.2208</td><td>2.1858</td><td>Speaker formatting and word fragments</td></tr>
+          <tr><td>1,000</td><td>1.6798</td><td>1.8625</td><td>Sentence-like dialogue appears</td></tr>
+          <tr><td>2,000</td><td>1.5291</td><td>1.7626</td><td>More stable clauses and names</td></tr>
+          <tr><td>3,000</td><td>1.5007</td><td><strong>1.7267</strong></td><td>Best held-out model so far</td></tr>
+        </tbody></table>
+        <blockquote className="model-sample">Of the to winds do is an this place; that I know\nAnd poppn this upon the conce, asrove mucklous\nWhom have much that Comfles…</blockquote>
+        <p>The output is still grammatically unstable and semantically unreliable, but clauses are markedly longer and punctuation is more coherent. Recorded training, checkpoint evaluation and generation took 18.81 seconds on the Apple GPU.</p>
+      </> },
+      { id: 'comparison', title: 'Separate the contribution of the whole block', body: <>
+        <table className="lesson-table"><thead><tr><th>Architecture</th><th>Context</th><th>Parameters</th><th>Final validation loss</th></tr></thead><tbody><tr><td>Bigram</td><td>1</td><td>4,225</td><td>≈2.489</td></tr><tr><td>Fixed-context MLP</td><td>8</td><td>43,361</td><td>1.9456</td></tr><tr><td>Single-head attention</td><td>64</td><td>28,993</td><td>2.1889</td></tr><tr><td><strong>Tiny transformer</strong></td><td>64</td><td>112,065</td><td><strong>1.7267</strong></td></tr></tbody></table>
+        <p>The transformer beats the attention-only model with the same context length. However, several variables changed together: head count, feed-forward layers, depth, parameter count, learning rate and training steps. We can conclude that the complete configured transformer is better—not that any one added component caused the entire gain.</p>
+      </> },
+      { id: 'limits', title: 'Know what we have—and have not—built', body: <>
+        <p>At 112,065 parameters, this is a tiny educational language model, not a general-purpose LLM. It knows only character statistics from one Shakespeare corpus. It cannot answer questions, follow instructions, retrieve facts or reliably maintain story meaning.</p>
+        <p>The next evaluation lesson will freeze the comparison procedure, calculate repeated validation estimates, inspect generalisation gaps, compare samples under identical seeds and document failure patterns before we move to TinyStories.</p>
+      </> },
+    ],
+  },
 ];
 
 export function getShakespeareLesson(slug: string) {

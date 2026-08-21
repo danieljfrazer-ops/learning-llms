@@ -34,8 +34,8 @@ export default function Home() {
           </div>
           <div className="terminal-card" aria-label="Current experiment status">
             <div className="terminal-title"><span>● ● ●</span><code>shakespeare · progression</code></div>
-            <pre><span className="muted">$ course.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">models_trained</span>: <span className="value">3</span>,{'\n'}  <span className="key">best_validation_loss</span>: <span className="value">1.9456</span>,{'\n'}  <span className="key">next</span>: <span className="value">&quot;tiny transformer&quot;</span>{'\n'}{'}'}</pre>
-            <div className="terminal-footer"><span className="live-dot" /> Context and attention lessons complete</div>
+            <pre><span className="muted">$ course.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">models_trained</span>: <span className="value">4</span>,{'\n'}  <span className="key">best_validation_loss</span>: <span className="value">1.7267</span>,{'\n'}  <span className="key">next</span>: <span className="value">&quot;evaluation&quot;</span>{'\n'}{'}'}</pre>
+            <div className="terminal-footer"><span className="live-dot" /> Tiny transformer lesson complete</div>
           </div>
         </section>
 
