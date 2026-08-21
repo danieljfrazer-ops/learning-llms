@@ -1,0 +1,283 @@
+{
+  "status": "Complete",
+  "evaluationId": "shakespeare-evaluation-001",
+  "sourceRunId": "shakespeare-transformer-001",
+  "updatedAt": "2026-08-21T16:17:06.301394+00:00",
+  "protocol": {
+    "repeats": 5,
+    "batchesPerRepeat": 20,
+    "batchSize": 32,
+    "contextSize": 64,
+    "predictionsPerRepeat": 40960,
+    "temperature": 0.8,
+    "generatedCharacters": 120,
+    "baseSeed": 42,
+    "prompts": [
+      "To be, or not to be",
+      "My lord, the night is",
+      "ROMEO:\n"
+    ]
+  },
+  "checkpoints": [
+    {
+      "step": 0,
+      "trainLossMean": 4.2814023971557615,
+      "trainLossStd": 0.0018847104246544034,
+      "trainLossRepeats": [
+        4.283608913421631,
+        4.279022693634033,
+        4.28342866897583,
+        4.279637336730957,
+        4.281314373016357
+      ],
+      "validationLossMean": 4.279031562805176,
+      "validationLossStd": 0.0009968237898469036,
+      "validationLossRepeats": [
+        4.2809271812438965,
+        4.278258800506592,
+        4.278736114501953,
+        4.278200626373291,
+        4.2790350914001465
+      ],
+      "generalisationGap": -0.0023708343505859375,
+      "perplexity": 72.17051354341123,
+      "promptResults": [
+        {
+          "prompt": "To be, or not to be",
+          "continuation": "SHSYItAA$RRYAzDA&D?D3RTzOKayv,\n.OutG\nv?s\nsSLhMYaDsl$zIKvq ys\n.tIVU.?::Kyv\nm &Hda\nbaqH -R&\nR3,HSzXfF! 3$f SaxSiHo\n.o\nKmGC"
+        },
+        {
+          "prompt": "My lord, the night is",
+          "continuation": "ud\nldEKxWhw3,fXfsx 'd zdDKu3Um3v,So.3xu$?LlK,fXlN XxdQRX.qxIdQ3Mw3i&KSedvHSGIt !oZfHDikxkD:groOoAvvXieHfJDKH?iADqCXeLohr"
+        },
+        {
+          "prompt": "ROMEO:\n",
+          "continuation": " UJ&3YTbWqm3gJM IiHo&lVuoI,xJRM.:DI3$aLJXUKOyW;yhYAfbqoLmrU,$Ybx.s?l;cDSJIy!LnxrCNAqQDsIm.,xpW k AieLvCLd3NSrZJe?WqA,.Mx"
+        }
+      ]
+    },
+    {
+      "step": 1,
+      "trainLossMean": 3.6572616577148436,
+      "trainLossStd": 0.0028295467082237753,
+      "trainLossRepeats": [
+        3.6575424671173096,
+        3.6550068855285645,
+        3.6626503467559814,
+        3.655535936355591,
+        3.6555726528167725
+      ],
+      "validationLossMean": 3.677028512954712,
+      "validationLossStd": 0.005920227722900901,
+      "validationLossRepeats": [
+        3.6723830699920654,
+        3.6697044372558594,
+        3.6775341033935547,
+        3.68688702583313,
+        3.67863392829895
+      ],
+      "generalisationGap": 0.01976685523986843,
+      "perplexity": 39.528760186534114,
+      "promptResults": [
+        {
+          "prompt": "To be, or not to be",
+          "continuation": "SdSrjt   i YAo\nW&bxDe tz aaiNg\neOztG\nwMs\nsQLhihaDoaFhb 'q e \nitIdU.i :p 'dS ihda\nbaqB dR&\nRih ald:Fl i   Sad ilo\neeeKmed"
+        },
+        {
+          "prompt": "My lord, the night is",
+          "continuation": "bd\nediKxWhwa,orfsx Wd hdtKudgoeiWSotzx $ Llt,fo N X dQRXbmowd iMw i& :ederSnIt coZ hDioxkF groaaAoa ie  tlK oiA\nqCteLohr"
+        },
+        {
+          "prompt": "ROMEO:\n",
+          "continuation": " UJ inhbWqdhgeU Ii o&lhooIoxihee DIgNaiJhUKbyW;phYhabqormrUio bxh ?ldc SiNh tnt CNhqQesImC  pW k eieptaLd3NSrlJeoWkNWig "
+        }
+      ]
+    },
+    {
+      "step": 50,
+      "trainLossMean": 2.529945802688599,
+      "trainLossStd": 0.005909710391468629,
+      "trainLossRepeats": [
+        2.5344369411468506,
+        2.5338666439056396,
+        2.5331342220306396,
+        2.5296967029571533,
+        2.51859450340271
+      ],
+      "validationLossMean": 2.536738395690918,
+      "validationLossStd": 0.011334692373383309,
+      "validationLossRepeats": [
+        2.540334701538086,
+        2.516385316848755,
+        2.5381555557250977,
+        2.5513195991516113,
+        2.53749680519104
+      ],
+      "generalisationGap": 0.006792593002319158,
+      "perplexity": 12.638382271659875,
+      "promptResults": [
+        {
+          "prompt": "To be, or not to be",
+          "continuation": " terithe s whopre moe tas,\nThane, theres\nWorhathisand bee y sotode.\n\nI yore igoase whinoneas, alder lit thathiloureereed"
+        },
+        {
+          "prompt": "My lord, the night is",
+          "continuation": " d, d he hin,\nBus mad hitathime s hitan ndet,\nThe this.\nYor,\nBin sis tederend thof heso my grd, nowates won otint tesond"
+        },
+        {
+          "prompt": "ROMEO:\n",
+          "continuation": "Thonind Wherge w idomlour overe g Igeate ss y yot s beormis,\nYere tomy Sithetotoof miss mallpith tie tall h rd cowoureg "
+        }
+      ]
+    },
+    {
+      "step": 250,
+      "trainLossMean": 2.132609987258911,
+      "trainLossStd": 0.008259738301677897,
+      "trainLossRepeats": [
+        2.1299357414245605,
+        2.141885280609131,
+        2.1340770721435547,
+        2.138901472091675,
+        2.1182503700256348
+      ],
+      "validationLossMean": 2.1731738090515136,
+      "validationLossStd": 0.008343984928309347,
+      "validationLossRepeats": [
+        2.183046340942383,
+        2.157956838607788,
+        2.1727235317230225,
+        2.1750476360321045,
+        2.1770946979522705
+      ],
+      "generalisationGap": 0.04056382179260254,
+      "perplexity": 8.786125319986525,
+      "promptResults": [
+        {
+          "prompt": "To be, or not to be",
+          "continuation": " turit cost,\nI pelly heas, youre, the blestehath, and bee y would\nBune your ithast no brauth, ast marit that in deee,\n\nT"
+        },
+        {
+          "prompt": "My lord, the night is",
+          "continuation": " deed he his,\nBus tod heand goe st tham now is le ther.\n\nTo dean his tell how thou hesou f grouenow ies wor of\nWeater ho"
+        },
+        {
+          "prompt": "ROMEO:\n",
+          "continuation": "You ind Wher go cidome\nThe, the gret ate spay you shbeor blioker. Touch\nThy to to he sanm. I Whe will aff harlace though"
+        }
+      ]
+    },
+    {
+      "step": 1000,
+      "trainLossMean": 1.7009041547775268,
+      "trainLossStd": 0.009752121107346783,
+      "trainLossRepeats": [
+        1.7033566236495972,
+        1.7124866247177124,
+        1.696053147315979,
+        1.7079235315322876,
+        1.684700846672058
+      ],
+      "validationLossMean": 1.863294005393982,
+      "validationLossStd": 0.010943454014112461,
+      "validationLossRepeats": [
+        1.8759115934371948,
+        1.8478542566299438,
+        1.8610929250717163,
+        1.8562206029891968,
+        1.875390648841858
+      ],
+      "generalisationGap": 0.16238985061645517,
+      "perplexity": 6.444931483587447,
+      "promptResults": [
+        {
+          "prompt": "To be, or not to be",
+          "continuation": " that so sound\nWhich hear aid news all shall and sainst'd you.\n\nVUBRUTUSTANDY Vallance,\nThat, as from the a die he live "
+        },
+        {
+          "prompt": "My lord, the night is",
+          "continuation": " do died his,\nBust frome as good the purn forfore the Rommond in his tellow\nIn wouch so my grown: and so my offitters ho"
+        },
+        {
+          "prompt": "ROMEO:\n",
+          "continuation": "You in be magge eind live overed consand sing your for rep in brestleck\nTo thought mins my lords off. Callow'd book's gr"
+        }
+      ]
+    },
+    {
+      "step": 2000,
+      "trainLossMean": 1.5736526489257812,
+      "trainLossStd": 0.010764211951977846,
+      "trainLossRepeats": [
+        1.5765571594238281,
+        1.588420033454895,
+        1.5671459436416626,
+        1.5792092084884644,
+        1.5569308996200562
+      ],
+      "validationLossMean": 1.7638805389404297,
+      "validationLossStd": 0.010323174555929243,
+      "validationLossRepeats": [
+        1.775622010231018,
+        1.7465966939926147,
+        1.7629855871200562,
+        1.7609866857528687,
+        1.7732117176055908
+      ],
+      "generalisationGap": 0.19022789001464857,
+      "perplexity": 5.83503660424796,
+      "promptResults": [
+        {
+          "prompt": "To be, or not to be",
+          "continuation": " than so soul presire the away\nSouly wish of anamely my does.\n\nBUCKINGHAM:\nSir, sir! is yourse are all finder, when amen"
+        },
+        {
+          "prompt": "My lord, the night is",
+          "continuation": " deed him wall folk\nTo dies good the purn friender thee borne in his tell.\n\nISABELLA:\nNow, grave of in from of York, and"
+        },
+        {
+          "prompt": "ROMEO:\n",
+          "continuation": "All in be marry comfortune, and grainations your burbeormion\nAnd stomp Sity to to his same, pray with a did of comful.\n\n"
+        }
+      ]
+    },
+    {
+      "step": 3000,
+      "trainLossMean": 1.5194244861602784,
+      "trainLossStd": 0.011308380083234586,
+      "trainLossRepeats": [
+        1.5207853317260742,
+        1.536698579788208,
+        1.51244056224823,
+        1.524146556854248,
+        1.5030514001846313
+      ],
+      "validationLossMean": 1.7205350399017334,
+      "validationLossStd": 0.010376688002816242,
+      "validationLossRepeats": [
+        1.7334641218185425,
+        1.7025831937789917,
+        1.7176097631454468,
+        1.722410798072815,
+        1.726607322692871
+      ],
+      "generalisationGap": 0.20111055374145503,
+      "perplexity": 5.587517209314435,
+      "promptResults": [
+        {
+          "prompt": "To be, or not to be",
+          "continuation": " that sees whose his heaven!\nBe Out love some this army'd your love?\nIf the not seal in a that spers it that in hell,\nI "
+        },
+        {
+          "prompt": "My lord, the night is",
+          "continuation": " dead?\n\nWARWICK:\nBy duke a dispace that not so let thee born with is tellow,\nAnd then of my love of the word? Anterer ha"
+        },
+        {
+          "prompt": "ROMEO:\n",
+          "continuation": "You in be more weind look overed compation\nOf you show remove breaklech in the comports my for king;\nThe ghat he would b"
+        }
+      ]
+    }
+  ],
+  "elapsedSeconds": 2.319199874997139
+}

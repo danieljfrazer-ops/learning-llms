@@ -22,3 +22,19 @@ The Shakespeare progression currently contains four runnable models:
 - `ml/shakespeare_transformer.py` — two-block, four-head decoder-only transformer
 
 Each script writes live dashboard metrics under `public/data/` and reproducibility metadata under `experiments/`.
+
+## Evaluation and prompting
+
+Run the frozen checkpoint evaluation with:
+
+```sh
+.venv/bin/python ml/shakespeare_evaluate.py
+```
+
+The interactive prompt lesson needs the local inference service alongside the wiki:
+
+```sh
+.venv/bin/python ml/shakespeare_inference_server.py
+```
+
+It binds to `127.0.0.1:8001`, loads saved transformer checkpoints on demand, and never updates their weights.

@@ -151,6 +151,34 @@ def generate(model: TinyTransformerLanguageModel, newline_id: int, vocabulary: l
     return "".join(vocabulary[token_id] for token_id in generated[1:])
 
 
+def generate_from_prompt(
+    model: TinyTransformerLanguageModel,
+    prompt: str,
+    char_to_id: dict[str, int],
+    vocabulary: list[str],
+    *,
+    seed: int,
+    characters: int,
+    temperature: float,
+) -> str:
+    """Return only newly sampled characters, conditioned on ``prompt``."""
+    unknown = sorted(set(prompt) - set(char_to_id))
+    if unknown:
+        raise ValueError(f"Prompt contains characters outside the vocabulary: {unknown!r}")
+    generated = [char_to_id[character] for character in prompt]
+    if not generated:
+        generated = [char_to_id["\n"]]
+    mx.random.seed(seed)
+    continuation: list[int] = []
+    for _ in range(characters):
+        context = generated[-model.context_size :]
+        logits = model(mx.array([context], dtype=mx.int32))[0, -1] / temperature
+        next_id = int(mx.random.categorical(logits).item())
+        generated.append(next_id)
+        continuation.append(next_id)
+    return "".join(vocabulary[token_id] for token_id in continuation)
+
+
 def atomic_json_write(path: Path, payload: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(".tmp")

@@ -1,0 +1,19 @@
+{
+  "evaluationId": "shakespeare-evaluation-001",
+  "sourceRunId": "shakespeare-transformer-001",
+  "createdAt": "2026-08-21T16:17:06.301394+00:00",
+  "elapsedSeconds": 2.319199874997139,
+  "repeats": 5,
+  "batchesPerRepeat": 20,
+  "batchSize": 32,
+  "contextSize": 64,
+  "predictionsPerRepeat": 40960,
+  "temperature": 0.8,
+  "generatedCharacters": 120,
+  "baseSeed": 42,
+  "prompts": [
+    "To be, or not to be",
+    "My lord, the night is",
+    "ROMEO:\n"
+  ]
+}

@@ -19,7 +19,7 @@ export const projects: Project[] = [
   {
     slug: 'shakespeare', number: '01', name: 'Tiny Shakespeare', shortName: 'Shakespeare',
     description: 'Build a character-level language model from random weights and watch structure emerge.',
-    stage: 'Evaluation', progress: 88, status: 'ACTIVE', method: 'Train from scratch',
+    stage: 'Training improvements', progress: 75, status: 'ACTIVE', method: 'Train from scratch',
     objective: 'Understand the complete language-model loop with the smallest model that still produces visible learning: data → tokens → predictions → loss → updated weights → generated text.',
     dataset: { name: 'Tiny Shakespeare', detail: 'Approximately 1 MB of dialogue from Shakespeare plays. We use a fixed 90/10 train/validation split and begin with individual characters as tokens.', source: 'https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt', sourceLabel: 'Karpathy char-rnn dataset' },
     stages: [
@@ -30,7 +30,11 @@ export const projects: Project[] = [
       { slug: 'context-windows', name: 'Context windows', state: 'complete', lesson: 'Let the model use several earlier characters instead of only one.' },
       { slug: 'self-attention', name: 'Self-attention', state: 'complete', lesson: 'Allow each position to selectively combine information from its context.' },
       { slug: 'tiny-transformer', name: 'Tiny transformer', state: 'complete', lesson: 'Assemble embeddings, multi-head attention, feed-forward layers, residual paths and normalisation.' },
-      { slug: 'evaluation', name: 'Evaluation', state: 'active', lesson: 'Compare checkpoints on held-out loss and representative generations.' },
+      { slug: 'evaluation', name: 'Evaluation', state: 'complete', lesson: 'Freeze a repeatable protocol and compare every checkpoint using held-out loss, perplexity, generalisation gap and fixed prompts.' },
+      { slug: 'prompt-playground', name: 'Prompt playground', state: 'complete', lesson: 'Load saved checkpoints behind a local inference service and complete learner-written Shakespearean prompts in the wiki.' },
+      { slug: 'training-improvements', name: 'Training improvements', state: 'active', lesson: 'Test learning-rate scheduling, gradient clipping, dropout, early stopping and longer training as controlled changes.' },
+      { slug: 'scaling-experiment', name: 'Scaling and longer context', state: 'planned', lesson: 'Compare wider, deeper and longer-context models while measuring quality, memory and speed.' },
+      { slug: 'final-evaluation', name: 'Final model and comparison', state: 'planned', lesson: 'Select the best configuration and rerun the frozen evaluation against every earlier model.' },
     ],
     concepts: [
       { term: 'Token', explanation: 'A unit represented by an integer. In this first project every distinct character—including spaces and line breaks—is a token.' },
@@ -94,6 +98,7 @@ export const projects: Project[] = [
 ];
 
 export const glossary = [
+  ['API', 'Application Programming Interface: a defined way for one program to request work or data from another. The prompt UI sends JSON to the local Python inference API.'],
   ['AdamW', 'An optimiser that adapts each parameter’s update size and can apply decoupled weight decay. Our bigram baseline uses AdamW with weight decay disabled.'],
   ['Attention head', 'One independently learned query, key and value relationship space inside multi-head attention. Different heads can learn to retrieve different kinds of information.'],
   ['Autoregressive', 'Generating or predicting one token at a time while conditioning on earlier tokens.'],
@@ -110,12 +115,15 @@ export const glossary = [
   ['Decoder-only transformer', 'A causal transformer that predicts future tokens from earlier tokens without a separate encoder. GPT-style language models use this arrangement.'],
   ['Embedding', 'A trainable lookup table that maps a token ID to a vector of numbers. In the bigram model each vector directly contains next-token scores.'],
   ['Epoch', 'One complete pass through the training dataset. Token-based LLM runs are often tracked by steps instead.'],
+  ['Evaluation protocol', 'A procedure fixed before comparing models: the same data, sampling method, metrics, prompts and random seeds are applied to every candidate.'],
   ['Feed-forward network', 'Dense transformations applied independently to representations, usually with a nonlinear activation between layers.'],
   ['GELU', 'Gaussian Error Linear Unit, a smooth nonlinear activation commonly used in transformer feed-forward layers.'],
   ['Gradient', 'The direction and magnitude in which changing a weight would change the loss.'],
+  ['Generalisation gap', 'The difference between validation loss and training loss. A growing positive gap can indicate that a model fits training data better than unseen data.'],
   ['Hot module reload', 'A development feature that applies source changes to an open page without restarting the whole application.'],
   ['Hidden layer', 'An internal neural-network layer whose values are neither the raw input nor the final output.'],
   ['Inference', 'Using trained weights to make predictions or generate output without updating them.'],
+  ['Inference service', 'A long-running program that loads model weights and accepts generation requests, allowing a user interface to invoke a model without implementing tensor operations itself.'],
   ['Learning rate', 'The scale of each optimiser update; too high can destabilise training and too low can make it impractically slow.'],
   ['Layer normalisation', 'Normalisation of features within each token representation, with learned scale and bias.'],
   ['Logit', 'An unnormalised score assigned to one possible output before scores are converted into probabilities.'],
@@ -125,6 +133,7 @@ export const glossary = [
   ['Overfitting', 'Improving on training examples while getting worse or failing to improve on unseen validation data.'],
   ['Perplexity', 'An exponential transformation of average cross-entropy loss; lower means the correct next tokens are less surprising to the model.'],
   ['Positional embedding', 'A learned vector associated with a sequence position and combined with token information to represent order.'],
+  ['Prompt', 'The input text supplied to a generative model as the context from which it should continue.'],
   ['Pre-layer-normalisation', 'A transformer arrangement that normalises a representation before each attention or feed-forward sublayer, then adds the sublayer output through a residual connection.'],
   ['Query vector', 'In attention, the learned representation of what the current position is looking for.'],
   ['Reproducibility', 'The ability to recreate an experiment from recorded code, data provenance, dependency versions, configuration and random seeds.'],

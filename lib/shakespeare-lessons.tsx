@@ -472,6 +472,138 @@ output = hidden + self.feed_forward(
       </> },
     ],
   },
+  {
+    slug: 'evaluation',
+    title: 'Evaluate every checkpoint with one frozen protocol',
+    summary: 'Stop changing weights, apply the same held-out measurements and prompts to every checkpoint, and distinguish improvement from sampling noise and overfitting.',
+    outcome: 'The final checkpoint achieved validation loss 1.7205 ± 0.0104 and perplexity 5.59; its 0.2011 generalisation gap shows that further training should not be judged by training loss alone.',
+    evidence: 'Completed · evaluation shakespeare-evaluation-001 · 7 checkpoints · 2.32 seconds · 2026-08-21 16:17 UTC',
+    sections: [
+      { id: 'purpose', title: 'Freeze the rules before reading the result', body: <>
+        <p>An <Term id="evaluation-protocol">evaluation protocol</Term> specifies the data, batches, metrics, prompts and random seeds applied to every candidate. Freezing those rules prevents us from quietly choosing easier examples for a preferred model.</p>
+        <p>Training answers “did the optimiser reduce error on examples it sampled?” Evaluation asks “does the saved model make better predictions on held-out text, and does the improvement remain visible under repeated measurement?” No gradients or optimiser updates occur in this lesson.</p>
+        <aside className="lesson-caveat"><strong>Development evaluation, not a final test</strong><p>The existing corpus has a 90% training and 10% validation split but no untouched test set. We have already used validation results to guide architecture choices, so this evidence supports development decisions rather than an unbiased final performance claim. The final-model lesson will define a fresh test strategy before another model is trained.</p></aside>
+      </> },
+      { id: 'protocol', title: 'Use identical batches and seeds', body: <>
+        <p>The script loads each of the seven <Term id="checkpoint">checkpoints</Term> and evaluates it on five repeatable estimates. Each repeat contains 20 batches × 32 windows × 64 positions = 40,960 next-character predictions. The five repeats therefore cover 204,800 sampled predictions per data split and checkpoint.</p>
+        <Code>{`repeated_loss(
+    model,
+    validation_data,
+    base_seed=200_042,  # identical for every checkpoint
+    repeats=5,
+    batches=20,
+    batch_size=32,
+    context_size=64,
+)`}</Code>
+        <p>The same seed schedule selects the same window starts for every checkpoint. We report the mean and population standard deviation across the five repeats. This is not five separately trained models: it measures batch-sampling variability for one saved model.</p>
+      </> },
+      { id: 'run', title: 'Run the read-only evaluator', body: <>
+        <Code>{`.venv/bin/python ml/shakespeare_evaluate.py`}</Code>
+        <p>The evaluator uses Python 3.12.13 and MLX 0.32.0 on <code>Device(gpu, 0)</code>. It reconstructs the exact 112,065-parameter architecture from <code>experiments/shakespeare-transformer-001/config.json</code>, then calls MLX <code>load_weights</code> for each Safetensors file. See the <Source href="https://ml-explore.github.io/mlx/build/html/python/nn/module.html">official MLX module documentation</Source>.</p>
+        <p>Raw results are written to <code>public/data/shakespeare-evaluation.json</code>; the frozen protocol and timing are also recorded under <code>experiments/shakespeare-evaluation-001/config.json</code>. The complete evaluation took 2.319 seconds.</p>
+      </> },
+      { id: 'metrics', title: 'Read loss, perplexity and the generalisation gap together', body: <>
+        <p><Term id="perplexity">Perplexity</Term> is <code>exp(cross-entropy loss)</code>. It expresses average predictive uncertainty on a multiplicative scale: 5.59 is substantially less uncertain than 72.17, but it does not mean the model has exactly 5.59 equally likely characters at every position. The relationship between cross-entropy and perplexity is described in the <Source href="https://web.stanford.edu/~jurafsky/slp3/3.pdf">Stanford Speech and Language Processing chapter</Source>.</p>
+        <p>The <Term id="generalisation-gap">generalisation gap</Term> here is validation loss minus training loss. A positive, growing gap means the model predicts its training distribution better than the held-out tail of the corpus.</p>
+        <table className="lesson-table"><thead><tr><th>Step</th><th>Train loss</th><th>Validation loss ± std</th><th>Gap</th><th>Perplexity</th></tr></thead><tbody>
+          <tr><td>0</td><td>4.2814</td><td>4.2790 ± 0.0010</td><td>−0.0024</td><td>72.17</td></tr>
+          <tr><td>1</td><td>3.6573</td><td>3.6770 ± 0.0059</td><td>0.0198</td><td>39.53</td></tr>
+          <tr><td>50</td><td>2.5299</td><td>2.5367 ± 0.0113</td><td>0.0068</td><td>12.64</td></tr>
+          <tr><td>250</td><td>2.1326</td><td>2.1732 ± 0.0083</td><td>0.0406</td><td>8.79</td></tr>
+          <tr><td>1,000</td><td>1.7009</td><td>1.8633 ± 0.0109</td><td>0.1624</td><td>6.44</td></tr>
+          <tr><td>2,000</td><td>1.5737</td><td>1.7639 ± 0.0103</td><td>0.1902</td><td>5.84</td></tr>
+          <tr><td><strong>3,000</strong></td><td><strong>1.5194</strong></td><td><strong>1.7205 ± 0.0104</strong></td><td><strong>0.2011</strong></td><td><strong>5.59</strong></td></tr>
+        </tbody></table>
+      </> },
+      { id: 'prompt-test', title: 'Hold generation settings constant too', body: <>
+        <p>Loss measures every target character but cannot show whether output feels coherent. We therefore pass the same three <Term id="prompt">prompts</Term> through every checkpoint: <code>To be, or not to be</code>, <code>My lord, the night is</code>, and <code>ROMEO:\n</code>. Each receives 120 new characters at temperature 0.8 with a fixed sampling seed.</p>
+        <table className="lesson-table"><thead><tr><th>Checkpoint</th><th>Continuation after “To be, or not to be”</th></tr></thead><tbody><tr><td>Random · step 0</td><td><code>SHSYItAA$RRYAzDA&amp;D?D3RTzOKayv,…</code></td></tr><tr><td>Step 50</td><td><code>terithe s whopre moe tas, Thane, theres…</code></td></tr><tr><td>Step 1,000</td><td><code>that so sound Which hear aid news all shall…</code></td></tr><tr><td>Step 3,000</td><td><code>that sees whose his heaven! Be Out love some…</code></td></tr></tbody></table>
+        <p>The later output has recognisable words, clauses and line breaks, but it still lacks reliable meaning. Prompt examples are qualitative evidence, not a substitute for held-out loss, and one attractive sample must not be treated as typical behaviour.</p>
+      </> },
+      { id: 'decision', title: 'Turn the evidence into the next experiment', body: <>
+        <p>Validation loss improves at every recorded checkpoint, so step 3,000 remains the best saved model. Yet the gap grows from roughly zero to 0.2011. The next training experiment should therefore save more frequent late checkpoints and test regularisation or a learning-rate schedule rather than merely chasing lower training loss.</p>
+        <p>The immediate next lesson does not change the model at all. It packages these checkpoints behind a local inference service so you can probe them with your own text and see how checkpoint, temperature and seed affect generation.</p>
+      </> },
+    ],
+  },
+  {
+    slug: 'prompt-playground',
+    title: 'Prompt saved checkpoints from the wiki',
+    summary: 'Connect the browser interface to a loopback-only Python inference service, load any saved checkpoint, encode learner-written text and generate a continuation one character at a time.',
+    outcome: 'The wiki can now complete an arbitrary valid Shakespeare prompt with random, minimally trained or final weights and compare all seven checkpoints under identical settings.',
+    evidence: 'Completed · local API on 127.0.0.1:8001 · 7 selectable checkpoints · Apple GPU generation',
+    sections: [
+      { id: 'two-processes', title: 'Separate the interface from model inference', body: <>
+        <p>The wiki runs in a JavaScript development server, while MLX and the checkpoints live in Python. A small <Term id="inference-service">inference service</Term> connects them: the browser sends a JSON request through an <Term id="api">API</Term>, Python invokes the model, and JSON returns the continuation.</p>
+        <Code>{`Browser UI :3000
+    │ POST /generate { prompt, checkpoint, temperature, ... }
+    ▼
+Python inference service :8001
+    │ encode → load weights → autoregressive sampling
+    ▼
+MLX model on Apple GPU`}</Code>
+        <p>This boundary keeps the educational model code readable and allows checkpoints to remain local. The service binds only to <code>127.0.0.1</code>, the loopback address of this Mac; it is not a hosted public model endpoint.</p>
+      </> },
+      { id: 'start', title: 'Start the two local processes', body: <>
+        <Code>{`# Terminal 1 — wiki (already running in this lab)
+npm run dev
+
+# Terminal 2 — checkpoint inference
+.venv/bin/python ml/shakespeare_inference_server.py`}</Code>
+        <p>The browser checks <code>GET http://127.0.0.1:8001/health</code> when the page loads. A green “Ready” badge confirms that Python found the seven checkpoint files and MLX reports the Apple GPU. If Python stops, the lesson remains readable and the playground shows the exact restart command.</p>
+        <p>The server is built with Python&apos;s standard <code>ThreadingHTTPServer</code>. Python explicitly warns that <Source href="https://docs.python.org/3/library/http.server.html">http.server is not recommended for production</Source>; it is appropriate here only because this is a local teaching service with bounded inputs.</p>
+      </> },
+      { id: 'load', title: 'Reconstruct and cache a selected checkpoint', body: <>
+        <Code>{`model = TinyTransformerLanguageModel(
+    vocabulary_size=65,
+    context_size=64,
+    model_size=64,
+    head_count=4,
+    block_count=2,
+)
+model.load_weights("checkpoint-3000.safetensors")
+mx.eval(model.parameters())`}</Code>
+        <p>A checkpoint contains learned tensors, not the Python architecture. The service reconstructs the same class and dimensions recorded by the training configuration before loading weights. Models are loaded lazily on first selection and cached in memory, so later requests avoid reading the same 440 KB file again.</p>
+        <p>Selecting step 0 invokes genuine random initial weights saved before training. Step 1 shows the minimally trained state, while step 3,000 loads the best evaluated checkpoint. “Compare every checkpoint” makes seven sequential requests with all other controls unchanged.</p>
+      </> },
+      { id: 'encode-prompt', title: 'Encode the prompt and respect the 64-character context', body: <>
+        <p>The <Term id="prompt">prompt</Term> is encoded with the same 65-character vocabulary used during training. A character outside that vocabulary produces an explicit error rather than being silently replaced. This simple tokenizer therefore accepts Shakespeare&apos;s letters, spaces and known punctuation but not arbitrary emoji or unseen Unicode characters.</p>
+        <Code>{`generated = [char_to_id[ch] for ch in prompt]
+context = generated[-model.context_size:]  # at most 64 characters
+logits = model(mx.array([context]))[0, -1]`}</Code>
+        <p>The page may retain a longer prompt for display, but only its final 64 characters can influence the first generated character. After each new character is appended, the oldest character falls out of the window. The result card reports how many prompt characters were initially visible.</p>
+      </> },
+      { id: 'sampling', title: 'Generate one character at a time', body: <>
+        <Code>{`for _ in range(characters):
+    logits = model(context)[0, -1] / temperature
+    next_id = mx.random.categorical(logits)
+    generated.append(next_id)
+    context = generated[-64:]`}</Code>
+        <p>This is <Term id="autoregressive">autoregressive</Term> inference. Each sampled character becomes input for the next model call. <Term id="temperature">Temperature</Term> rescales logits: lower values favour the model&apos;s highest-scoring options; higher values increase variety and errors. The seed makes categorical sampling repeatable for the same model, prompt and settings.</p>
+        <p>Output length controls work, not context: asking for 400 new characters causes 400 forward passes, while every pass still sees at most 64 characters.</p>
+      </> },
+      { id: 'invoke', title: 'See the exact request behind the button', body: <>
+        <Code>{`curl -X POST http://127.0.0.1:8001/generate \
+  -H 'Content-Type: application/json' \
+  --data '{
+    "prompt": "To be, or not to be",
+    "checkpoint": 3000,
+    "temperature": 0.8,
+    "characters": 80,
+    "seed": 42
+  }'`}</Code>
+        <p>The measured response took 0.086 seconds and continued: <code> blood thing whose same; and stay speak.\n\nABTRUTUS:…</code>. Repeating the request with the same values produces the same sampled continuation; changing the seed explores another valid path through the probability distribution.</p>
+      </> },
+      { id: 'controls', title: 'Use the playground as an experiment, not a slot machine', body: <>
+        <ol><li>Enter one prompt and keep it unchanged.</li><li>Set temperature 0.8, seed 42 and a modest output length.</li><li>Compare every checkpoint to isolate the effect of training progress.</li><li>Then hold the final checkpoint fixed and change one control at a time.</li><li>Record failures as well as unusually good samples.</li></ol>
+        <p>The service validates checkpoint names, temperature 0.1–2.0, output length 1–500 and prompt length up to 2,000 characters. Requests are serialised around MLX generation to avoid concurrent mutation of its shared random generator.</p>
+      </> },
+      { id: 'limits', title: 'Understand what prompting does not change', body: <>
+        <p>A prompt conditions existing weights; it does not teach new facts or update the model. This character model has no instruction training, so “Write a sonnet about Mars” is merely another character prefix rather than a command it understands.</p>
+        <p>The next lesson returns to training. We will preserve this playground and frozen evaluation as acceptance tests while changing one training technique at a time. That prevents a visually pleasing cherry-picked completion from overriding worse held-out evidence.</p>
+      </> },
+    ],
+  },
 ];
 
 export function getShakespeareLesson(slug: string) {
