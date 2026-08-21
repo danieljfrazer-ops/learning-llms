@@ -1,0 +1,55 @@
+{
+  "status": "Complete",
+  "experimentId": "shakespeare-final-001",
+  "updatedAt": "2026-08-21T21:50:17.116725+00:00",
+  "architecture": {
+    "modelSize": 128,
+    "transformerBlocks": 2,
+    "attentionHeads": 4,
+    "contextSize": 64,
+    "parameterCount": 420673
+  },
+  "seeds": [
+    {
+      "runId": "shakespeare-scale-width-001",
+      "seed": 42,
+      "reusedScalingRun": true,
+      "parameterCount": 420673,
+      "elapsedSeconds": 23.445781665999675,
+      "peakMetalMemoryBytes": 295150148,
+      "validationLossMean": 1.5861881256103516,
+      "validationLossStd": 0.009092057691667212,
+      "perplexity": 4.885092034831704,
+      "continuation": " that says who\nWe may base your with whose thine, and yet you.\n\nVOLUMNIA:\nStay as a grace that safe! I find him.\n\nKING EDWARD IV:\nArt no groan enter the little "
+    },
+    {
+      "runId": "shakespeare-final-seed-043",
+      "seed": 43,
+      "reusedScalingRun": false,
+      "parameterCount": 420673,
+      "elapsedSeconds": 21.51857108299737,
+      "peakMetalMemoryBytes": 159381767,
+      "validationLossMean": 1.5791292190551758,
+      "validationLossStd": 0.010857722940000477,
+      "perplexity": 4.850730048352961,
+      "continuation": " that says with\nClifford and grace loves\nso his pulpisy'd years.\n\nBALTHASAR:\nHow banished that safe! what a divide thee us,\nI made revenge to change the lie of "
+    },
+    {
+      "runId": "shakespeare-final-seed-044",
+      "seed": 44,
+      "reusedScalingRun": false,
+      "parameterCount": 420673,
+      "elapsedSeconds": 21.930575124992174,
+      "peakMetalMemoryBytes": 159381665,
+      "validationLossMean": 1.588457465171814,
+      "validationLossStd": 0.012809838832444572,
+      "perplexity": 4.896190555841108,
+      "continuation": " that seek the report thee\nTo see the kinsman this prince end.\n\nVUCIO:\nThe nighted with hear, as from the attile\nTo be duke of a threen heat him well.\n\nKING RIC"
+    }
+  ],
+  "validationLossAcrossSeedsMean": 1.5845916032791139,
+  "validationLossAcrossSeedsStd": 0.003972044525493106,
+  "perplexityFromMeanLoss": 4.877299098761448,
+  "selectedRunId": "shakespeare-final-seed-043",
+  "elapsedSeconds": 44.321272125002
+}

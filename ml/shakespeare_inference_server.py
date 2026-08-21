@@ -35,6 +35,7 @@ class InferenceRuntime:
         self.run_directories = {
             "baseline": run_dir,
             "warmup-cosine": ROOT / "experiments" / "shakespeare-warmup-cosine-001",
+            "final": ROOT / "experiments" / "shakespeare-final-seed-043",
         }
         self.run_directories = {
             run_id: directory for run_id, directory in self.run_directories.items()

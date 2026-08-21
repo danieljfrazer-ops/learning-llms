@@ -1,0 +1,17 @@
+{
+  "status": "Complete",
+  "experimentId": "shakespeare-final-001",
+  "updatedAt": "2026-08-21T21:50:17.116725+00:00",
+  "architecture": {
+    "modelSize": 128,
+    "transformerBlocks": 2,
+    "attentionHeads": 4,
+    "contextSize": 64,
+    "parameterCount": 420673
+  },
+  "validationLossAcrossSeedsMean": 1.5845916032791139,
+  "validationLossAcrossSeedsStd": 0.003972044525493106,
+  "perplexityFromMeanLoss": 4.877299098761448,
+  "selectedRunId": "shakespeare-final-seed-043",
+  "elapsedSeconds": 44.321272125002
+}

@@ -21,6 +21,8 @@ The Shakespeare progression currently contains four runnable models:
 - `ml/shakespeare_attention.py` — single-head causal attention over 64 characters
 - `ml/shakespeare_transformer.py` — two-block, four-head decoder-only transformer
 - `ml/shakespeare_training_improvements.py` — controlled learning-rate and gradient-clipping comparison
+- `ml/shakespeare_scaling.py` — controlled width, depth, and context comparison
+- `ml/shakespeare_final.py` — three-seed confirmation of the selected architecture
 
 Each script writes live dashboard metrics under `public/data/` and reproducibility metadata under `experiments/`.
 

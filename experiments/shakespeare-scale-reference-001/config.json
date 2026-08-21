@@ -1,0 +1,12 @@
+{
+  "runId": "shakespeare-scale-reference-001",
+  "factor": "Reference",
+  "label": "Reference 64\u00d72 \u00b7 context 64",
+  "modelSize": 64,
+  "transformerBlocks": 2,
+  "contextSize": 64,
+  "attentionHeads": 4,
+  "parameterCount": 112065,
+  "elapsedSeconds": 15.367297250006231,
+  "peakMetalMemoryBytes": 170119748
+}

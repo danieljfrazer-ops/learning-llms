@@ -1,0 +1,12 @@
+{
+  "runId": "shakespeare-scale-depth-001",
+  "factor": "Depth",
+  "label": "Deeper 64\u00d74 \u00b7 context 64",
+  "modelSize": 64,
+  "transformerBlocks": 4,
+  "contextSize": 64,
+  "attentionHeads": 4,
+  "parameterCount": 211521,
+  "elapsedSeconds": 28.982558042000164,
+  "peakMetalMemoryBytes": 197636494
+}

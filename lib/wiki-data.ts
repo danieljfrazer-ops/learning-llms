@@ -19,7 +19,7 @@ export const projects: Project[] = [
   {
     slug: 'shakespeare', number: '01', name: 'Tiny Shakespeare', shortName: 'Shakespeare',
     description: 'Build a character-level language model from random weights and watch structure emerge.',
-    stage: 'Scaling and longer context', progress: 83, status: 'ACTIVE', method: 'Train from scratch',
+    stage: 'Complete', progress: 100, status: 'COMPLETE', method: 'Train from scratch',
     objective: 'Understand the complete language-model loop with the smallest model that still produces visible learning: data → tokens → predictions → loss → updated weights → generated text.',
     dataset: { name: 'Tiny Shakespeare', detail: 'Approximately 1 MB of dialogue from Shakespeare plays. We use a fixed 90/10 train/validation split and begin with individual characters as tokens.', source: 'https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt', sourceLabel: 'Karpathy char-rnn dataset' },
     stages: [
@@ -33,8 +33,8 @@ export const projects: Project[] = [
       { slug: 'evaluation', name: 'Evaluation', state: 'complete', lesson: 'Freeze a repeatable protocol and compare every checkpoint using held-out loss, perplexity, generalisation gap and fixed prompts.' },
       { slug: 'prompt-playground', name: 'Prompt playground', state: 'complete', lesson: 'Load saved checkpoints behind a local inference service and complete learner-written Shakespearean prompts in the wiki.' },
       { slug: 'training-improvements', name: 'Training improvements', state: 'complete', lesson: 'Hold the model fixed while testing warmup plus cosine decay and gradient clipping as controlled changes.' },
-      { slug: 'scaling-experiment', name: 'Scaling and longer context', state: 'active', lesson: 'Compare wider, deeper and longer-context models while measuring quality, memory and speed.' },
-      { slug: 'final-evaluation', name: 'Final model and comparison', state: 'planned', lesson: 'Select the best configuration and rerun the frozen evaluation against every earlier model.' },
+      { slug: 'scaling-experiment', name: 'Scaling and longer context', state: 'complete', lesson: 'Compare wider, deeper and longer-context models while measuring quality, memory and speed.' },
+      { slug: 'final-evaluation', name: 'Final model and comparison', state: 'complete', lesson: 'Confirm the selected architecture across three training seeds and close the project with an honest comparison.' },
     ],
     concepts: [
       { term: 'Token', explanation: 'A unit represented by an integer. In this first project every distinct character—including spaces and line breaks—is a token.' },
@@ -106,6 +106,7 @@ export const glossary = [
   ['Attention score', 'A query–key compatibility value that determines how strongly one position reads information from another position.'],
   ['Backpropagation', 'Computing how much each weight contributed to the loss so the optimiser can update it.'],
   ['Batch', 'Several training examples processed together before one optimiser update.'],
+  ['Capacity', 'The amount and complexity of patterns a model can represent, influenced by parameter count, width, depth and architecture.'],
   ['Bigram model', 'A model of pairs. Our character bigram predicts the next character using only the current character.'],
   ['Character-level tokenizer', 'A transparent tokenizer in which every distinct character—including punctuation, spaces and line breaks—is its own token.'],
   ['Causal mask', 'A mask that prevents a next-token model from attending to positions in the future.'],
@@ -136,6 +137,7 @@ export const glossary = [
   ['Model width', 'The number of features used to represent each token inside the model. In this experiment the model width is 64.'],
   ['Multi-head attention', 'Several attention heads run in parallel on different learned subspaces; their outputs are concatenated and projected back to the model width.'],
   ['Overfitting', 'Improving on training examples while getting worse or failing to improve on unseen validation data.'],
+  ['Parameter efficiency', 'The quality improvement achieved relative to additional parameters, memory, or computation.'],
   ['Perplexity', 'An exponential transformation of average cross-entropy loss; lower means the correct next tokens are less surprising to the model.'],
   ['Positional embedding', 'A learned vector associated with a sequence position and combined with token information to represent order.'],
   ['Prompt', 'The input text supplied to a generative model as the context from which it should continue.'],
@@ -151,6 +153,7 @@ export const glossary = [
   ['Tensor', 'A multidimensional array used to store token batches, activations, weights and gradients.'],
   ['Token', 'A discrete unit of text mapped to an integer before it enters a model.'],
   ['Training step', 'One batch loss calculation followed by one optimiser update.'],
+  ['Training-seed variance', 'Differences between independently trained models caused by random initialisation, batch sampling and other seeded numerical choices.'],
   ['Unified memory', 'Apple-silicon memory shared by CPU and GPU rather than split into separate system RAM and video RAM pools.'],
   ['Validation set', 'Held-out examples used to measure generalisation during development but never used for weight updates.'],
   ['Value vector', 'In attention, the information from a position that is blended according to its attention weight.'],

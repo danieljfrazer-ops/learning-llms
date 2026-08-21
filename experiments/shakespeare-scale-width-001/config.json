@@ -1,0 +1,12 @@
+{
+  "runId": "shakespeare-scale-width-001",
+  "factor": "Width",
+  "label": "Wider 128\u00d72 \u00b7 context 64",
+  "modelSize": 128,
+  "transformerBlocks": 2,
+  "contextSize": 64,
+  "attentionHeads": 4,
+  "parameterCount": 420673,
+  "elapsedSeconds": 23.445781665999675,
+  "peakMetalMemoryBytes": 295150148
+}

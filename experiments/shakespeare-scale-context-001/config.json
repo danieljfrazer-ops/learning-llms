@@ -1,0 +1,12 @@
+{
+  "runId": "shakespeare-scale-context-001",
+  "factor": "Context",
+  "label": "Longer context 64\u00d72 \u00b7 context 128",
+  "modelSize": 64,
+  "transformerBlocks": 2,
+  "contextSize": 128,
+  "attentionHeads": 4,
+  "parameterCount": 116161,
+  "elapsedSeconds": 36.184200791991316,
+  "peakMetalMemoryBytes": 405588036
+}

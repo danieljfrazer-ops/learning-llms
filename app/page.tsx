@@ -34,8 +34,8 @@ export default function Home() {
           </div>
           <div className="terminal-card" aria-label="Current experiment status">
             <div className="terminal-title"><span>● ● ●</span><code>shakespeare · progression</code></div>
-            <pre><span className="muted">$ course.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">training_runs</span>: <span className="value">6</span>,{'\n'}  <span className="key">best_validation_loss</span>: <span className="value">1.7051</span>,{'\n'}  <span className="key">next</span>: <span className="value">&quot;scaling and context&quot;</span>{'\n'}{'}'}</pre>
-            <div className="terminal-footer"><span className="live-dot" /> Warmup + cosine is the provisional best recipe</div>
+            <pre><span className="muted">$ course.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">shakespeare_project</span>: <span className="value">&quot;complete&quot;</span>,{'\n'}  <span className="key">final_mean_validation_loss</span>: <span className="value">1.5846</span>,{'\n'}  <span className="key">next</span>: <span className="value">&quot;TinyStories&quot;</span>{'\n'}{'}'}</pre>
+            <div className="terminal-footer"><span className="live-dot" /> Final 420,673-parameter model ready to prompt</div>
           </div>
         </section>
 

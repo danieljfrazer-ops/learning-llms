@@ -5,6 +5,8 @@ import ModelComparison from '@/app/components/ModelComparison';
 import PromptPlayground from '@/app/components/PromptPlayground';
 import EvaluationPanel from '@/app/components/EvaluationPanel';
 import TrainingImprovementsPanel from '@/app/components/TrainingImprovementsPanel';
+import ScalingPanel from '@/app/components/ScalingPanel';
+import FinalModelPanel from '@/app/components/FinalModelPanel';
 import { getProject, projects } from '@/lib/wiki-data';
 import { getShakespeareLesson } from '@/lib/shakespeare-lessons';
 
@@ -38,6 +40,8 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       {project.slug === 'shakespeare' && lessonSlug === 'evaluation' && <EvaluationPanel />}
       {project.slug === 'shakespeare' && lessonSlug === 'prompt-playground' && <PromptPlayground />}
       {project.slug === 'shakespeare' && lessonSlug === 'training-improvements' && <TrainingImprovementsPanel />}
+      {project.slug === 'shakespeare' && lessonSlug === 'scaling-experiment' && <ScalingPanel />}
+      {project.slug === 'shakespeare' && lessonSlug === 'final-evaluation' && <FinalModelPanel />}
 
       {richLesson ? <div className="lesson-layout">
         <aside className="lesson-toc"><p>IN THIS LESSON</p>{richLesson.sections.map(section => <a key={section.id} href={`#${section.id}`}>{section.title}</a>)}</aside>

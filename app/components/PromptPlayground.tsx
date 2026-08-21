@@ -10,6 +10,7 @@ const fallbackCheckpoints = [0, 1, 50, 250, 1000, 2000, 3000];
 const presets = ['To be, or not to be', 'My lord, the night is', 'ROMEO:\n'];
 
 function checkpointLabel(run: string, step: number) {
+  if (run === 'final') return `Final 420K model · seed 43 · step ${step.toLocaleString()}`;
   if (run === 'warmup-cosine') return `Improved recipe · step ${step.toLocaleString()}`;
   if (step === 0) return 'Random weights · step 0';
   if (step === 1) return 'Minimally trained · step 1';
@@ -19,7 +20,7 @@ function checkpointLabel(run: string, step: number) {
 export default function PromptPlayground() {
   const [health, setHealth] = useState<Health | null>(null);
   const [prompt, setPrompt] = useState(presets[0]);
-  const [selection, setSelection] = useState('warmup-cosine:3000');
+  const [selection, setSelection] = useState('final:3000');
   const [temperature, setTemperature] = useState(0.8);
   const [characters, setCharacters] = useState(180);
   const [seed, setSeed] = useState(42);
@@ -49,7 +50,7 @@ export default function PromptPlayground() {
     try {
       const [selectedRun, selectedStep] = selection.split(':');
       const comparisons: [string, number][] = compareAll
-        ? [...fallbackCheckpoints.map(step => ['baseline', step] as [string, number]), ['warmup-cosine', 3000]]
+        ? [...fallbackCheckpoints.map(step => ['baseline', step] as [string, number]), ['warmup-cosine', 3000], ['final', 3000]]
         : [[selectedRun, Number(selectedStep)]];
       const completions = [];
       for (const [run, step] of comparisons) completions.push(await requestCompletion(run, step));

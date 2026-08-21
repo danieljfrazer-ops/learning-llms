@@ -1,0 +1,246 @@
+{
+  "status": "Complete",
+  "experimentId": "shakespeare-scaling-001",
+  "updatedAt": "2026-08-21T21:48:54.441224+00:00",
+  "controlledVariables": {
+    "seed": 42,
+    "steps": 3000,
+    "batchSize": 32,
+    "learningRateRecipe": "100-step warmup then cosine 0.001 to 0.0001",
+    "weightDecay": 0.01,
+    "evaluationRepeats": 5,
+    "evaluationBatchesPerRepeat": 20
+  },
+  "variants": [
+    {
+      "runId": "shakespeare-scale-reference-001",
+      "factor": "Reference",
+      "label": "Reference 64×2 · context 64",
+      "modelSize": 64,
+      "transformerBlocks": 2,
+      "contextSize": 64,
+      "attentionHeads": 4,
+      "parameterCount": 112065,
+      "elapsedSeconds": 15.367297250006231,
+      "peakMetalMemoryBytes": 170119748,
+      "checkpoints": [
+        {
+          "step": 0,
+          "capturedAt": "2026-08-21T21:47:08.371823+00:00",
+          "trainLoss": null,
+          "validationLoss": 4.280045509338379,
+          "learningRate": 0.0001
+        },
+        {
+          "step": 250,
+          "capturedAt": "2026-08-21T21:47:09.732075+00:00",
+          "trainLoss": 2.2734501361846924,
+          "validationLoss": 2.230391025543213,
+          "learningRate": 0.0009941505268216133
+        },
+        {
+          "step": 1000,
+          "capturedAt": "2026-08-21T21:47:13.516313+00:00",
+          "trainLoss": 1.6519032716751099,
+          "validationLoss": 1.8515630960464478,
+          "learningRate": 0.0008029374876059592
+        },
+        {
+          "step": 2000,
+          "capturedAt": "2026-08-21T21:47:18.559920+00:00",
+          "trainLoss": 1.5087556838989258,
+          "validationLoss": 1.734861969947815,
+          "learningRate": 0.0003396470856387168
+        },
+        {
+          "step": 3000,
+          "capturedAt": "2026-08-21T21:47:23.600187+00:00",
+          "trainLoss": 1.4808419942855835,
+          "validationLoss": 1.7059111595153809,
+          "learningRate": 0.00010000026668421924
+        }
+      ],
+      "evaluation": {
+        "trainLossMean": 1.5124003171920777,
+        "validationLossMean": 1.7051451206207275,
+        "validationLossStd": 0.008265921811516443,
+        "generalisationGap": 0.19274480342864986,
+        "perplexity": 5.502184089646762,
+        "continuation": " that seeing of this\nTo same grace the shalthings and been such\nOne and semberdant which unsight from the advilo's eame\n"
+      }
+    },
+    {
+      "runId": "shakespeare-scale-width-001",
+      "factor": "Width",
+      "label": "Wider 128×2 · context 64",
+      "modelSize": 128,
+      "transformerBlocks": 2,
+      "contextSize": 64,
+      "attentionHeads": 4,
+      "parameterCount": 420673,
+      "elapsedSeconds": 23.445781665999675,
+      "peakMetalMemoryBytes": 295150148,
+      "checkpoints": [
+        {
+          "step": 0,
+          "capturedAt": "2026-08-21T21:47:24.160754+00:00",
+          "trainLoss": null,
+          "validationLoss": 4.334870338439941,
+          "learningRate": 0.0001
+        },
+        {
+          "step": 250,
+          "capturedAt": "2026-08-21T21:47:26.129712+00:00",
+          "trainLoss": 2.0263671875,
+          "validationLoss": 2.0552139282226562,
+          "learningRate": 0.0009941505268216133
+        },
+        {
+          "step": 1000,
+          "capturedAt": "2026-08-21T21:47:31.995976+00:00",
+          "trainLoss": 1.508062720298767,
+          "validationLoss": 1.711165428161621,
+          "learningRate": 0.0008029374876059592
+        },
+        {
+          "step": 2000,
+          "capturedAt": "2026-08-21T21:47:39.647500+00:00",
+          "trainLoss": 1.372293472290039,
+          "validationLoss": 1.6144311428070068,
+          "learningRate": 0.0003396470856387168
+        },
+        {
+          "step": 3000,
+          "capturedAt": "2026-08-21T21:47:47.410347+00:00",
+          "trainLoss": 1.3384531736373901,
+          "validationLoss": 1.5808937549591064,
+          "learningRate": 0.00010000026668421924
+        }
+      ],
+      "evaluation": {
+        "trainLossMean": 1.3599653244018555,
+        "validationLossMean": 1.5861881256103516,
+        "validationLossStd": 0.009092057691667212,
+        "generalisationGap": 0.22622280120849614,
+        "perplexity": 4.885092034831704,
+        "continuation": " that says who\nWe may base your with whose thine, and yet you.\n\nVOLUMNIA:\nStay as a grace that safe! I find him.\n\nKING E"
+      }
+    },
+    {
+      "runId": "shakespeare-scale-depth-001",
+      "factor": "Depth",
+      "label": "Deeper 64×4 · context 64",
+      "modelSize": 64,
+      "transformerBlocks": 4,
+      "contextSize": 64,
+      "attentionHeads": 4,
+      "parameterCount": 211521,
+      "elapsedSeconds": 28.982558042000164,
+      "peakMetalMemoryBytes": 197636494,
+      "checkpoints": [
+        {
+          "step": 0,
+          "capturedAt": "2026-08-21T21:47:48.054539+00:00",
+          "trainLoss": null,
+          "validationLoss": 4.562234878540039,
+          "learningRate": 0.0001
+        },
+        {
+          "step": 250,
+          "capturedAt": "2026-08-21T21:47:50.446027+00:00",
+          "trainLoss": 2.273620128631592,
+          "validationLoss": 2.2442774772644043,
+          "learningRate": 0.0009941505268216133
+        },
+        {
+          "step": 1000,
+          "capturedAt": "2026-08-21T21:47:57.555121+00:00",
+          "trainLoss": 1.6439567804336548,
+          "validationLoss": 1.821360468864441,
+          "learningRate": 0.0008029374876059592
+        },
+        {
+          "step": 2000,
+          "capturedAt": "2026-08-21T21:48:07.364200+00:00",
+          "trainLoss": 1.4382023811340332,
+          "validationLoss": 1.6883914470672607,
+          "learningRate": 0.0003396470856387168
+        },
+        {
+          "step": 3000,
+          "capturedAt": "2026-08-21T21:48:16.970797+00:00",
+          "trainLoss": 1.4141888618469238,
+          "validationLoss": 1.652660608291626,
+          "learningRate": 0.00010000026668421924
+        }
+      ],
+      "evaluation": {
+        "trainLossMean": 1.4503294229507446,
+        "validationLossMean": 1.6503507375717164,
+        "validationLossStd": 0.010574975346581876,
+        "generalisationGap": 0.20002131462097172,
+        "perplexity": 5.20880643095097,
+        "continuation": " dear to straight.\n\nARTjRage:\nI would blest his is a master some with thee\nthis changed and spale:\nAll find die here, si"
+      }
+    },
+    {
+      "runId": "shakespeare-scale-context-001",
+      "factor": "Context",
+      "label": "Longer context 64×2 · context 128",
+      "modelSize": 64,
+      "transformerBlocks": 2,
+      "contextSize": 128,
+      "attentionHeads": 4,
+      "parameterCount": 116161,
+      "elapsedSeconds": 36.184200791991316,
+      "peakMetalMemoryBytes": 405588036,
+      "checkpoints": [
+        {
+          "step": 0,
+          "capturedAt": "2026-08-21T21:48:17.914323+00:00",
+          "trainLoss": null,
+          "validationLoss": 4.34883975982666,
+          "learningRate": 0.0001
+        },
+        {
+          "step": 250,
+          "capturedAt": "2026-08-21T21:48:21.103564+00:00",
+          "trainLoss": 2.356062889099121,
+          "validationLoss": 2.3696019649505615,
+          "learningRate": 0.0009941505268216133
+        },
+        {
+          "step": 1000,
+          "capturedAt": "2026-08-21T21:48:30.021616+00:00",
+          "trainLoss": 1.6806788444519043,
+          "validationLoss": 1.8401603698730469,
+          "learningRate": 0.0008029374876059592
+        },
+        {
+          "step": 2000,
+          "capturedAt": "2026-08-21T21:48:41.866266+00:00",
+          "trainLoss": 1.49972403049469,
+          "validationLoss": 1.710323452949524,
+          "learningRate": 0.0003396470856387168
+        },
+        {
+          "step": 3000,
+          "capturedAt": "2026-08-21T21:48:53.752013+00:00",
+          "trainLoss": 1.4730324745178223,
+          "validationLoss": 1.6861125230789185,
+          "learningRate": 0.00010000026668421924
+        }
+      ],
+      "evaluation": {
+        "trainLossMean": 1.4920630216598512,
+        "validationLossMean": 1.6826516151428224,
+        "validationLossStd": 0.007856499435155475,
+        "generalisationGap": 0.1905885934829712,
+        "perplexity": 5.37980224004867,
+        "continuation": " dearth your speed?\n\nROMEO:\nNor I though so; and, and you your lord?\n\nKING RICHARD III:\nThat, as from the at is deed, ed"
+      }
+    }
+  ],
+  "elapsedSeconds": 106.21437874999538,
+  "selectedRunId": "shakespeare-scale-width-001"
+}
