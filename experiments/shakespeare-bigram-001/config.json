@@ -1,0 +1,11 @@
+{
+  "seed": 42,
+  "steps": 400,
+  "batchSize": 64,
+  "blockSize": 64,
+  "learningRate": 0.03,
+  "vocabularySize": 65,
+  "trainingCharacters": 1003854,
+  "validationCharacters": 111540,
+  "mlxDevice": "Device(gpu, 0)"
+}

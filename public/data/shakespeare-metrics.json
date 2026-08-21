@@ -1,0 +1,44 @@
+{
+  "status": "Complete",
+  "runId": "shakespeare-bigram-001",
+  "model": "Character bigram",
+  "parameters": 4225,
+  "updatedAt": "2026-08-21T14:59:42.476756+00:00",
+  "checkpoints": [
+    {
+      "label": "Random weights",
+      "step": 0,
+      "trainLoss": null,
+      "validationLoss": null,
+      "sample": "\nAM?EWAKvDhgtWQMbubo:rG's3zfXSruc;kJza\ns,CVTyiJCCLWRayJMzcQk-mH&Yn!;3sUaad.VpFZ, SNfrQm!PKlgwcx3YRJ emptQR3Whf;Gl&wOXdkGX$sLphtlwOpnPuIHKTIy:xhypWWjZgPaoVsWuwJuQ;Ual,'!YIk-wlF''Cu'T,UtaVo&NtjFYcU&PW-nX!YMcm&qQyxzVtjOiIHYiach'EW'GAhopqN?KEpSuNKEpBxw'xlHE3vwI!YEJSyLAyv!ROvsfqxFRR;;N"
+    },
+    {
+      "label": "One update",
+      "step": 1,
+      "trainLoss": 4.187287330627441,
+      "validationLoss": 4.061366081237793,
+      "sample": "\nYF&KNM:n!&lNeaDcrcQPE,mopv?bTIUD?wa,,Q-!-hTt:eSWtdUORW?;me'llSbv TafXF:eGEh?.Z,PtPqC-HchoApqA;ObIbu:ZnJsYtXjebPDJMeq-jQrerLneRZ:S;DHvIlXTnZ'NTSNS tTxS$fojbYYkpqrnaYRpv$3cjD;'fNJWghK&;anawNhZ'Zjn$;Lrd qcuCZ'L,gWxZ!\ncHL3MEx.IFtHfX'mNKCmJ:yvY,:ahtRs'AAIOdBJmnQWxEVMxFuDCPUF,hTq'.HC p"
+    },
+    {
+      "label": "After 25 updates",
+      "step": 25,
+      "trainLoss": 2.504936695098877,
+      "validationLoss": 2.5498626232147217,
+      "sample": "\nH:\nH:\nS: be ce bareve pes werantha hamy ind the t t t, thepou and thind.\n\n\nThan an u d tr stur aire coon will w dul me s wee the-wwilithe amull t whesot feYour n meeploveremathe t,\nI's hist.\nAPOMANThe che ha ano he t d tothe we; sthowis yofath, de me thJUE:\n\nEncatal mes, be win y"
+    },
+    {
+      "label": "After 100 updates",
+      "step": 100,
+      "trainLoss": 2.4906082153320312,
+      "validationLoss": 2.488729238510132,
+      "sample": "\nMy im whayor; bllanour an, theeainso athese, fedlliein u ces st tho s w tofo dias CH:\n\nNAMat o thea senPat besy I whisu s thirou,\nDou s ppor the thanokeine ENTh ay d; lishar;\nI se t lo heat e CES:\nBE curord ghivesul s beravinde s brd p p, ll\nThisto brvan t'sonksstt wersan walou i"
+    },
+    {
+      "label": "After 400 updates",
+      "step": 400,
+      "trainLoss": 2.438741683959961,
+      "validationLoss": 2.4888715744018555,
+      "sample": "\nThthanangeshe harugayo.\nTONGe n t atherl d s, mer ite,\nLOfffsens be ttnst;\nPERI the art, f urourere tht.\nBRWhert mellerthitheng rstheout'd o Bumurs blllllifane ETHal war icelle dere.\n\nWin th tithath an bllount ousty\nTHe ty inst:\nBund y sersthe t\nAnthe we rde t mouthar mave erort "
+    }
+  ]
+}
