@@ -1,0 +1,310 @@
+{
+  "status": "Complete",
+  "experimentId": "tinystories-dataset-audit-001",
+  "updatedAt": "2026-08-22T10:35:03.659347+00:00",
+  "datasetDecision": {
+    "datasetId": "tinystories-development-v1",
+    "decision": "Frozen for tokenizer, batching, baseline, and short pretraining experiments",
+    "notApprovedFor": "Final scaling run or claims about the complete TinyStories distribution",
+    "trainStories": 1000,
+    "validationStories": 200,
+    "sourceManifestHashes": {
+      "train": "7cc2bc86bf1a11ef1c74531db4fcde2a02da8c1153915f3ffda215ec477026c1",
+      "validation": "5be6ca53915cbad0e42955c619a927cca67237f28d94c16bf858b3f31bee382b"
+    }
+  },
+  "integrity": {
+    "train": {
+      "emptyStories": 0,
+      "unicodeReplacementCharacters": 0,
+      "unexpectedControlCharacters": 0,
+      "storiesUnder200Characters": 0,
+      "storiesOver2000Characters": 18,
+      "duplicateSourceRowIds": 0
+    },
+    "validation": {
+      "emptyStories": 0,
+      "unicodeReplacementCharacters": 0,
+      "unexpectedControlCharacters": 0,
+      "storiesUnder200Characters": 0,
+      "storiesOver2000Characters": 0,
+      "duplicateSourceRowIds": 0
+    }
+  },
+  "duplicates": {
+    "train": {
+      "exactDuplicateGroups": 0,
+      "exactDuplicateRowsBeyondFirst": 0,
+      "normalisedDuplicateGroups": 0,
+      "normalisedDuplicateRowsBeyondFirst": 0
+    },
+    "validation": {
+      "exactDuplicateGroups": 0,
+      "exactDuplicateRowsBeyondFirst": 0,
+      "normalisedDuplicateGroups": 0,
+      "normalisedDuplicateRowsBeyondFirst": 0
+    },
+    "crossSplit": {
+      "method": "exact match after NFKC/lowercase/whitespace normalisation plus word 5-gram Jaccard",
+      "nearDuplicateThreshold": 0.8,
+      "comparisons": 200000,
+      "rawExactCrossSplitPairs": [],
+      "normalisedExactCrossSplitPairs": [],
+      "nearDuplicatePairsAtOrAboveThreshold": [],
+      "strongestPair": {
+        "similarity": 0.04296875,
+        "trainSourceRow": 335864,
+        "validationSourceRow": 991
+      }
+    }
+  },
+  "structure": {
+    "train": {
+      "stories": 1000,
+      "characters": 839030,
+      "words": 163592,
+      "distinctLowercaseWordForms": 4604,
+      "storyWords": {
+        "minimum": 59,
+        "median": 148.0,
+        "mean": 163.592,
+        "p95": 303,
+        "maximum": 700
+      },
+      "topFiveWordOpenings": [
+        {
+          "opening": "once upon a time there",
+          "stories": 610
+        },
+        {
+          "opening": "once there was a little",
+          "stories": 26
+        },
+        {
+          "opening": "once upon a time in",
+          "stories": 19
+        },
+        {
+          "opening": "once there was a boy",
+          "stories": 11
+        },
+        {
+          "opening": "one day a little girl",
+          "stories": 10
+        },
+        {
+          "opening": "once upon a time a",
+          "stories": 8
+        },
+        {
+          "opening": "one day a little boy",
+          "stories": 8
+        },
+        {
+          "opening": "once there was a girl",
+          "stories": 6
+        }
+      ],
+      "templatePhraseStories": {
+        "once upon a time": 642,
+        "one day": 710,
+        "lived happily ever after": 13,
+        "was very happy": 82,
+        "learned a valuable lesson": 5
+      },
+      "mostCommonWords": [
+        {
+          "word": "the",
+          "occurrences": 9471
+        },
+        {
+          "word": "and",
+          "occurrences": 7666
+        },
+        {
+          "word": "to",
+          "occurrences": 5623
+        },
+        {
+          "word": "a",
+          "occurrences": 5325
+        },
+        {
+          "word": "was",
+          "occurrences": 4685
+        },
+        {
+          "word": "he",
+          "occurrences": 3579
+        },
+        {
+          "word": "she",
+          "occurrences": 3191
+        },
+        {
+          "word": "it",
+          "occurrences": 3046
+        },
+        {
+          "word": "they",
+          "occurrences": 2575
+        },
+        {
+          "word": "her",
+          "occurrences": 2128
+        },
+        {
+          "word": "so",
+          "occurrences": 1474
+        },
+        {
+          "word": "in",
+          "occurrences": 1447
+        }
+      ]
+    },
+    "validation": {
+      "stories": 200,
+      "characters": 157955,
+      "words": 30516,
+      "distinctLowercaseWordForms": 2322,
+      "storyWords": {
+        "minimum": 69,
+        "median": 150.0,
+        "mean": 152.58,
+        "p95": 206,
+        "maximum": 231
+      },
+      "topFiveWordOpenings": [
+        {
+          "opening": "once upon a time there",
+          "stories": 99
+        },
+        {
+          "opening": "once there was a little",
+          "stories": 10
+        },
+        {
+          "opening": "once upon a time a",
+          "stories": 4
+        },
+        {
+          "opening": "it was a sunny day",
+          "stories": 3
+        },
+        {
+          "opening": "once there was a girl",
+          "stories": 2
+        },
+        {
+          "opening": "once there was a man",
+          "stories": 2
+        },
+        {
+          "opening": "once there was a happy",
+          "stories": 2
+        },
+        {
+          "opening": "one day a very strong",
+          "stories": 1
+        }
+      ],
+      "templatePhraseStories": {
+        "once upon a time": 105,
+        "one day": 117,
+        "lived happily ever after": 6,
+        "was very happy": 15,
+        "learned a valuable lesson": 0
+      },
+      "mostCommonWords": [
+        {
+          "word": "the",
+          "occurrences": 1933
+        },
+        {
+          "word": "and",
+          "occurrences": 1410
+        },
+        {
+          "word": "a",
+          "occurrences": 984
+        },
+        {
+          "word": "was",
+          "occurrences": 982
+        },
+        {
+          "word": "to",
+          "occurrences": 976
+        },
+        {
+          "word": "he",
+          "occurrences": 850
+        },
+        {
+          "word": "she",
+          "occurrences": 576
+        },
+        {
+          "word": "it",
+          "occurrences": 566
+        },
+        {
+          "word": "her",
+          "occurrences": 393
+        },
+        {
+          "word": "so",
+          "occurrences": 364
+        },
+        {
+          "word": "said",
+          "occurrences": 345
+        },
+        {
+          "word": "in",
+          "occurrences": 306
+        }
+      ]
+    }
+  },
+  "contentTermScreen": {
+    "method": "Case-insensitive keyword triage; presence is not a safety judgement and absence is not a safety guarantee",
+    "train": {
+      "injuryOrDeathTerms": 70,
+      "fearOrDangerTerms": 205,
+      "conflictTerms": 62
+    },
+    "validation": {
+      "injuryOrDeathTerms": 3,
+      "fearOrDangerTerms": 33,
+      "conflictTerms": 7
+    }
+  },
+  "provisionalTokenizer": {
+    "vocabularySize": 2048,
+    "train": {
+      "stories": 1000,
+      "tokens": 228867,
+      "tokensPerStoryMedian": 206.0,
+      "tokensPerStoryP95": 431,
+      "unknownTokens": 0,
+      "nfkcRoundTripMismatches": 0
+    },
+    "validation": {
+      "stories": 200,
+      "tokens": 44077,
+      "tokensPerStoryMedian": 216.0,
+      "tokensPerStoryP95": 303,
+      "unknownTokens": 0,
+      "nfkcRoundTripMismatches": 0
+    }
+  },
+  "elapsedSeconds": 1.551357124990318,
+  "limitations": [
+    "The audit covers 1,200 sampled stories, not all 2.14 million source rows.",
+    "Word 5-gram Jaccard can miss paraphrases and stories that share a template but use different words.",
+    "Keyword screens locate text for human review; they do not classify harm, age suitability, bias, or factuality.",
+    "The sample is frozen for development comparisons only; later data-scaling experiments require a larger separately versioned corpus."
+  ]
+}

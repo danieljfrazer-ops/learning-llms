@@ -29,7 +29,7 @@ No previous machine-learning knowledge is assumed. **Beginner Mode** adds deeper
 | Project | Purpose | Starting point | Status in the reference course |
 |---|---|---|---|
 | 01 · Tiny Shakespeare | Expose the complete language-model loop at character scale | Random weights | 12 lessons complete |
-| 02 · TinyStories | Train a small GPT-like model on simple English using subword tokens | Random weights | Lesson 1 of 12 complete |
+| 02 · TinyStories | Train a small GPT-like model on simple English using subword tokens | Random weights | Lesson 2 of 12 complete |
 | 03 · English → SQL | Contrast pretraining with task adaptation and executable evaluation | Pretrained small model | Planned |
 | 04 · Sentiment laboratory | Independently build a classifier with robustness and calibration checks | Fully scaffolded extension | Optional |
 | 05 · Dialogue summarisation | Ask your coding agent to scaffold a careful sequence-to-sequence project | Agent brief only | Optional |
@@ -116,9 +116,10 @@ Project 2 adds Hugging Face Tokenizers 0.23.1 but continues to use the same plat
 ```sh
 uv run --no-sync python scripts/download_tinystories_sample.py
 uv run --no-sync python ml/tinystories_transition.py
+uv run --no-sync python ml/tinystories_dataset_audit.py
 ```
 
-Open `/projects/tinystories/lessons/transition-to-subwords` in the wiki. Reference results contain the reviewed course run; My Lab reads your ignored `tinystories-transition.json` and local checkpoint.
+Open `/projects/tinystories/lessons/transition-to-subwords`, then `/projects/tinystories/lessons/dataset-audit` in the wiki. The second command verifies the downloaded hashes, measures integrity, duplicates, cross-split similarity, templates and tokenizer round trips, then freezes the bounded sample for development experiments. It does not train model weights. Reference results contain the reviewed course runs; My Lab reads your ignored local evidence and checkpoint files.
 
 ## Repository map
 

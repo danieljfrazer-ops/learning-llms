@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import BeginnerTerm from '@/app/components/BeginnerTerm';
+import TinyStoriesDatasetAuditPanel from '@/app/components/TinyStoriesDatasetAuditPanel';
 import TinyStoriesTransitionPanel from '@/app/components/TinyStoriesTransitionPanel';
 import type { RichLesson } from './shakespeare-lessons';
 
@@ -99,6 +100,81 @@ export const tinyStoriesLessons: RichLesson[] = [
           <p>We established that the source is reachable, the bounded files are traceable, the tokenizer can encode and decode the material, the intended transformer family fits comfortably, tensor shapes connect, random loss is finite, checkpoint saving works, and generated IDs return to visible text. That removes many plumbing risks before an expensive run.</p>
           <p>We did <strong>not</strong> establish that the dataset is clean, the vocabulary is optimal, 938,496 parameters are sufficient, the fixed-batch loss is a stable estimate, or the model can tell stories. Its broken continuation is evidence that architecture plus tokenizer is not learning.</p>
           <p>Lesson 2 now audits the dataset and freezes the bounded course subset. Only after that will we compare tokenizers, construct causal batches, and define the official random GPT baseline.</p>
+        </>,
+      },
+    ],
+  },
+  {
+    slug: 'dataset-audit',
+    title: 'Audit and freeze the development dataset',
+    summary: 'Verify the sampled files, measure malformed text, duplication, cross-split similarity, repeated templates, content terms and tokenizer integrity, then freeze a deliberately limited development split.',
+    outcome: 'The 1,000/200-story split was frozen as tinystories-development-v1: no exact or ≥80%-similar cross-split pairs were found, but opening-template repetition was substantial.',
+    evidence: 'Complete · tinystories-dataset-audit-001 · 200,000 cross-split comparisons · no model training',
+    sections: [
+      {
+        id: 'why-audit', title: 'Why inspect the teaching material before training?', body: <>
+          <p>A training loop will faithfully optimise against whatever text it receives. It cannot tell us that a validation story was copied from training, that thousands of stories repeat one template, or that a generated dataset contains undesirable assumptions. Those are data questions, so we ask them before spending compute.</p>
+          <p>This lesson sits before the tokenizer comparison because the chosen sample determines which pairs BPE considers frequent. It also sits before model training because <Term id="data-leakage">data leakage</Term> can make validation loss look better without improving genuine generalisation.</p>
+          <aside className="lesson-caveat"><strong>Audit does not mean certify</strong><p>Every check detects a defined pattern. Passing it narrows uncertainty; it never proves that two million source stories are unbiased, safe, factual, diverse or suitable for every learner.</p></aside>
+        </>,
+      },
+      {
+        id: 'freeze-inputs', title: 'Verify the exact files and preserve provenance', body: <>
+          <p>The audit reloads the Lesson 1 <Term id="data-manifest">data manifest</Term> and recomputes SHA-256 for both JSONL files. It stops before analysis if either hash differs. This prevents an audit result from being silently attached to changed text.</p>
+          <table className="lesson-table"><tbody>
+            <tr><th>Dataset source</th><td><Source href="https://huggingface.co/datasets/roneneldan/TinyStories">roneneldan/TinyStories dataset repository</Source></td></tr>
+            <tr><th>Research description</th><td><Source href="https://arxiv.org/abs/2305.07759">Eldan and Li, TinyStories</Source></td></tr>
+            <tr><th>Recorded host licence</th><td>CDLA-Sharing-1.0; review again before redistribution</td></tr>
+            <tr><th>Training selection</th><td>1,000 source rows selected from ten seeded, non-overlapping API pages</td></tr>
+            <tr><th>Validation selection</th><td>200 source rows selected separately from two seeded API pages</td></tr>
+          </tbody></table>
+          <p>Original source-row identifiers stay beside each story. The course does not commit the story text; it commits the reviewed hashes, selection settings, measurements and limitations needed to identify the reference experiment.</p>
+        </>,
+      },
+      {
+        id: 'command', title: 'Run a read-only audit over text and tokenizer', body: <>
+          <Code>{`uv run --no-sync python ml/tinystories_dataset_audit.py`}</Code>
+          <p>The program uses Python 3.12 standard-library JSON, hashing, Unicode, regular-expression and counting tools plus Hugging Face Tokenizers 0.23.1. It loads the provisional tokenizer created in Lesson 1 only to test encoding; it creates no neural-network architecture, calculates no logits and performs no optimiser update.</p>
+          <p>Results are written atomically to <code>public/data/local/tinystories-dataset-audit.json</code>. The local configuration goes to <code>work/experiments/tinystories-dataset-audit-001/config.json</code>. Reference mode reads the separately reviewed promoted copies.</p>
+        </>,
+      },
+      {
+        id: 'integrity', title: 'Check structure before judging content', body: <>
+          <p>The integrity pass checks that every JSON line contains an integer source row and string text, then counts empty stories, repeated source IDs, Unicode replacement characters and unexpected control characters. It also flags very short and very long stories for inspection rather than deleting them automatically.</p>
+          <p>Length is descriptive evidence. A 700-word story is not corrupt merely because most stories are shorter, but it affects token batching and may dominate more training windows. Automatic removal would change the dataset distribution, so any future filter must be a separate versioned decision.</p>
+        </>,
+      },
+      {
+        id: 'leakage', title: 'Test exact and near-duplicate leakage', body: <>
+          <p>Exact matching first compares raw text, then repeats after Unicode NFKC <Term id="normalisation">normalisation</Term>, lower-casing and whitespace collapse. That catches files which differ only in superficial representation.</p>
+          <p>For <Term id="near-duplicate">near duplicates</Term>, each story becomes a set of consecutive five-word sequences. Every validation story is compared with every training story using <Term id="jaccard-similarity">Jaccard similarity</Term>: the shared five-word sequences divided by all distinct five-word sequences in the pair. At the frozen threshold of 0.80, a pair must share most of its local wording to be flagged.</p>
+          <p>This produces 200 × 1,000 = 200,000 comparisons. It is a deliberately interpretable check, but paraphrases with different words may evade it and common templates can remain visible without making two whole stories 80% similar.</p>
+        </>,
+      },
+      {
+        id: 'templates', title: 'Separate leakage from template diversity', body: <>
+          <p>Two stories can share a formulaic opening and still have low whole-story Jaccard similarity. We therefore count the first five normalised words and several recurring phrases separately. This addresses a different question: how narrow is the style the model is likely to imitate?</p>
+          <p>A dominant opening is not train/validation leakage by itself because it can appear across many distinct stories. It is still important: a model can reduce loss and generate plausible openings by mastering repeated scaffolds before it learns longer consistency.</p>
+          <TinyStoriesDatasetAuditPanel />
+        </>,
+      },
+      {
+        id: 'content-screen', title: 'Use keyword screens as triage, not judgement', body: <>
+          <p>The audit counts stories containing small, declared groups of injury/death, fear/danger and conflict words. This locates material for later human inspection and proves that “simple vocabulary” does not mean every story is emotionally neutral.</p>
+          <p>A keyword hit is not automatically harmful: a story may say that a character avoided danger or helped someone who was hurt. A story without those words may still contain unsuitable ideas. We preserve the method and counts while explicitly refusing to call it a safety classifier.</p>
+        </>,
+      },
+      {
+        id: 'tokenizer-check', title: 'Confirm that the provisional tokenizer preserves the split', body: <>
+          <p>The existing byte-level BPE tokenizer encodes and decodes every story. The audit counts unknown-token IDs and compares decoded output with each story after the tokenizer&apos;s declared NFKC normalisation. It also measures tokens per story separately for training and validation.</p>
+          <p>This is an integrity gate, not tokenizer selection. Zero unknowns and reversible decoding mean the provisional vocabulary can represent the data; Lesson 3 still has to compare vocabulary sizes, compression, sequence lengths and output-layer parameter cost.</p>
+        </>,
+      },
+      {
+        id: 'decision', title: 'Freeze a development split—and preserve its boundary', body: <>
+          <p>The verified hashes, source rows and audit configuration now define <code>tinystories-development-v1</code>. Lessons 3–8 may use it for tokenizer comparison, batching, the official random baseline and short training-recipe experiments. Keeping that input fixed makes those comparisons interpretable.</p>
+          <p>It is deliberately <strong>not approved</strong> as the final scaling corpus or as evidence about the complete TinyStories distribution. With only 228,867 ordinary training tokens under the provisional tokenizer, it is a fast laboratory slice rather than an adequate one-pass corpus for a 5–15M parameter final model.</p>
+          <p>Next, Lesson 3 trains several BPE vocabularies on this exact training split and evaluates them on the frozen validation split. No model weights will be trained until the tokenizer decision is recorded.</p>
         </>,
       },
     ],

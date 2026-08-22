@@ -109,6 +109,7 @@ Download the deterministic bounded sample and invoke the provisional random mode
 ```sh
 uv run --no-sync python scripts/download_tinystories_sample.py
 uv run --no-sync python ml/tinystories_transition.py
+uv run --no-sync python ml/tinystories_dataset_audit.py
 ```
 
 The downloader retains 1,000 rows from the official training split and 200 from the validation split, with source row numbers, selected page offsets and SHA-256 hashes in `data/raw/tinystories-sample/manifest.json`. If matching files already exist, it verifies and reuses them.
@@ -121,6 +122,13 @@ The transition experiment trains a provisional 2,048-piece byte-level BPE tokeni
 - `work/experiments/tinystories-transition-001/checkpoint-0000.safetensors`.
 
 The fetched dataset can change upstream. Compare your manifest and resulting measurements with Reference results rather than assuming future hashes must match forever. A hash mismatch is a reason to inspect provenance, not permission to copy the reference metric into My Lab.
+
+The audit command performs no neural-network training. It verifies the manifest hashes and JSON rows, measures exact and normalised duplicates, compares every validation story with every training story using word five-gram Jaccard similarity, counts repeated openings and declared content terms, and checks the provisional tokenizer for unknown IDs and NFKC round-trip mismatches. It creates:
+
+- `public/data/local/tinystories-dataset-audit.json`; and
+- `work/experiments/tinystories-dataset-audit-001/config.json`.
+
+Passing these checks freezes the named `tinystories-development-v1` split for tokenizer, batching, baseline and short-recipe comparisons. It does not certify the complete source dataset, approve this small slice for final scaling, or turn a keyword screen into a safety assessment.
 
 ## 9. Keep your work private or publish it deliberately
 
