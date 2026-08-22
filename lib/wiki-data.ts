@@ -51,7 +51,7 @@ export const projects: Project[] = [
   {
     slug: 'tinystories', number: '02', name: 'TinyStories', shortName: 'TinyStories',
     description: 'Scale the same ideas into a small GPT that learns simple, coherent English stories.',
-    stage: 'Lesson 7 of 12 complete', progress: 58, status: 'ACTIVE', method: 'Train from scratch',
+    stage: 'Lesson 8 of 12 complete', progress: 67, status: 'ACTIVE', method: 'Train from scratch',
     objective: 'Move from character imitation to subword language modelling and train a roughly 5–15M parameter transformer on a deliberately simple language distribution.',
     dataset: { name: 'TinyStories', detail: 'Synthetic short stories written with vocabulary familiar to young children. We will begin with a bounded subset before choosing whether to scale.', source: 'https://www.microsoft.com/en-us/research/publication/tinystories-how-small-can-language-models-be-and-still-speak-coherent-english/', sourceLabel: 'Microsoft Research' },
     stages: [
@@ -62,8 +62,8 @@ export const projects: Project[] = [
       { slug: 'random-gpt-baseline', name: 'Random GPT baseline', state: 'complete', lesson: 'Freeze the first training architecture and record loss, memory and prompted output before any optimiser update.' },
       { slug: 'first-pretraining', name: 'First pretraining run', state: 'complete', lesson: 'Run next-token training from scratch and expose the first transition from random fragments toward simple sentences.' },
       { slug: 'checkpoints-dashboard', name: 'Checkpoints and live metrics', state: 'complete', lesson: 'Save comparable training states and make token loss, throughput, memory and fixed-prompt samples visible in the wiki.' },
-      { slug: 'training-recipe', name: 'Improve the training recipe', state: 'active', lesson: 'Test learning-rate schedules, regularisation and batch choices as controlled experiments.' },
-      { slug: 'scaling-budget', name: 'Scale within the laptop budget', state: 'planned', lesson: 'Benchmark width, depth, context and dataset size before selecting a longer run that fits the MacBook Air.' },
+      { slug: 'training-recipe', name: 'Improve the training recipe', state: 'complete', lesson: 'Branch one complete state into matched learning-rate policies and select with a predeclared validation threshold.' },
+      { slug: 'scaling-budget', name: 'Scale within the laptop budget', state: 'active', lesson: 'Benchmark width, depth, context and dataset size before selecting a longer run that fits the MacBook Air.' },
       { slug: 'story-evaluation', name: 'Evaluate story behaviour', state: 'planned', lesson: 'Combine frozen held-out loss with prompt adherence, consistency, repetition, diversity and overlap checks.' },
       { slug: 'tinystories-playground', name: 'TinyStories prompt playground', state: 'planned', lesson: 'Complete learner-written story openings with selected local checkpoints under controlled generation settings.' },
       { slug: 'final-story-model', name: 'Final model and comparison', state: 'planned', lesson: 'Confirm the selected model across seeds and compare character-level Shakespeare with subword TinyStories honestly.' },
@@ -120,6 +120,7 @@ export const glossary = [
   ['Byte Pair Encoding', 'A subword-tokenisation method that repeatedly merges frequent adjacent pieces to build a reusable vocabulary. It is commonly abbreviated BPE.'],
   ['Byte-level tokenizer', 'A tokenizer whose guaranteed starting alphabet is the 256 possible byte values, allowing any encoded text to be represented before frequent byte sequences are merged.'],
   ['Character-level tokenizer', 'A transparent tokenizer in which every distinct character—including punctuation, spaces and line breaks—is its own token.'],
+  ['Cherry-picking', 'Selecting unusually attractive examples after seeing many outputs while hiding the broader or less successful results. Fixed prompts, seeds and aggregate metrics reduce this risk.'],
   ['Causal mask', 'A mask that prevents a next-token model from attending to positions in the future.'],
   ['Checkpoint', 'A saved snapshot of model weights. A resumable training checkpoint must also preserve optimiser, step, and data-order state; a weight-only checkpoint supports inspection and inference but not exact continuation.'],
   ['Controlled experiment', 'A comparison that changes one chosen variable while keeping other relevant conditions fixed, making causal interpretation more defensible.'],

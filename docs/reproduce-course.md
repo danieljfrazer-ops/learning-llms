@@ -182,6 +182,16 @@ The control route saves at step 550 and continues in memory to step 600. A secon
 
 Model and optimiser tensors must reload with zero difference before continuation. Batch hashes, target counts, cursor, and next-batch identity must match exactly. Separate accelerator processes may not be bitwise deterministic, so the protocol records numerical tolerances before the comparison and reports every observed floating-point difference. Do not call a run exact when it merely falls inside tolerance, and do not treat resume validation as evidence that model quality improved.
 
+Lesson 8 uses the complete resumed step-600 state rather than resetting weights, AdamW history, or data order. It freezes three 100-update candidates before execution and changes only learning-rate policy:
+
+```sh
+uv run --no-sync python ml/tinystories_training_recipe.py
+```
+
+The control keeps `3e-4`, the lower constant candidate uses `1.5e-4`, and cosine decay moves from `3e-4` to `3e-5`. Every fresh worker receives the same next 100 batch identities, complete validation set, prompts and generation seeds. The predeclared rule selects an alternative only when its complete validation loss improves on the control by at least `0.001`; otherwise the control remains selected.
+
+Live and final evidence is written to `public/data/local/tinystories-training-recipe.json`. The frozen protocol, traces, results, selection record and complete step-700 candidate checkpoints live under `work/experiments/tinystories-training-recipe-001/`. Expect roughly 200 MiB for three model-plus-AdamW states. The chosen checkpoint is a local continuation artifact; training does not promote it or any measurement to Reference results.
+
 ## 9. Keep your work private or publish it deliberately
 
 My Lab artifacts are ignored. To preserve your journey, create a separate branch or repository policy for selected JSON/configuration files; do not commit raw datasets or every checkpoint by default. Review dataset terms and remove private prompts before sharing.

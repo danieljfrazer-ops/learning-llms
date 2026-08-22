@@ -5,6 +5,7 @@ import TinyStoriesDatasetAuditPanel from '@/app/components/TinyStoriesDatasetAud
 import TinyStoriesRandomBaselinePanel from '@/app/components/TinyStoriesRandomBaselinePanel';
 import TinyStoriesPretrainingPanel from '@/app/components/TinyStoriesPretrainingPanel';
 import TinyStoriesCheckpointPanel from '@/app/components/TinyStoriesCheckpointPanel';
+import TinyStoriesRecipePanel from '@/app/components/TinyStoriesRecipePanel';
 import TinyStoriesTokenizerPanel from '@/app/components/TinyStoriesTokenizerPanel';
 import TinyStoriesTransitionPanel from '@/app/components/TinyStoriesTransitionPanel';
 import type { RichLesson } from './shakespeare-lessons';
@@ -566,6 +567,93 @@ optimiser.state = tree_unflatten(mx.load("optimizer.safetensors"))`}</Code>
         id: 'limits-next', title: 'Use the reliable save path without overreading the extra updates', body: <>
           <p>The 100 control updates exist to test checkpoint behaviour. Any step-600 validation movement is secondary and may worsen because the small corpus has already been traversed several times, the new segment reset AdamW history, and the recipe remains intentionally untuned. A more fluent single sample cannot override held-out loss.</p>
           <p>Lesson 8 can now compare schedules, clipping, or other recipe changes without risking an untestable restart mechanism. It should start every candidate from the same checkpoint and state contract, use matched data order and budgets, and select on frozen validation evidence rather than live training curves.</p>
+        </>,
+      },
+    ],
+  },
+  {
+    slug: 'training-recipe',
+    title: 'Improve the training recipe',
+    summary: 'Branch one complete step-600 checkpoint into three matched 100-update continuations, change only learning-rate policy, and select with a threshold fixed before seeing validation results.',
+    outcome: 'Cosine decay improved complete held-out loss from the shared 3.8312 start to 3.7904, beating the constant-rate control by 0.0781 while all 100 batch identities matched.',
+    evidence: 'Complete · tinystories-training-recipe-001 · 3 × 100 updates · selected checkpoint 700 · reference evidence intentionally unpromoted',
+    sections: [
+      {
+        id: 'recipe-question', title: 'Ask whether the correction size—not the model—is now the problem', body: <>
+          <p>By step 600, the 5,816,320-parameter architecture can already form recognisable TinyStories-like prose, but validation loss has stopped improving reliably. Rebuilding a larger model would change both capacity and optimisation. Lesson 8 instead runs a <Term id="controlled-experiment">controlled experiment</Term>: preserve the complete training state and change only the rule that scales each correction.</p>
+          <p>That scaling value is the <Term id="learning-rate">learning rate</Term>. AdamW calculates a direction and coordinate-wise adjustment from gradients and its moving averages; the learning rate then controls the overall step size. A rate that was useful early can be too aggressive once weights reach a narrower, more useful region.</p>
+          <aside className="lesson-caveat"><strong>Recipe is not architecture</strong><p>This experiment does not add layers, parameters, context, data or reasoning machinery. It asks whether the same model can use the next 100 batches more effectively under a different update-size policy.</p></aside>
+        </>,
+      },
+      {
+        id: 'shared-start', title: 'Fork the exact same complete step-600 state', body: <>
+          <p>Each candidate starts from Lesson 7&apos;s resumed <code>checkpoint-0600</code>. The loader verifies its manifest and hashes, then restores the same model tensors, AdamW moments, optimiser step, shuffled permutation, cursor and random-generator state. Complete validation before any new update is exactly <code>3.831226</code> in all three worker processes.</p>
+          <p>The source checkpoint is not copied from reference evidence or reconstructed from seed 42. It is the learner-owned state produced on this Mac. This matters because a merely similar model or a reset optimiser could react differently to the same learning rate.</p>
+        </>,
+      },
+      {
+        id: 'controls', title: 'Hold every competing explanation still', body: <>
+          <p>All branches use the same 2,292 training windows, batch size 32, 128-token context, AdamW state, weight decay 0.01, 100-update budget, validation set, prompts, generation seeds and software path. The saved data cursor produces the same sequence of 100 batch hashes in every branch.</p>
+          <table className="lesson-table"><thead><tr><th>Held fixed</th><th>Why it could otherwise explain a difference</th></tr></thead><tbody>
+            <tr><td>Model and optimiser state</td><td>Different weights or AdamW moments propose different updates</td></tr>
+            <tr><td>Batch identities and order</td><td>Different examples produce different losses and gradients</td></tr>
+            <tr><td>Update count</td><td>More batches provide more opportunities to fit the corpus</td></tr>
+            <tr><td>Complete validation</td><td>Different questions or sampling could change the score</td></tr>
+            <tr><td>Changed variable</td><td><strong>Only the learning-rate policy</strong></td></tr>
+          </tbody></table>
+        </>,
+      },
+      {
+        id: 'schedule-mechanism', title: 'Turn one fixed number into a learning-rate schedule', body: <>
+          <p>A <Term id="learning-rate-schedule">learning-rate schedule</Term> supplies a rate for each update instead of using one constant. MLX exposes both optimiser schedules and mutable optimiser learning-rate state in its <Source href="https://ml-explore.github.io/mlx/build/html/python/optimizers/schedules.html">official schedule API</Source>. Because this experiment restores an existing optimiser step, the script explicitly calculates the segment-relative rate before each update and assigns it to the loaded AdamW state.</p>
+          <Code>{`progress = (segment_update - 1) / 99
+rate = end + 0.5 * (start - end) * (1 + cos(pi * progress))
+optimiser.learning_rate = rate
+optimiser.update(model, gradients)`}</Code>
+          <p>The cosine formula begins at <code>3e-4</code>, bends smoothly, and ends at <code>3e-5</code>. This family was popularised for annealing schedules by <Source href="https://arxiv.org/abs/1608.03983">Loshchilov and Hutter&apos;s SGDR paper</Source>; using the curve here tests a local hypothesis, not a claim that every result from that paper transfers to our tiny run.</p>
+        </>,
+      },
+      {
+        id: 'candidates', title: 'Compare three update-size policies, not three bundles of tricks', body: <>
+          <table className="lesson-table"><thead><tr><th>Candidate</th><th>Rate over 100 updates</th><th>Question</th></tr></thead><tbody>
+            <tr><td>Control</td><td>constant <code>3e-4</code></td><td>What happens if the Lesson 7 rate simply continues?</td></tr>
+            <tr><td>Lower constant</td><td>constant <code>1.5e-4</code></td><td>Is one uniformly smaller correction enough?</td></tr>
+            <tr><td>Cosine decay</td><td><code>3e-4 → 3e-5</code></td><td>Can early movement followed by increasingly fine corrections help?</td></tr>
+          </tbody></table>
+          <p>Gradient clipping, batch size and weight decay remain unchanged. Testing them simultaneously would create a recipe bundle: a better result would not reveal which ingredient mattered. They remain valid later experiments, but not part of this causal comparison.</p>
+        </>,
+      },
+      {
+        id: 'selection-rule', title: 'Write the decision rule before seeing the scores', body: <>
+          <p>The <Term id="evaluation-protocol">evaluation protocol</Term> selects on complete held-out cross-entropy at step 700. A candidate replaces the control only if it improves loss by at least <code>0.001</code>. Otherwise we retain the simpler constant recipe instead of declaring a tiny numerical fluctuation a discovery.</p>
+          <p>Lesson 7 measured a fresh-process validation difference of about <code>0.000030</code>. That is reported as numerical context, not subtracted from results. The selection threshold is more than 30 times larger, and the observed cosine improvement over control was <code>0.078113</code>.</p>
+          <aside className="lesson-caveat"><strong>Validation is doing model selection</strong><p>Once validation evidence chooses a recipe, it is no longer a completely untouched final exam. Lesson 10 must add broader behaviour measures and avoid treating this one selected score as definitive generalisation proof.</p></aside>
+        </>,
+      },
+      {
+        id: 'command', title: 'Run three fresh workers from the frozen protocol', body: <>
+          <Code>{`uv run --no-sync python ml/tinystories_training_recipe.py`}</Code>
+          <p>The orchestrator verifies the Lesson 7 dashboard, source checkpoint manifest, dataset hashes and tokenizer hash, then writes <code>work/experiments/tinystories-training-recipe-001/protocol.json</code>. It launches one fresh Python process per candidate so each reconstructs state from disk.</p>
+          <p>Every ten updates, the current worker atomically refreshes ignored <code>public/data/local/tinystories-training-recipe.json</code>. Each candidate writes a trace, result and complete step-700 checkpoint containing model, AdamW, trainer state and a manifest. The three checkpoint branches occupy about 200 MiB; no reference result is promoted.</p>
+        </>,
+      },
+      {
+        id: 'evidence', title: 'Let complete validation—not the prettiest live curve—choose', body: <>
+          <p>The constant <code>3e-4</code> control worsened from <code>3.8312</code> to <code>3.8685</code>. The lower constant rate ended almost flat at <code>3.8299</code>. Cosine decay reached <code>3.7904</code>, improving on the shared start by <code>0.0408</code> and on the control by <code>0.0781</code>.</p>
+          <p>Late training-batch losses also looked lower under cosine decay, but they did not make the decision. Each batch contains different story windows and its loss is noisy; complete validation grades every genuine held-out target under one frozen procedure.</p>
+          <TinyStoriesRecipePanel />
+        </>,
+      },
+      {
+        id: 'samples', title: 'Use prompt samples to inspect failure shape, not crown a winner', body: <>
+          <p>With the fixed prompt <em>Once upon a time, there was</em>, all candidates produce recognisable simple-story syntax. They also repeat phrases, invent malformed words, lose grammatical roles and drift between characters. The cosine sample begins “a little girl. She was very brave...” but later produces broken phrases such as “chirpress its place.”</p>
+          <p>One sampled continuation follows one random path through next-token probabilities. It can reveal qualitative failure modes that average loss hides, but choosing the most charming paragraph would be <Term id="cherry-picking">cherry-picking</Term>. The dashboard therefore shows the same prompt and seed for every branch while loss remains the predeclared selector.</p>
+        </>,
+      },
+      {
+        id: 'limits-next', title: 'Carry the selected recipe forward without universalising it', body: <>
+          <p>Cosine decay won this one 100-update continuation from this step-600 state on a deliberately small 1,000-story development corpus. It may behave differently from random weights, over a longer budget, with more data, after a batch-size change, or in a larger model. We have one controlled local result, not a universal optimiser law.</p>
+          <p>The selected step-700 directory is a complete resumable checkpoint, so Lesson 9 can benchmark width, depth, context and dataset-scale options without losing the course&apos;s state discipline. Scaling will change architecture or data and must therefore measure memory, speed and quality as a new comparison rather than silently extending this recipe claim.</p>
         </>,
       },
     ],
