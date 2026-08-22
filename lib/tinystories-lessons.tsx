@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import BeginnerTerm from '@/app/components/BeginnerTerm';
 import TinyStoriesDatasetAuditPanel from '@/app/components/TinyStoriesDatasetAuditPanel';
+import TinyStoriesTokenizerPanel from '@/app/components/TinyStoriesTokenizerPanel';
 import TinyStoriesTransitionPanel from '@/app/components/TinyStoriesTransitionPanel';
 import type { RichLesson } from './shakespeare-lessons';
 
@@ -175,6 +176,84 @@ export const tinyStoriesLessons: RichLesson[] = [
           <p>The verified hashes, source rows and audit configuration now define <code>tinystories-development-v1</code>. Lessons 3–8 may use it for tokenizer comparison, batching, the official random baseline and short training-recipe experiments. Keeping that input fixed makes those comparisons interpretable.</p>
           <p>It is deliberately <strong>not approved</strong> as the final scaling corpus or as evidence about the complete TinyStories distribution. With only 228,867 ordinary training tokens under the provisional tokenizer, it is a fast laboratory slice rather than an adequate one-pass corpus for a 5–15M parameter final model.</p>
           <p>Next, Lesson 3 trains several BPE vocabularies on this exact training split and evaluates them on the frozen validation split. No model weights will be trained until the tokenizer decision is recorded.</p>
+        </>,
+      },
+    ],
+  },
+  {
+    slug: 'tokenizer-experiment',
+    title: 'Compare and freeze the subword tokenizer',
+    summary: 'Train four byte-level BPE vocabularies on the same frozen stories, test representation integrity and sequence compression on held-out stories, expose model-interface cost, and use a declared rule to select one tokenizer.',
+    outcome: 'The reproducible procedure and My Lab dashboard are ready. Reference evidence remains intentionally unpromoted until a separate maintainer review.',
+    evidence: 'Active lesson · four candidate vocabularies · tokenizer training only · no neural-model updates',
+    sections: [
+      {
+        id: 'question', title: 'Why can the tokenizer change the model experiment?', body: <>
+          <p>A tokenizer fixes both sides of the language-model interface. It converts text into input IDs, and its <Term id="vocabulary">vocabulary</Term> defines every possible next-token output. A small vocabulary assembles prose from many short pieces; a large vocabulary offers more reusable pieces but asks the model to score more alternatives at every position.</p>
+          <p>Lesson 1 proved that 2,048 pieces worked. This lesson asks a controlled question: among 512, 1,024, 2,048 and 4,096-piece byte-level BPE tokenizers, which one best matches our stated preference for compact sequences without spending too much of a small model on vocabulary-specific weights?</p>
+          <aside className="lesson-caveat"><strong>Tokenizer training is not model training</strong><p>BPE counts adjacent text pieces and stores merge rules. It creates no transformer weights, logits, loss, gradients or language capability. The eventual model will learn only after later optimiser updates.</p></aside>
+        </>,
+      },
+      {
+        id: 'fixed-inputs', title: 'Hold the data and tokenizer recipe fixed', body: <>
+          <p>Every candidate reads the exact <code>tinystories-development-v1</code> training file approved in Lesson 2. The command refuses to continue if the JSONL hashes differ from either the source manifest or the local audit. The 200 validation stories remain <Term id="validation-set">held out</Term>: they measure the finished tokenizer but never teach its merge rules.</p>
+          <table className="lesson-table"><tbody>
+            <tr><th>Training input</th><td>1,000 frozen training stories; SHA-256 checked before use</td></tr>
+            <tr><th>Held-out input</th><td>200 frozen validation stories; encoded only after each vocabulary is trained</td></tr>
+            <tr><th>Shared pipeline</th><td>NFKC normalisation → byte-level pre-tokenisation → BPE with minimum pair frequency 2</td></tr>
+            <tr><th>Shared structure</th><td><code>&lt;pad&gt;</code>, <code>&lt;unk&gt;</code>, <code>&lt;bos&gt;</code>, <code>&lt;eos&gt;</code> fixed at IDs 0–3</td></tr>
+            <tr><th>Only changed variable</th><td>Requested vocabulary size: 512, 1,024, 2,048 or 4,096</td></tr>
+          </tbody></table>
+        </>,
+      },
+      {
+        id: 'tooling', title: 'Use one implementation for every candidate', body: <>
+          <p>The experiment uses Hugging Face Tokenizers 0.23.1. Its <Source href="https://huggingface.co/docs/tokenizers/main/quicktour">official from-scratch quick tour</Source> explains that a BPE trainer repeatedly merges frequent neighbouring pieces until reaching the requested vocabulary size. We pass the 1,000 story strings through the documented <Source href="https://huggingface.co/docs/tokenizers/main/training_from_memory">in-memory iterator interface</Source>.</p>
+          <Code>{`tokenizer = build_tokenizer(train_texts, requested_size)
+tokenizer.save(candidate_path, pretty=True)
+train_metrics = evaluate_split(tokenizer, train_rows)
+validation_metrics = evaluate_split(tokenizer, validation_rows)`}</Code>
+          <p>The same Rust-backed library code, normaliser, pre-tokenizer, minimum frequency and special-token order are reused for all four candidates. That makes vocabulary size the intended changed variable rather than one member of a bundle of hidden changes. The <Source href="https://huggingface.co/docs/tokenizers/main/api/trainers">BpeTrainer API reference</Source> defines the recorded <code>vocab_size</code>, <code>min_frequency</code>, special-token and initial-alphabet settings.</p>
+        </>,
+      },
+      {
+        id: 'command', title: 'Run the comparison and preserve every candidate', body: <>
+          <Code>{`uv run --no-sync python ml/tinystories_tokenizer_experiment.py`}</Code>
+          <p>The command reads the local Lesson 2 audit, manifest and two raw JSONL files. It trains four tokenizer merge tables in memory, then writes ignored candidate files, <code>tokenizer.json</code> and <code>config.json</code> beneath <code>work/experiments/tinystories-tokenizer-001/</code>. Dashboard evidence is written atomically to <code>public/data/local/tinystories-tokenizer.json</code>.</p>
+          <p>The configuration records dependency version, file hashes, candidate sizes, preprocessing, selection thresholds and the checksum of the selected tokenizer. No MLX device is invoked because the computation is text counting and encoding, not tensor training.</p>
+        </>,
+      },
+      {
+        id: 'integrity', title: 'Require every tokenizer to return the text', body: <>
+          <p>A <Term id="round-trip-test">round-trip test</Term> encodes each story to IDs, decodes those IDs, and compares the returned string with the declared NFKC-normalised source. The audit also counts <code>&lt;unk&gt;</code> IDs and verifies that the four special tokens retain their intended IDs.</p>
+          <p>These are hard gates: a candidate with an unknown ID, a changed structural ID or one mismatched story cannot win, regardless of its sequence length. Byte-level starting pieces are meant to make arbitrary encoded text representable, but the observed files still have to prove that the configured pipeline behaves that way.</p>
+          <aside className="lesson-caveat"><strong>Reversible does not mean useful</strong><p>A tokenizer could preserve every character by emitting one tiny piece at a time. Integrity establishes that information survived; it says nothing yet about sequence efficiency or eventual model quality.</p></aside>
+        </>,
+      },
+      {
+        id: 'compression', title: 'Measure how much text each token position carries', body: <>
+          <p>For both splits, the script records total tokens, characters per token, and the minimum, median, mean, 95th-percentile and maximum tokens per story. Characters per token is a simple <Term id="compression-ratio">compression ratio</Term>: larger values mean one token position covers more visible source text on this corpus.</p>
+          <p>Shorter sequences let a fixed context window cover more story and reduce the number of training positions needed to traverse the corpus. The metric is corpus-specific: repeated TinyStories phrases may compress well even if unrelated text or another language does not.</p>
+        </>,
+      },
+      {
+        id: 'model-cost', title: 'Count the model weights that vocabulary size would create', body: <>
+          <p>Our decoder has an input token-embedding table and a separate output projection. With model width <code>d</code> and vocabulary size <code>V</code>, their combined <Term id="vocabulary-dependent-parameters">vocabulary-dependent parameters</Term> are <code>V × d + d × V + V = V × (2d + 1)</code>. Doubling <code>V</code> therefore doubles this part of the model.</p>
+          <p>The experiment reports that exact quantity for a 256-wide version of the course architecture. It is a comparison proxy, not the final parameter count: Lesson 5 will freeze width, depth and the complete architecture after sequence batching is defined.</p>
+        </>,
+      },
+      {
+        id: 'decision', title: 'Apply a decision rule written before seeing the result', body: <>
+          <p>The provisional 2,048-piece vocabulary is the anchor. A smaller candidate wins only if it adds no more than 10% validation tokens; a larger candidate wins only if it removes at least 20%. Otherwise we retain 2,048. These thresholds deliberately require a material sequence benefit before changing the already working interface.</p>
+          <p>The dashboard below reads the active evidence mode. My Lab shows the learner-owned run; Reference mode remains “Not run yet” unless a maintainer explicitly reviews and promotes a separate reference result.</p>
+          <TinyStoriesTokenizerPanel />
+        </>,
+      },
+      {
+        id: 'freeze-next', title: 'Freeze the interface, while keeping the claim narrow', body: <>
+          <p>The selected <code>tokenizer.json</code>, its SHA-256 checksum and the full candidate configuration now define the text-to-ID interface for the next TinyStories development lessons. Lesson 4 can therefore compare batching strategies without silently changing how stories are represented.</p>
+          <p>This freeze applies to the 1,000-story development corpus. A larger final corpus may contain different frequent pairs, so scaling the data requires an explicit tokenizer re-evaluation rather than blindly reusing today&apos;s merge table.</p>
+          <p>Next, we will add beginning/end markers, decide how separate stories become fixed-length causal windows, and inspect input and target tensors by decoding them back to text. The selected tokenizer remains fixed throughout that comparison.</p>
         </>,
       },
     ],

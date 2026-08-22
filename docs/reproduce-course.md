@@ -110,6 +110,7 @@ Download the deterministic bounded sample and invoke the provisional random mode
 uv run --no-sync python scripts/download_tinystories_sample.py
 uv run --no-sync python ml/tinystories_transition.py
 uv run --no-sync python ml/tinystories_dataset_audit.py
+uv run --no-sync python ml/tinystories_tokenizer_experiment.py
 ```
 
 The downloader retains 1,000 rows from the official training split and 200 from the validation split, with source row numbers, selected page offsets and SHA-256 hashes in `data/raw/tinystories-sample/manifest.json`. If matching files already exist, it verifies and reuses them.
@@ -129,6 +130,15 @@ The audit command performs no neural-network training. It verifies the manifest 
 - `work/experiments/tinystories-dataset-audit-001/config.json`.
 
 Passing these checks freezes the named `tinystories-development-v1` split for tokenizer, batching, baseline and short-recipe comparisons. It does not certify the complete source dataset, approve this small slice for final scaling, or turn a keyword screen into a safety assessment.
+
+The tokenizer experiment requires that learner-local audit. It trains 512, 1,024, 2,048 and 4,096-piece byte-level BPE candidates on the training split only; validation stories measure compression and reversibility afterward. It saves:
+
+- `public/data/local/tinystories-tokenizer.json`;
+- `work/experiments/tinystories-tokenizer-001/candidate-*.json`;
+- `work/experiments/tinystories-tokenizer-001/tokenizer.json`; and
+- `work/experiments/tinystories-tokenizer-001/config.json`.
+
+The hard gates require stable special-token IDs, zero unknown IDs and zero NFKC round-trip mismatches. The documented selection policy weighs held-out sequence length against the embedding/output parameters induced by vocabulary size. It is a development decision, not a downstream model-quality measurement, and must be revisited if the training corpus or normalisation changes.
 
 ## 9. Keep your work private or publish it deliberately
 

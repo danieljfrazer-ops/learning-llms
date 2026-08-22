@@ -117,9 +117,10 @@ Project 2 adds Hugging Face Tokenizers 0.23.1 but continues to use the same plat
 uv run --no-sync python scripts/download_tinystories_sample.py
 uv run --no-sync python ml/tinystories_transition.py
 uv run --no-sync python ml/tinystories_dataset_audit.py
+uv run --no-sync python ml/tinystories_tokenizer_experiment.py
 ```
 
-Open `/projects/tinystories/lessons/transition-to-subwords`, then `/projects/tinystories/lessons/dataset-audit` in the wiki. The second command verifies the downloaded hashes, measures integrity, duplicates, cross-split similarity, templates and tokenizer round trips, then freezes the bounded sample for development experiments. It does not train model weights. Reference results contain the reviewed course runs; My Lab reads your ignored local evidence and checkpoint files.
+Open the first three TinyStories lessons in order. The dataset audit verifies hashes and freezes the bounded development sample; the tokenizer experiment then compares 512–4,096-piece byte-level BPE vocabularies and freezes one local tokenizer. Neither command trains neural-model weights. Reference results contain only separately reviewed course runs; My Lab reads your ignored local evidence, tokenizer and checkpoint files.
 
 ## Repository map
 
