@@ -6,6 +6,7 @@ import TinyStoriesRandomBaselinePanel from '@/app/components/TinyStoriesRandomBa
 import TinyStoriesPretrainingPanel from '@/app/components/TinyStoriesPretrainingPanel';
 import TinyStoriesCheckpointPanel from '@/app/components/TinyStoriesCheckpointPanel';
 import TinyStoriesRecipePanel from '@/app/components/TinyStoriesRecipePanel';
+import TinyStoriesScalingPanel from '@/app/components/TinyStoriesScalingPanel';
 import TinyStoriesTokenizerPanel from '@/app/components/TinyStoriesTokenizerPanel';
 import TinyStoriesTransitionPanel from '@/app/components/TinyStoriesTransitionPanel';
 import type { RichLesson } from './shakespeare-lessons';
@@ -567,6 +568,72 @@ optimiser.state = tree_unflatten(mx.load("optimizer.safetensors"))`}</Code>
         id: 'limits-next', title: 'Use the reliable save path without overreading the extra updates', body: <>
           <p>The 100 control updates exist to test checkpoint behaviour. Any step-600 validation movement is secondary and may worsen because the small corpus has already been traversed several times, the new segment reset AdamW history, and the recipe remains intentionally untuned. A more fluent single sample cannot override held-out loss.</p>
           <p>Lesson 8 can now compare schedules, clipping, or other recipe changes without risking an untestable restart mechanism. It should start every candidate from the same checkpoint and state contract, use matched data order and budgets, and select on frozen validation evidence rather than live training curves.</p>
+        </>,
+      },
+    ],
+  },
+  {
+    slug: 'scaling-budget',
+    title: 'Scale within the laptop budget',
+    summary: 'Measure how width, depth, context and story coverage trade learning against memory and time, then commit the laptop to one evidence-selected 700-update run.',
+    outcome: 'The 5.82M-parameter reference learned fastest in the 100-update screen. Larger models did not clear the quality threshold, context 256 exceeded the speed ceiling, and the selected fresh 700-update run reached 3.8216 validation loss.',
+    evidence: 'Complete · tinystories-scaling-budget-001 · 5 × 100-update probes + 1 × 700-update selected run · learner-local evidence only',
+    sections: [
+      {
+        id: 'budget-question', title: 'Treat scaling as a budget allocation problem', body: <>
+          <p><Term id="model-width">Width</Term>, <Term id="model-depth">depth</Term>, <Term id="context-window">context</Term> and data coverage are different ways to give a model more opportunity. They do not have the same cost. Wider matrices add many weights, deeper models repeat whole processing blocks, longer context creates larger attention workspaces, and more stories add variety without changing the architecture.</p>
+          <p>A <Term id="compute-budget">compute budget</Term> is the time, memory and number of updates we are willing to spend. The goal is not to find the largest tensor allocation the Mac can survive; it is to find a defensible balance between held-out learning and the cost of iterating.</p>
+          <aside className="lesson-caveat"><strong>Bigger can need more teaching</strong><p>A larger model may have more eventual capacity yet learn less in 100 updates because more randomly initialised weights must become coordinated. This screen tests short-budget usefulness, not ultimate potential.</p></aside>
+        </>,
+      },
+      {
+        id: 'fresh-start', title: 'Restart candidates because their tensor shapes differ', body: <>
+          <p>Lesson 8&apos;s selected checkpoint contains arrays shaped for width 256, six blocks and context 128. A width-320 model needs larger matrices; an eight-block model needs two additional sets of tensors; context 256 needs a larger positional table. Those saved arrays cannot be loaded strictly into different architectures.</p>
+          <p>Every architecture therefore starts from <Term id="random-initialisation">random initialisation</Term> seed 42 with fresh AdamW state and seeded batch order. The reference probe restarts too. This gives an honest from-scratch comparison, but it deliberately does not reproduce Lesson 8&apos;s inherited training history.</p>
+        </>,
+      },
+      {
+        id: 'matrix', title: 'Freeze five probes and change one axis at a time', body: <>
+          <table className="lesson-table"><thead><tr><th>Probe</th><th>Changed axis</th><th>Question</th></tr></thead><tbody>
+            <tr><td>256 × 6, context 128</td><td>None: control</td><td>How much does the existing architecture learn?</td></tr>
+            <tr><td>320 × 6, context 128</td><td>Width</td><td>Do richer token representations earn their matrix cost?</td></tr>
+            <tr><td>256 × 8, context 128</td><td>Depth</td><td>Do two more processing stages help this early?</td></tr>
+            <tr><td>256 × 6, context 256</td><td>Context</td><td>Does twice the visible history justify its attention workspace?</td></tr>
+            <tr><td>Reference, 500 stories</td><td>Data coverage</td><td>What is lost when story variety is halved?</td></tr>
+          </tbody></table>
+          <p>All probes use 100 AdamW updates at <code>3e-4</code>, weight decay <code>0.01</code>, batch size 32, the same tokenizer, validation stories, model seed and batch seed. The half-data probe is diagnostic and cannot win architecture selection. Context 256 preserves every genuine held-out next-token target, although it groups those targets into different windows.</p>
+        </>,
+      },
+      {
+        id: 'ceilings', title: 'Declare feasibility and quality gates before running', body: <>
+          <p>An architecture is feasible only when peak MLX allocation stays at or below 4 GiB and its mean optimiser update stays at or below 250 ms on this machine. Among feasible architecture probes, a candidate replaces the reference only if complete validation cross-entropy is at least <code>0.01</code> lower after 100 updates.</p>
+          <p>These ceilings encode this course&apos;s preference for quick laptop iteration; they are not universal minimum requirements. A desktop GPU, actively cooled Mac, different batch size or willingness to wait would justify a different budget. The thresholds live in the frozen protocol before results are measured.</p>
+        </>,
+      },
+      {
+        id: 'command', title: 'Run the probes, selection rule and longer confirmation', body: <>
+          <Code>{`uv run --no-sync python ml/tinystories_scaling_budget.py`}</Code>
+          <p>The parent process checksums the frozen data and tokenizer, verifies completed baseline and recipe evidence, and writes <code>work/experiments/tinystories-scaling-budget-001/protocol.json</code>. Fresh worker processes construct each candidate, perform forward passes, calculate masked loss and gradients, apply AdamW, evaluate every held-out target and save probe weights.</p>
+          <p>Every ten updates it atomically refreshes <code>public/data/local/tinystories-scaling-budget.json</code>. Probe artifacts and the selected complete model-plus-optimiser checkpoint stay under <code>work/experiments/</code>; this run occupied about 195 MiB. Published Reference results remain untouched.</p>
+        </>,
+      },
+      {
+        id: 'probe-evidence', title: 'Read quality and cost together', body: <>
+          <p>The reference reached loss <code>4.7394</code> after 100 updates at 130 ms/update and 1,714 MiB peak MLX allocation. Width 320 reached <code>5.0231</code> at 168 ms and 1,852 MiB; eight blocks reached <code>5.4751</code> at 177 ms and 1,894 MiB. Context 256 reached <code>5.2659</code> at 307 ms and 2,620 MiB, exceeding the predeclared speed ceiling.</p>
+          <p>The 500-story probe reached <code>5.2039</code> with the same architecture, compared with <code>4.7394</code> from all 1,000 training stories. Under this fixed update budget, the extra variety helped held-out prediction. The probe cannot tell us how the complete two-million-story corpus would behave.</p>
+          <TinyStoriesScalingPanel />
+        </>,
+      },
+      {
+        id: 'long-run', title: 'Confirm the selection with a useful complete checkpoint', body: <>
+          <p>No feasible alternative improved on the reference, so the rule retained 256-wide, six-block, context-128. A fresh model then received 700 updates: constant <code>3e-4</code> for 600 followed by the selected <Term id="cosine-decay">cosine decay</Term> from <code>3e-4</code> to <code>3e-5</code> for 100. Complete validation moved from random <code>7.7524</code> to <code>3.8216</code>.</p>
+          <p>The manifest-marked <Term id="resumable-checkpoint">resumable checkpoint</Term> contains model weights, AdamW state, data-order cursor and hashes at <code>selected-long-run/checkpoint-0700</code>. It is ready for Lesson 10&apos;s broader behaviour evaluation.</p>
+        </>,
+      },
+      {
+        id: 'comparison-limit', title: 'Do not call the clean run an improvement over Lesson 8', body: <>
+          <p>Lesson 8 ended at <code>3.7904</code>, slightly below this run&apos;s <code>3.8216</code>. The numbers are informative but not a controlled head-to-head result. Lesson 8 continued weights trained in Lesson 6, crossed a declared AdamW reset in Lesson 7, then inherited saved optimiser and data-order state. Lesson 9 trained a clean 700-update path from random weights with fresh AdamW and a fresh data cursor.</p>
+          <p>The visible sample now resembles a simple story but still loses grammar, invents fragments and drifts between events. Lesson 10 should evaluate prompt adherence, repetition, diversity and story consistency beside frozen loss rather than selecting whichever isolated paragraph sounds nicest.</p>
         </>,
       },
     ],

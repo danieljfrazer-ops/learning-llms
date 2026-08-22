@@ -51,7 +51,7 @@ export const projects: Project[] = [
   {
     slug: 'tinystories', number: '02', name: 'TinyStories', shortName: 'TinyStories',
     description: 'Scale the same ideas into a small GPT that learns simple, coherent English stories.',
-    stage: 'Lesson 8 of 12 complete', progress: 67, status: 'ACTIVE', method: 'Train from scratch',
+    stage: 'Lesson 9 of 12 complete', progress: 75, status: 'ACTIVE', method: 'Train from scratch',
     objective: 'Move from character imitation to subword language modelling and train a roughly 5–15M parameter transformer on a deliberately simple language distribution.',
     dataset: { name: 'TinyStories', detail: 'Synthetic short stories written with vocabulary familiar to young children. We will begin with a bounded subset before choosing whether to scale.', source: 'https://www.microsoft.com/en-us/research/publication/tinystories-how-small-can-language-models-be-and-still-speak-coherent-english/', sourceLabel: 'Microsoft Research' },
     stages: [
@@ -63,8 +63,8 @@ export const projects: Project[] = [
       { slug: 'first-pretraining', name: 'First pretraining run', state: 'complete', lesson: 'Run next-token training from scratch and expose the first transition from random fragments toward simple sentences.' },
       { slug: 'checkpoints-dashboard', name: 'Checkpoints and live metrics', state: 'complete', lesson: 'Save comparable training states and make token loss, throughput, memory and fixed-prompt samples visible in the wiki.' },
       { slug: 'training-recipe', name: 'Improve the training recipe', state: 'complete', lesson: 'Branch one complete state into matched learning-rate policies and select with a predeclared validation threshold.' },
-      { slug: 'scaling-budget', name: 'Scale within the laptop budget', state: 'active', lesson: 'Benchmark width, depth, context and dataset size before selecting a longer run that fits the MacBook Air.' },
-      { slug: 'story-evaluation', name: 'Evaluate story behaviour', state: 'planned', lesson: 'Combine frozen held-out loss with prompt adherence, consistency, repetition, diversity and overlap checks.' },
+      { slug: 'scaling-budget', name: 'Scale within the laptop budget', state: 'complete', lesson: 'Benchmark width, depth, context and dataset size before selecting a longer run that fits the MacBook Air.' },
+      { slug: 'story-evaluation', name: 'Evaluate story behaviour', state: 'active', lesson: 'Combine frozen held-out loss with prompt adherence, consistency, repetition, diversity and overlap checks.' },
       { slug: 'tinystories-playground', name: 'TinyStories prompt playground', state: 'planned', lesson: 'Complete learner-written story openings with selected local checkpoints under controlled generation settings.' },
       { slug: 'final-story-model', name: 'Final model and comparison', state: 'planned', lesson: 'Confirm the selected model across seeds and compare character-level Shakespeare with subword TinyStories honestly.' },
     ],
@@ -125,6 +125,7 @@ export const glossary = [
   ['Checkpoint', 'A saved snapshot of model weights. A resumable training checkpoint must also preserve optimiser, step, and data-order state; a weight-only checkpoint supports inspection and inference but not exact continuation.'],
   ['Controlled experiment', 'A comparison that changes one chosen variable while keeping other relevant conditions fixed, making causal interpretation more defensible.'],
   ['Compression ratio', 'A ratio describing how much source text each token represents. This course uses characters per token, where a larger value means a shorter token sequence for the same text.'],
+  ['Compute budget', 'A declared allowance of training updates, time, memory or other resources used to bound an experiment and compare what each candidate achieves for that cost.'],
   ['Context window', 'The maximum number of earlier tokens visible when predicting the next token.'],
   ['Cross-entropy', 'A loss that penalises low probability assigned to the correct class or next token.'],
   ['Data leakage', 'Information from evaluation examples entering training or model-selection inputs, making held-out results look better than genuine performance on new data.'],

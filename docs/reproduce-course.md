@@ -192,6 +192,16 @@ The control keeps `3e-4`, the lower constant candidate uses `1.5e-4`, and cosine
 
 Live and final evidence is written to `public/data/local/tinystories-training-recipe.json`. The frozen protocol, traces, results, selection record and complete step-700 candidate checkpoints live under `work/experiments/tinystories-training-recipe-001/`. Expect roughly 200 MiB for three model-plus-AdamW states. The chosen checkpoint is a local continuation artifact; training does not promote it or any measurement to Reference results.
 
+Lesson 9 cannot load that selected checkpoint into wider, deeper, or longer-context candidates because their tensor shapes differ. It therefore runs a fresh-start screen with a common model seed, batch seed, tokenizer, validation set, optimiser and 100-update budget:
+
+```sh
+uv run --no-sync python ml/tinystories_scaling_budget.py
+```
+
+The five probes are the 256-wide/six-block/context-128 control, width 320, eight blocks, context 256, and the control trained on a deterministic half of the training stories. The data probe diagnoses coverage and is not eligible for architecture selection. Feasible architectures must stay below 4 GiB peak MLX allocation and 250 ms mean update time on the documented reference machine; an alternative must improve complete validation loss by at least `0.01` or the control remains selected.
+
+After applying that frozen rule, the script rebuilds only the selected architecture and trains it for 700 updates: constant `3e-4` through update 600 and cosine decay to `3e-5` over the final 100. Live evidence is `public/data/local/tinystories-scaling-budget.json`; protocol, probe weights, traces, selection, and the complete selected checkpoint are under `work/experiments/tinystories-scaling-budget-001/`. The recorded run used about 195 MiB. Treat its hardware timings as local measurements and its 1,000-story quality screen as development evidence, not full-dataset scaling proof.
+
 ## 9. Keep your work private or publish it deliberately
 
 My Lab artifacts are ignored. To preserve your journey, create a separate branch or repository policy for selected JSON/configuration files; do not commit raw datasets or every checkpoint by default. Review dataset terms and remove private prompts before sharing.
