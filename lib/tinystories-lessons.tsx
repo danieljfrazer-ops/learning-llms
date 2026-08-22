@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import BeginnerTerm from '@/app/components/BeginnerTerm';
+import TinyStoriesBatchingPanel from '@/app/components/TinyStoriesBatchingPanel';
 import TinyStoriesDatasetAuditPanel from '@/app/components/TinyStoriesDatasetAuditPanel';
 import TinyStoriesTokenizerPanel from '@/app/components/TinyStoriesTokenizerPanel';
 import TinyStoriesTransitionPanel from '@/app/components/TinyStoriesTransitionPanel';
@@ -254,6 +255,75 @@ validation_metrics = evaluate_split(tokenizer, validation_rows)`}</Code>
           <p>The selected <code>tokenizer.json</code>, its SHA-256 checksum and the full candidate configuration now define the text-to-ID interface for the next TinyStories development lessons. Lesson 4 can therefore compare batching strategies without silently changing how stories are represented.</p>
           <p>This freeze applies to the 1,000-story development corpus. A larger final corpus may contain different frequent pairs, so scaling the data requires an explicit tokenizer re-evaluation rather than blindly reusing today&apos;s merge table.</p>
           <p>Next, we will add beginning/end markers, decide how separate stories become fixed-length causal windows, and inspect input and target tensors by decoding them back to text. The selected tokenizer remains fixed throughout that comparison.</p>
+        </>,
+      },
+    ],
+  },
+  {
+    slug: 'sequence-batching',
+    title: 'Build causal batches without mixing stories',
+    summary: 'Turn differently sized tokenised stories into fixed 32 × 128 input, target, and loss-mask tensors while preserving every legitimate next-token pair and excluding padding.',
+    outcome: 'The reproducible procedure and My Lab dashboard are ready. Reference evidence remains intentionally unpromoted until a separate maintainer review.',
+    evidence: 'Available procedure · story-isolated windows · tensor construction only · no model or optimiser updates',
+    sections: [
+      {
+        id: 'why-batching', title: 'Why does the model need batches?', body: <>
+          <p>The tokenizer returns one list of token IDs per story, but those lists have different lengths. Efficient accelerator work instead uses rectangular <Term id="tensor">tensors</Term>: rows contain examples, columns contain sequence positions. A <Term id="batch">batch</Term> is a group of those examples processed in one model calculation.</p>
+          <p>This lesson therefore defines the questions that future training will ask. Each input position must be paired with its genuine next token, separate stories must remain separate, and structural filler must never become a learning target. Batching is not merely storage housekeeping; a boundary mistake changes the task itself.</p>
+        </>,
+      },
+      {
+        id: 'boundaries', title: 'Wrap each story before slicing it', body: <>
+          <p>Each story is encoded independently as <code>&lt;bos&gt; + ordinary tokens + &lt;eos&gt;</code>. The beginning marker tells the model that no earlier prose belongs to this story. The ending marker is a real target: learning when stories stop is part of next-token prediction.</p>
+          <p>We deliberately do not join one story&apos;s end to another story&apos;s beginning. A joined stream would create an artificial <code>&lt;eos&gt; → &lt;bos&gt;</code> prediction and could let tokens in the new story attend to unrelated prose from the previous one.</p>
+          <aside className="lesson-caveat"><strong>Boundaries are experimental policy</strong><p>Other systems use boundary-aware <Term id="sequence-packing">sequence packing</Term> to place multiple short documents in one tensor efficiently. That can be valid, but only when attention and loss rules preserve document separation. We choose the simpler auditable method first.</p></aside>
+        </>,
+      },
+      {
+        id: 'shifted-targets', title: 'Make the answer strip by shifting one place', body: <>
+          <p>For token IDs <code>[BOS, Once, upon, …]</code>, the inputs are <code>[BOS, Once, upon, …]</code> and the <Term id="shifted-targets">shifted targets</Term> are <code>[Once, upon, …, EOS]</code>. Position zero sees <code>BOS</code> and is graded against <code>Once</code>; position one sees <code>Once</code> and is graded against <code>upon</code>.</p>
+          <p>A 128-position training example consequently needs up to 129 consecutive IDs before the shift. Inputs take the first 128 and targets take the following 128. This alignment is what turns one story fragment into 128 next-token questions.</p>
+        </>,
+      },
+      {
+        id: 'windowing', title: 'Preserve every adjacent pair across windows', body: <>
+          <p>Long stories are read in chunks starting at token 0, 128, 256, and so on. Each chunk reads at most 129 IDs and forms 128 input–target pairs. The last ID of one chunk becomes the first input ID of the next, creating a one-token overlap without grading any pair twice.</p>
+          <p>The audit reconstructs every encoded story from its windows and checks that the number of observed target pairs equals <code>story tokens − 1</code>. This catches gaps, duplicated answers, and off-by-one errors before they can silently affect training.</p>
+          <aside className="lesson-caveat"><strong>The overlap preserves pairs, not unlimited memory</strong><p>The first prediction in a later chunk sees its boundary token but cannot attend to the preceding 127 tokens from the previous chunk. A 128-token context remains a hard limit.</p></aside>
+        </>,
+      },
+      {
+        id: 'padding', title: 'Pad the rectangle, then cover the blank answers', body: <>
+          <p>The final chunk of a story is often shorter than 128 questions. <Term id="padding">Padding</Term> fills the unused cells on the right with the reserved <code>&lt;pad&gt;</code> ID so every row has the same shape. Padding is scaffolding created by the batching system, not story text.</p>
+          <p>A matching <Term id="loss-mask">loss mask</Term> contains <code>1</code> for each real target and <code>0</code> for padded targets. Later, per-position cross-entropy values will be multiplied by that mask before averaging, so blank cells provide neither error nor gradient.</p>
+        </>,
+      },
+      {
+        id: 'causal-mask', title: 'Keep the two masks conceptually separate', body: <>
+          <p>The loss mask answers <em>should this position be graded?</em> The <Term id="causal-mask">causal mask</Term> answers <em>which positions may this position inspect?</em> In a 128 × 128 attention grid, a position may use itself and earlier positions but not later ones. That lower-triangular rule prevents the model from reading an answer before predicting it.</p>
+          <p>We materialise inputs and targets as 32-bit integer MLX arrays and the loss mask as a 32-bit floating-point array. MLX documents its supported <Source href="https://ml-explore.github.io/mlx/build/html/python/data_types.html">array data types</Source> and its <Source href="https://ml-explore.github.io/mlx/build/html/usage/quick_start.html">lazy array evaluation model</Source>; the script calls <code>mx.eval</code> so the audit measures actual materialised tensors.</p>
+        </>,
+      },
+      {
+        id: 'command', title: 'Run the boundary audit and save learner evidence', body: <>
+          <Code>{`uv run --no-sync python ml/tinystories_sequence_batching.py`}</Code>
+          <p>The command reads the Lesson 3 learner evidence, verifies the frozen <code>tokenizer.json</code> checksum, re-verifies both dataset hashes, and encodes each story independently. It constructs all windows, audits their pair coverage, shuffles only the training-example indices with seed 42, and materialises one fixed batch for each split.</p>
+          <p>It uses Python 3.12, Tokenizers 0.23.1, and MLX 0.32.0. It writes ignored <code>public/data/local/tinystories-batching.json</code>, <code>work/experiments/tinystories-batching-001/config.json</code>, and <code>batch-preview.json</code>. No transformer is constructed, no forward loss is calculated, and no weights or optimiser state exist to change.</p>
+          <Code>{`visible = story_ids[start:start + context_size + 1]\ninputs = padded_visible[:-1]\ntargets = padded_visible[1:]\nloss_mask = [1.0] * real_targets + [0.0] * padding_targets`}</Code>
+        </>,
+      },
+      {
+        id: 'evidence', title: 'Read correctness and efficiency together', body: <>
+          <p>The dashboard compares story-isolated padded windows with a deliberately naïve continuous stream. The latter can fill almost every position, but that attractive utilisation number hides false cross-story targets and unrelated prior context. The selected method spends more cells to make the learning questions defensible.</p>
+          <p>General transformer tooling often calls the component that pads examples into a batch a <Source href="https://huggingface.co/docs/transformers/en/main_classes/data_collator">data collator</Source>. We implement this small one directly so its boundary, shift, and mask rules remain visible rather than hidden behind a library default.</p>
+          <TinyStoriesBatchingPanel />
+        </>,
+      },
+      {
+        id: 'freeze-next', title: 'Freeze the batch contract for the random baseline', body: <>
+          <p>The selected development contract is now: independent BOS/EOS-wrapped stories, context 128, one-token-overlap windows, right padding, masked padded targets, batch size 32, and a causal attention mask. Those rules remain fixed while Lesson 5 chooses the first training architecture.</p>
+          <p>This lesson establishes data-shape and boundary correctness, not model quality or optimal throughput. A later controlled enhancement can test segment-aware packing, but it must reproduce the same legitimate within-story target pairs and demonstrate that no attention crosses story boundaries.</p>
+          <p>Next, we will create the official seeded random GPT, record its parameter count, memory, held-out loss, and broken prompt continuations, then save checkpoint zero before any optimiser update.</p>
         </>,
       },
     ],

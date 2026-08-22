@@ -111,6 +111,7 @@ uv run --no-sync python scripts/download_tinystories_sample.py
 uv run --no-sync python ml/tinystories_transition.py
 uv run --no-sync python ml/tinystories_dataset_audit.py
 uv run --no-sync python ml/tinystories_tokenizer_experiment.py
+uv run --no-sync python ml/tinystories_sequence_batching.py
 ```
 
 The downloader retains 1,000 rows from the official training split and 200 from the validation split, with source row numbers, selected page offsets and SHA-256 hashes in `data/raw/tinystories-sample/manifest.json`. If matching files already exist, it verifies and reuses them.
@@ -139,6 +140,14 @@ The tokenizer experiment requires that learner-local audit. It trains 512, 1,024
 - `work/experiments/tinystories-tokenizer-001/config.json`.
 
 The hard gates require stable special-token IDs, zero unknown IDs and zero NFKC round-trip mismatches. The documented selection policy weighs held-out sequence length against the embedding/output parameters induced by vocabulary size. It is a development decision, not a downstream model-quality measurement, and must be revisited if the training corpus or normalisation changes.
+
+The sequence-batching experiment requires the learner-local tokenizer result and verifies both the selected tokenizer checksum and dataset hashes before proceeding. It wraps each story independently with beginning/end markers, slices context-128 windows with a one-token overlap, right-pads final windows, and masks padded targets. It saves:
+
+- `public/data/local/tinystories-batching.json`;
+- `work/experiments/tinystories-batching-001/config.json`; and
+- `work/experiments/tinystories-batching-001/batch-preview.json`.
+
+The audit requires every within-story adjacent token pair to appear exactly once, zero cross-story targets, exact story reconstruction, aligned `32 × 128` input/target/loss-mask tensors, and masked padding. It also reports a deliberately naïve concatenation comparison to show why high tensor utilisation is not sufficient evidence of correct batching. This command materialises arrays but performs no model forward pass, loss calculation, gradient, optimiser update, or checkpoint write.
 
 ## 9. Keep your work private or publish it deliberately
 
