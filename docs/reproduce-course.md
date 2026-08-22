@@ -112,6 +112,7 @@ uv run --no-sync python ml/tinystories_transition.py
 uv run --no-sync python ml/tinystories_dataset_audit.py
 uv run --no-sync python ml/tinystories_tokenizer_experiment.py
 uv run --no-sync python ml/tinystories_sequence_batching.py
+uv run --no-sync python ml/tinystories_random_baseline.py
 ```
 
 The downloader retains 1,000 rows from the official training split and 200 from the validation split, with source row numbers, selected page offsets and SHA-256 hashes in `data/raw/tinystories-sample/manifest.json`. If matching files already exist, it verifies and reuses them.
@@ -148,6 +149,14 @@ The sequence-batching experiment requires the learner-local tokenizer result and
 - `work/experiments/tinystories-batching-001/batch-preview.json`.
 
 The audit requires every within-story adjacent token pair to appear exactly once, zero cross-story targets, exact story reconstruction, aligned `32 × 128` input/target/loss-mask tensors, and masked padding. It also reports a deliberately naïve concatenation comparison to show why high tensor utilisation is not sufficient evidence of correct batching. This command materialises arrays but performs no model forward pass, loss calculation, gradient, optimiser update, or checkpoint write.
+
+The random-baseline experiment requires that learner-local batching result. It verifies the frozen tokenizer and validation-data checksums, then materialises the selected width-256, eight-head, six-block decoder with 5,816,320 seeded random parameters. It evaluates every validation window once with padding excluded, generates from three fixed prompts, and saves:
+
+- `public/data/local/tinystories-random-baseline.json`;
+- `work/experiments/tinystories-random-baseline-001/config.json`; and
+- `work/experiments/tinystories-random-baseline-001/checkpoint-0000.safetensors`.
+
+The script loads that checkpoint strictly into a fresh matching architecture and requires a fixed logit slice to remain identical. Loss, probability, prompt, forward-throughput, and MLX allocator measurements are all before-state evidence: the experiment constructs no optimiser and performs zero weight updates. Its peak allocation excludes total process and system memory, while forward throughput excludes backward, gradient, and optimiser work. Lower-memory adaptations may choose the documented width-192 candidate, but must record that architecture change rather than compare it as if it were the official baseline.
 
 ## 9. Keep your work private or publish it deliberately
 

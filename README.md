@@ -119,9 +119,10 @@ uv run --no-sync python ml/tinystories_transition.py
 uv run --no-sync python ml/tinystories_dataset_audit.py
 uv run --no-sync python ml/tinystories_tokenizer_experiment.py
 uv run --no-sync python ml/tinystories_sequence_batching.py
+uv run --no-sync python ml/tinystories_random_baseline.py
 ```
 
-Open the first four TinyStories lessons in order. The dataset audit verifies hashes and freezes the bounded development sample; the tokenizer experiment compares 512–4,096-piece byte-level BPE vocabularies and freezes one local tokenizer; sequence batching then creates and audits story-isolated 32 × 128 tensors. None of these three commands trains neural-model weights. Reference results contain only separately reviewed course runs; My Lab reads your ignored local evidence, tokenizer and checkpoint files.
+Open the first five TinyStories lessons in order. The dataset audit verifies hashes and freezes the bounded development sample; the tokenizer experiment compares 512–4,096-piece byte-level BPE vocabularies and freezes one local tokenizer; sequence batching creates story-isolated 32 × 128 tensors; and the random-baseline command saves and reloads the official 5.82M-parameter checkpoint zero. None of these four commands performs an optimiser update. Reference results contain only separately reviewed course runs; My Lab reads your ignored local evidence, tokenizer and checkpoint files.
 
 ## Repository map
 

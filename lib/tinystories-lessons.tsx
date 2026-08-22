@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import BeginnerTerm from '@/app/components/BeginnerTerm';
 import TinyStoriesBatchingPanel from '@/app/components/TinyStoriesBatchingPanel';
 import TinyStoriesDatasetAuditPanel from '@/app/components/TinyStoriesDatasetAuditPanel';
+import TinyStoriesRandomBaselinePanel from '@/app/components/TinyStoriesRandomBaselinePanel';
 import TinyStoriesTokenizerPanel from '@/app/components/TinyStoriesTokenizerPanel';
 import TinyStoriesTransitionPanel from '@/app/components/TinyStoriesTransitionPanel';
 import type { RichLesson } from './shakespeare-lessons';
@@ -324,6 +325,85 @@ validation_metrics = evaluate_split(tokenizer, validation_rows)`}</Code>
           <p>The selected development contract is now: independent BOS/EOS-wrapped stories, context 128, one-token-overlap windows, right padding, masked padded targets, batch size 32, and a causal attention mask. Those rules remain fixed while Lesson 5 chooses the first training architecture.</p>
           <p>This lesson establishes data-shape and boundary correctness, not model quality or optimal throughput. A later controlled enhancement can test segment-aware packing, but it must reproduce the same legitimate within-story target pairs and demonstrate that no attention crosses story boundaries.</p>
           <p>Next, we will create the official seeded random GPT, record its parameter count, memory, held-out loss, and broken prompt continuations, then save checkpoint zero before any optimiser update.</p>
+        </>,
+      },
+    ],
+  },
+  {
+    slug: 'random-gpt-baseline',
+    title: 'Freeze and invoke the random GPT baseline',
+    summary: 'Select the smallest architecture inside the declared 5–15M range, materialise seeded random weights, evaluate every frozen validation window, inspect prompt probabilities, and prove checkpoint-zero reload parity before training.',
+    outcome: 'The reproducible procedure and My Lab dashboard are ready. Reference evidence remains intentionally unpromoted until a separate maintainer review.',
+    evidence: 'Available procedure · 5.82M-parameter GPT · checkpoint step 0 · zero optimiser updates',
+    sections: [
+      {
+        id: 'why-baseline', title: 'Why freeze an official random baseline?', body: <>
+          <p>A <Term id="baseline">baseline</Term> is the measured starting condition against which later change is judged. Lesson 1 proved a provisional transformer could run, but its smaller architecture and temporary tokenizer no longer match the system we intend to train. Comparing future checkpoints with that smoke test would mix learning with several design changes.</p>
+          <p>Lesson 5 therefore freezes the exact <Term id="model-architecture">model architecture</Term>, tokenizer, batches, prompts, evaluation protocol, and seed that the first pretraining lesson will inherit. It invokes this complete system before any correction step, so later improvements can be attributed to training rather than to missing before-state evidence.</p>
+          <aside className="lesson-caveat"><strong>Running is not learning</strong><p>A finite loss, valid probability distribution, or grammatical-looking fragment can occur with random weights. Training requires gradients and optimiser updates; this lesson performs neither.</p></aside>
+        </>,
+      },
+      {
+        id: 'size-choice', title: 'Choose a laptop-scale architecture by a declared rule', body: <>
+          <p>The project declared a target of roughly 5–15 million <Term id="parameter-count">parameters</Term>. We compare width 192, 256, and 320 while holding six blocks, context 128, and approximately 32 features per attention head. The selected width 256 design contains exactly 5,816,320 trainable numbers: the smallest candidate inside that range.</p>
+          <p>This is a resource-oriented starting rule, not a quality result. The wider candidate is deferred until a later scaling lesson can justify its added memory and computation with matched training evidence. The smaller candidate remains useful for reduced-compute adaptations, but would change the declared experiment.</p>
+          <Code>{`parameters = token_embedding + position_embedding\nparameters += 6 * (attention + feed_forward + block_norms)\nparameters += final_norm + output_projection`}</Code>
+        </>,
+      },
+      {
+        id: 'architecture', title: 'Trace IDs through the six-block decoder', body: <>
+          <p>Each token ID retrieves a 256-number embedding, and each of the 128 positions retrieves another 256-number embedding. Their sum passes through six pre-normalised transformer blocks. Every block contains eight-head causal self-attention, a four-times-wider GELU feed-forward network, residual paths, and layer normalisation.</p>
+          <p>The final normalisation and untied output projection convert every position into 2,048 <Term id="logit">logits</Term>—one score for every frozen vocabulary token. This is the same decoder-only pattern introduced in Shakespeare, enlarged in width and depth for subword stories. The original <Source href="https://arxiv.org/abs/1706.03762">Transformer paper</Source> describes stacked attention/feed-forward layers, residual connections, normalisation, and masked decoder attention.</p>
+          <table className="lesson-table"><thead><tr><th>Component group</th><th>What its count depends on</th><th>Role</th></tr></thead><tbody>
+            <tr><td>Token and position embeddings</td><td>Vocabulary × width; context × width</td><td>Map integer labels and positions into working vectors</td></tr>
+            <tr><td>Six attention systems</td><td>Mostly width²</td><td>Route information among visible earlier positions</td></tr>
+            <tr><td>Six feed-forward systems</td><td>Width × four-times expansion</td><td>Transform each position independently after attention</td></tr>
+            <tr><td>Output projection</td><td>Width × vocabulary</td><td>Produce one next-token score per vocabulary entry</td></tr>
+          </tbody></table>
+        </>,
+      },
+      {
+        id: 'random-state', title: 'Materialise reproducible random weights', body: <>
+          <p><Term id="random-initialisation">Random initialisation</Term> fills the architecture&apos;s parameter arrays with pseudo-random starting values. Seed 42 makes that starting ticket repeatable on this software path. MLX lazily constructs arrays, so the script calls <code>mx.eval(model.parameters())</code> to ensure all weights actually exist on the selected device before they are counted or measured.</p>
+          <p>The weights provide numeric transformations but contain no learned TinyStories regularities. Architecture defines possible computations; initial values specify one arbitrary starting point inside that architecture; training will later move those values using prediction error.</p>
+        </>,
+      },
+      {
+        id: 'validation', title: 'Grade every held-out target without changing the model', body: <>
+          <p>A <Term id="forward-pass">forward pass</Term> sends input IDs through the current weights to produce logits. Cross-entropy compares those logits with the shifted next-token targets. The script walks every frozen validation window exactly once, uses the Lesson 4 loss mask to exclude padding, and divides the summed error by the number of real targets.</p>
+          <p>The uniform-guess reference is <code>ln(2,048)</code>. Random initialisation need not equal it exactly because the initial logits need not be identical, but both establish the high-error region expected before learning. <Term id="perplexity">Perplexity</Term> is recorded for later same-tokenizer comparisons, not as an intuitive claim that the model literally considers a fixed shortlist.</p>
+          <aside className="lesson-caveat"><strong>Forward speed is not training speed</strong><p>The measured throughput omits backward differentiation, gradient storage, optimiser work, and weight updates. It establishes inference feasibility, not the duration or memory of pretraining.</p></aside>
+        </>,
+      },
+      {
+        id: 'prompting', title: 'Inspect probabilities and continuations before learning', body: <>
+          <p>Three frozen prompts use fixed sampling seeds, temperature 0.9, and a maximum of 64 new tokens. At each step the latest context enters the model, softmax converts its final-position logits to probabilities, categorical sampling draws one ID, and that ID is appended for the next step.</p>
+          <p>The dashboard also exposes the five highest probabilities after the first prompt. Random output may contain recognisable fragments because the tokenizer already stores frequent pieces; joining those pieces does not mean the random weights learned grammar, plot, or meaning.</p>
+        </>,
+      },
+      {
+        id: 'checkpoint', title: 'Save checkpoint zero and prove it reloads', body: <>
+          <p>A <Term id="checkpoint">checkpoint</Term> saves weight tensors, not the Python architecture or tokenizer. The script writes <code>checkpoint-0000.safetensors</code>, records its SHA-256 checksum and byte size, constructs a fresh matching model, and calls strict <code>load_weights</code>. A fixed slice of logits must match exactly or the experiment fails.</p>
+          <p>MLX&apos;s <Source href="https://ml-explore.github.io/mlx/build/html/python/nn/module.html">Module documentation</Source> explains recursive parameters and its save/load interface; the dedicated <Source href="https://ml-explore.github.io/mlx/build/html/python/nn/_autosummary/mlx.nn.Module.save_weights.html">save_weights reference</Source> records that a <code>.safetensors</code> extension selects Safetensors serialization. Strict reload checks parameter names and shapes, while our logit comparison tests behaviour on a fixed input.</p>
+        </>,
+      },
+      {
+        id: 'command', title: 'Run the official before-state experiment', body: <>
+          <Code>{`uv run --no-sync python ml/tinystories_random_baseline.py`}</Code>
+          <p>The command reads <code>public/data/local/tinystories-batching.json</code>, the selected <code>tokenizer.json</code>, and the frozen validation JSONL. It refuses mismatched tokenizer or data checksums, reconstructs Lesson 4 windows, materialises the selected GPT, warms one shape, then performs full validation, prompting, checkpoint save, and strict reload.</p>
+          <p>It uses Python 3.12, MLX 0.32.0, and Tokenizers 0.23.1. It writes ignored <code>public/data/local/tinystories-random-baseline.json</code>, <code>work/experiments/tinystories-random-baseline-001/config.json</code>, and <code>checkpoint-0000.safetensors</code>. The checkpoint is learner-owned and is not committed or promoted automatically.</p>
+        </>,
+      },
+      {
+        id: 'evidence', title: 'Read checkpoint zero as a control, not a failed story model', body: <>
+          <p>The live panel keeps architecture selection, complete held-out loss, forward-only memory, checkpoint integrity, top-token probabilities, and fixed-prompt output together. Switch to My Lab for learner evidence; Reference remains blank until a maintainer separately reviews and promotes a course run.</p>
+          <TinyStoriesRandomBaselinePanel />
+        </>,
+      },
+      {
+        id: 'freeze-next', title: 'Freeze everything that Lesson 6 must inherit', body: <>
+          <p>The development baseline now fixes dataset identity and hashes, tokenizer checksum, story-isolated batches, context 128, batch size 32, width 256, eight heads, six blocks, four-times feed-forward expansion, seed 42, evaluation windows, prompt text, sampling settings, and checkpoint zero.</p>
+          <p>Lesson 6 may add only the training correction loop: masked cross-entropy, automatic differentiation, an optimiser, and a checkpoint schedule. Capturing one update and several early stages will let us see the transition from broad random probabilities toward spaces, common fragments, sentences, and eventually story patterns without hiding the awkward beginning.</p>
         </>,
       },
     ],
