@@ -34,9 +34,26 @@ Do not publish solely because the code builds. Complete this checklist deliberat
 - [ ] Confirm all displayed metrics and samples trace to committed reference JSON and configuration.
 - [ ] Complete accessibility, keyboard, responsive, and reduced-motion checks.
 
+## Browser playground release gate
+
+Complete the detailed [GitHub and Cloudflare publication plan](publishing-github-and-cloudflare.md) before either public launch.
+
+- [ ] Export selected Shakespeare checkpoints for browser execution.
+- [ ] Provide WebAssembly compatibility and optional WebGPU acceleration without a public inference API.
+- [ ] Prove tokenizer, parameter, logits, greedy-generation, and checkpoint-selection parity against MLX.
+- [ ] Publish model manifests, checksums, run identifiers, numerical tolerances, download sizes, and browser limitations.
+- [ ] Confirm public prompts remain on the visitor's device.
+- [ ] Confirm an unsupported browser receives a useful explanation and published reference samples rather than a broken playground.
+
 ## Publication
 
+- [ ] Freeze one release-candidate commit for both GitHub and Cloudflare.
 - [ ] Create the public repository only after the above review.
 - [ ] Protect the default branch and require build/lint/audit checks.
 - [ ] Create a tagged first release with a clear scope and known limitations.
+- [ ] Build and preview the Cloudflare wiki from that exact tagged commit.
+- [ ] Verify that lesson content and model files are static-first and no public inference server is required.
+- [ ] Smoke-test browser inference, Reference/My Lab separation, accessibility, metadata, and rollback before changing site access.
+- [ ] Obtain explicit final approval before making the Cloudflare deployment public.
+- [ ] Link the public wiki to the tagged source and the repository to the public wiki.
 - [ ] Publish no learner-local files, prompts, credentials, or machine-specific paths.

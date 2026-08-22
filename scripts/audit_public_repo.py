@@ -14,6 +14,7 @@ required = [
     "README.md", "AGENTS.md", "CONTRIBUTING.md",
     "docs/hardware.md", "docs/reproduce-course.md", "docs/evidence-modes.md",
     "docs/agent-workflow.md", "docs/independent-projects.md", "docs/public-release-checklist.md",
+    "docs/publishing-github-and-cloudflare.md",
     "scripts/download_tiny_shakespeare.py", "scripts/system_report.py",
 ]
 for relative in required:
@@ -39,7 +40,7 @@ for path in (ROOT / "ml").glob("shakespeare_*.py"):
         errors.append(f"training code writes or references committed evidence directly: {path.name}")
 
 readme = (ROOT / "README.md").read_text(encoding="utf-8")
-for phrase in ("Reference results", "My lab", "Other hardware", "Before public release"):
+for phrase in ("Reference results", "My lab", "Other hardware", "Before public release", "Cloudflare"):
     if phrase not in readme:
         errors.append(f"README missing public orientation: {phrase}")
 

@@ -158,8 +158,9 @@ After the three core projects, open the wiki’s **Continue yourself** page or r
 - [Reference results versus My lab](docs/evidence-modes.md)
 - [Agent-assisted learning workflow](docs/agent-workflow.md)
 - [Independent project extensions](docs/independent-projects.md)
+- [Publishing GitHub and the Cloudflare wiki](docs/publishing-github-and-cloudflare.md)
 - [Future public-release checklist](docs/public-release-checklist.md)
 
 ## Before public release
 
-This repository still needs an explicit licence choice, a final secret/large-file audit, clean-clone testing on the supported hardware paths, dataset-terms review, accessibility QA, and a decision about whether any checkpoints belong in release assets. No GitHub remote or public repository is created by the current setup work.
+This repository still needs an explicit licence choice, a final secret/large-file audit, clean-clone testing on the supported hardware paths, dataset-terms review, accessibility QA, and a browser-executable Shakespeare export proven equivalent to the MLX model. GitHub and the public Cloudflare wiki will be released from one reviewed candidate under the [coordinated publication plan](docs/publishing-github-and-cloudflare.md). No remote repository, public site, or deployment is created by the current setup work.

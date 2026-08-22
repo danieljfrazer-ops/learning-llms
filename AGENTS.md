@@ -52,4 +52,6 @@ Also run the smallest safe experiment or fixture that validates changed Python b
 
 ## Publication boundary
 
-Do not create a GitHub repository, add a remote, publish a package, deploy the wiki, promote reference results, or choose a licence unless the user explicitly asks for that separate action. Use `docs/public-release-checklist.md` when publication is requested.
+Do not create a GitHub repository, add a remote, publish a package, deploy the wiki, promote reference results, or choose a licence unless the user explicitly asks for that separate action. Use `docs/public-release-checklist.md` and `docs/publishing-github-and-cloudflare.md` when publication is requested.
+
+Treat GitHub and Cloudflare as one coordinated release candidate. Before either public launch, require the browser-executable Shakespeare model, MLX/browser parity evidence, static-first hosting, private or preview smoke testing, documented rollback, and a final approval that explicitly names the public site access. Never substitute a hosted general-purpose model for the course's trained checkpoint without clearly defining it as a different experiment.
