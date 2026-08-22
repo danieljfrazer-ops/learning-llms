@@ -4,6 +4,7 @@ import WikiChrome from '@/app/components/WikiChrome';
 import LiveMetrics from '@/app/components/LiveMetrics';
 import ModelComparison from '@/app/components/ModelComparison';
 import { getProject, projects } from '@/lib/wiki-data';
+import { BeginnerProjectGuide } from '@/app/components/BeginnerGuidance';
 
 export function generateStaticParams() { return projects.map(project => ({ slug: project.slug })); }
 
@@ -13,6 +14,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     <article className="article-page">
       <div className="breadcrumbs"><Link href="/">Dashboard</Link><span>/</span><span>Projects</span><span>/</span><strong>{project.shortName}</strong></div>
       <header className="article-hero"><div><p className="kicker">PROJECT {project.number} · {project.method.toUpperCase()}</p><h1>{project.name}</h1><p>{project.objective}</p></div><div className="stage-stamp"><span>CURRENT STAGE</span><strong>{project.stage}</strong><small>{project.progress}% of planned journey</small><div className="progress-track"><i style={{ width: `${Math.max(project.progress, 2)}%` }} /></div></div></header>
+      <BeginnerProjectGuide project={project.slug} />
 
       {project.slug === 'shakespeare' && <LiveMetrics />}
       {project.slug === 'shakespeare' && <ModelComparison />}

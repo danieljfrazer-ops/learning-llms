@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BeginnerModeToggle } from './BeginnerMode';
 
 export default function WikiChrome({ active, children }: { active: string; children: React.ReactNode }) {
   const link = (href: string, label: string, icon: string, key: string) => <Link className={`nav-link ${active === key ? 'active' : ''}`} href={href}><span>{icon}</span>{label}</Link>;
@@ -12,6 +13,6 @@ export default function WikiChrome({ active, children }: { active: string; child
       </nav>
       <div className="machine-card"><span className="live-dot" /> LOCAL LAB<strong>MacBook Air · 32 GB</strong><small>Apple M5 · MLX</small></div>
     </aside>
-    <main className="main-content"><header className="topbar"><div><span className="eyebrow">LEARNING LANGUAGE MODELS</span><span className="sync-state">● Living documentation</span></div><Link className="search-link" href="/glossary">Technical glossary <kbd>A–Z</kbd></Link></header>{children}</main>
+    <main className="main-content"><header className="topbar"><div><span className="eyebrow">LEARNING LANGUAGE MODELS</span><span className="sync-state">● Living documentation</span></div><div className="topbar-tools"><BeginnerModeToggle /><Link className="search-link" href="/glossary">Technical glossary <kbd>A–Z</kbd></Link></div></header>{children}</main>
   </div>;
 }

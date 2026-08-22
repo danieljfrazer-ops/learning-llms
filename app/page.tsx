@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { projects as projectRecords } from '@/lib/wiki-data';
+import { BeginnerModeToggle, BeginnerOnly } from '@/app/components/BeginnerMode';
 
 const projects = projectRecords.map(project => ({ ...project, href: `/projects/${project.slug}` }));
 
@@ -24,12 +25,13 @@ export default function Home() {
       </aside>
 
       <main className="main-content">
-        <header className="topbar"><div><span className="eyebrow">LIVING WIKI</span><span className="sync-state">● Documentation synced</span></div><a className="search-link" href="#projects">Jump to projects <kbd>↓</kbd></a></header>
+        <header className="topbar"><div><span className="eyebrow">LIVING WIKI</span><span className="sync-state">● Documentation synced</span></div><div className="topbar-tools"><BeginnerModeToggle /><a className="search-link" href="#projects">Jump to projects <kbd>↓</kbd></a></div></header>
         <section className="hero">
           <div>
             <p className="kicker">BUILDING LANGUAGE MODELS FROM FIRST PRINCIPLES</p>
             <h1>Learn by watching<br /><em>language emerge.</em></h1>
             <p className="hero-copy">A hands-on record of every dataset, tensor, training run and mistake—as we teach small models to predict what comes next.</p>
+            <BeginnerOnly className="home-beginner"><strong>New to all of this?</strong><span>An LLM is fundamentally an autocomplete system trained on enormous amounts of text. Here we build tiny versions so every moving part stays visible. Switch Beginner Mode off whenever the extra coaching is no longer useful.</span></BeginnerOnly>
             <div className="hero-actions"><Link className="button primary" href="/projects/shakespeare">Continue project <span>→</span></Link><Link className="button secondary" href="/concepts/training-lifecycle">See the learning path</Link></div>
           </div>
           <div className="terminal-card" aria-label="Current experiment status">

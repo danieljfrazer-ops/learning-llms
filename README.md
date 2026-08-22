@@ -2,6 +2,16 @@
 
 An executable course in building small language models on a 32 GB Apple-silicon Mac. The local wiki explains each experiment and displays checkpoint samples and metrics as they are produced.
 
+## Beginner Mode
+
+Use the **Beginner Mode** switch in the wiki's top bar to reveal an extra teaching layer without replacing the concise technical lesson. It adds an everyday mental model and plain-language goal to each lesson, a contextual explanation after every lesson section, and inline definitions when linked technical terms first appear. The choice is remembered as you move between pages.
+
+The red-team findings that shaped this layer are recorded in `docs/beginner-red-team.md`. Future lesson changes should pass the skill's coverage audit:
+
+```sh
+python3 ~/.codex/skills/learning-llm-wiki/scripts/audit_beginner_guidance.py
+```
+
 ## Project shape
 
 - `ml/` contains deliberately readable training code.
@@ -14,7 +24,7 @@ An executable course in building small language models on a 32 GB Apple-silicon 
 
 Use Node 22 or newer for the wiki and Python 3.12 with MLX for the experiments.
 
-The Shakespeare progression currently contains four runnable models:
+The Shakespeare progression currently contains seven runnable model and experiment stages:
 
 - `ml/shakespeare_bigram.py` — one-character lookup baseline
 - `ml/shakespeare_context.py` — eight-character feed-forward model

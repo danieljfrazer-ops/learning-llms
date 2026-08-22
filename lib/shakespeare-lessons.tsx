@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import Link from 'next/link';
+import BeginnerTerm from '@/app/components/BeginnerTerm';
 
 export type RichLesson = {
   slug: string;
@@ -11,7 +11,7 @@ export type RichLesson = {
 };
 
 function Term({ id, children }: { id: string; children: ReactNode }) {
-  return <Link className="inline-term" href={`/glossary#${id}`}>{children}</Link>;
+  return <BeginnerTerm id={id}>{children}</BeginnerTerm>;
 }
 
 function Source({ href, children }: { href: string; children: ReactNode }) {
