@@ -29,7 +29,7 @@ No previous machine-learning knowledge is assumed. **Beginner Mode** adds deeper
 | Project | Purpose | Starting point | Status in the reference course |
 |---|---|---|---|
 | 01 · Tiny Shakespeare | Expose the complete language-model loop at character scale | Random weights | 12 lessons complete |
-| 02 · TinyStories | Train a small GPT-like model on simple English using subword tokens | Random weights | Lesson 2 of 12 complete |
+| 02 · TinyStories | Train a small GPT-like model on simple English using subword tokens | Random weights → first pretraining | Reference evidence through lesson 2; executable lessons through 6 |
 | 03 · English → SQL | Contrast pretraining with task adaptation and executable evaluation | Pretrained small model | Planned |
 | 04 · Sentiment laboratory | Independently build a classifier with robustness and calibration checks | Fully scaffolded extension | Optional |
 | 05 · Dialogue summarisation | Ask your coding agent to scaffold a careful sequence-to-sequence project | Agent brief only | Optional |
@@ -120,9 +120,10 @@ uv run --no-sync python ml/tinystories_dataset_audit.py
 uv run --no-sync python ml/tinystories_tokenizer_experiment.py
 uv run --no-sync python ml/tinystories_sequence_batching.py
 uv run --no-sync python ml/tinystories_random_baseline.py
+uv run --no-sync python ml/tinystories_first_pretraining.py
 ```
 
-Open the first five TinyStories lessons in order. The dataset audit verifies hashes and freezes the bounded development sample; the tokenizer experiment compares 512–4,096-piece byte-level BPE vocabularies and freezes one local tokenizer; sequence batching creates story-isolated 32 × 128 tensors; and the random-baseline command saves and reloads the official 5.82M-parameter checkpoint zero. None of these four commands performs an optimiser update. Reference results contain only separately reviewed course runs; My Lab reads your ignored local evidence, tokenizer and checkpoint files.
+Open the first six TinyStories lessons in order. The dataset audit verifies hashes and freezes the bounded development sample; the tokenizer experiment compares 512–4,096-piece byte-level BPE vocabularies and freezes one local tokenizer; sequence batching creates story-isolated 32 × 128 tensors; and the random-baseline command saves and reloads the official 5.82M-parameter checkpoint zero. Those preparation commands perform no optimiser update. Lesson 6 then loads that exact checkpoint and performs the first 500 AdamW updates, preserving full-validation results and fixed-prompt output at steps 0, 1, 10, 50, 100, 250, and 500. Reference results contain only separately reviewed course runs; My Lab reads your ignored local evidence, tokenizer, and checkpoint files.
 
 ## Repository map
 

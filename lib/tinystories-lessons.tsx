@@ -3,6 +3,7 @@ import BeginnerTerm from '@/app/components/BeginnerTerm';
 import TinyStoriesBatchingPanel from '@/app/components/TinyStoriesBatchingPanel';
 import TinyStoriesDatasetAuditPanel from '@/app/components/TinyStoriesDatasetAuditPanel';
 import TinyStoriesRandomBaselinePanel from '@/app/components/TinyStoriesRandomBaselinePanel';
+import TinyStoriesPretrainingPanel from '@/app/components/TinyStoriesPretrainingPanel';
 import TinyStoriesTokenizerPanel from '@/app/components/TinyStoriesTokenizerPanel';
 import TinyStoriesTransitionPanel from '@/app/components/TinyStoriesTransitionPanel';
 import type { RichLesson } from './shakespeare-lessons';
@@ -404,6 +405,84 @@ validation_metrics = evaluate_split(tokenizer, validation_rows)`}</Code>
         id: 'freeze-next', title: 'Freeze everything that Lesson 6 must inherit', body: <>
           <p>The development baseline now fixes dataset identity and hashes, tokenizer checksum, story-isolated batches, context 128, batch size 32, width 256, eight heads, six blocks, four-times feed-forward expansion, seed 42, evaluation windows, prompt text, sampling settings, and checkpoint zero.</p>
           <p>Lesson 6 may add only the training correction loop: masked cross-entropy, automatic differentiation, an optimiser, and a checkpoint schedule. Capturing one update and several early stages will let us see the transition from broad random probabilities toward spaces, common fragments, sentences, and eventually story patterns without hiding the awkward beginning.</p>
+        </>,
+      },
+    ],
+  },
+  {
+    slug: 'first-pretraining',
+    title: 'Run the first TinyStories pretraining journey',
+    summary: 'Load the exact checkpoint-zero control, add masked gradients and AdamW, traverse shuffled training windows, and preserve the model at seven stages so numerical and visible learning can be inspected together.',
+    outcome: 'The learner-local run completes 500 optimiser updates from the frozen random baseline while recording full held-out evaluation and fixed-prompt generations at steps 0, 1, 10, 50, 100, 250, and 500.',
+    evidence: 'Executable lesson · one controlled training recipe · seven staged checkpoints · learner-local evidence only',
+    sections: [
+      {
+        id: 'meaning', title: 'What does “pretraining” mean in this small experiment?', body: <>
+          <p><Term id="pretraining">Pretraining</Term> is the first broad phase in which a model learns next-token patterns from a corpus, before any later task-specific adaptation. Here “broad” means only the frozen TinyStories development slice: 1,000 synthetic training stories. It does not mean internet-scale knowledge, instruction following, or human-like understanding.</p>
+          <p>Lesson 5 supplied an honest before-state: the complete 5.82M-parameter decoder could calculate probabilities, but its weights were random. Lesson 6 repeats the chain <strong>batch → prediction → error → gradient → weight update</strong> 500 times, then asks whether untouched validation stories became easier to predict.</p>
+          <aside className="lesson-caveat"><strong>Training changes numbers, not the architecture</strong><p>The six blocks, eight heads, 128-token context, and 2,048-token vocabulary remain fixed. Only the values stored in the trainable weight arrays move.</p></aside>
+        </>,
+      },
+      {
+        id: 'inherit-control', title: 'Begin from the exact photographed control', body: <>
+          <p>The script verifies the dataset hashes, tokenizer checksum, Lesson 4 batch contract, and SHA-256 of <code>checkpoint-0000.safetensors</code>. It reconstructs the same architecture and loads those weights strictly. The step-zero validation loss must therefore reproduce Lesson 5 before the first update.</p>
+          <p>This is stronger than merely reusing seed 42. A seed asks a software path to generate random values again; loading the checked file restores the actual tensors we measured. Any later difference then follows from the learning loop rather than a subtly different initial ticket.</p>
+        </>,
+      },
+      {
+        id: 'data-order', title: 'Deal shuffled worksheets without silently dropping examples', body: <>
+          <p>The 2,292 story-isolated training windows are shuffled with Python seed 42. The program takes up to 32 windows at a time, includes the smaller final batch, then reshuffles only after every window has been dealt once. This creates a reproducible <Term id="data-order">data order</Term> without repeatedly sampling some windows while missing others.</p>
+          <p>The dashboard reports real target tokens seen and “equivalent complete training passes”: targets used for updates divided by the 229,867 legitimate training targets. It is a workload ratio, not a claim that every checkpoint lands exactly on an <Term id="epoch">epoch</Term> boundary.</p>
+        </>,
+      },
+      {
+        id: 'loss', title: 'Grade only genuine next-token questions', body: <>
+          <p>For each batch, the model produces a 2,048-way logit vector at every one of the 128 positions. Cross-entropy calculates one error per position. The Lesson 4 <Term id="loss-mask">loss mask</Term> multiplies errors for right-hand padding by zero, then the script divides the remaining sum by the count of real targets.</p>
+          <Code>{`per_position = cross_entropy(model(inputs), targets)
+loss = sum(per_position * loss_mask) / sum(loss_mask)`}</Code>
+          <p>Without the mask, short final chunks would reward the model for predicting artificial <code>&lt;pad&gt;</code> labels. The model could lower its score by learning our storage convenience rather than story text.</p>
+        </>,
+      },
+      {
+        id: 'gradients', title: 'Turn one error number into millions of local correction signals', body: <>
+          <p>Loss says how wrong the batch was but not how each of 5,816,320 weights contributed. MLX <Term id="automatic-differentiation">automatic differentiation</Term> traces the forward calculations backward and produces a <Term id="gradient">gradient</Term> for every trainable array: a local slope showing how a tiny weight change would affect loss.</p>
+          <p>Imagine a huge mixing desk after a poor recording. The loss is the single complaint “this sounds wrong”; gradients are millions of tiny arrows saying which direction each dial locally points uphill. They do not reveal the perfect final setting, so training takes a small step, listens again on another batch, and repeats. MLX documents this model-aware transformation in <Source href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.nn.value_and_grad.html">nn.value_and_grad</Source>.</p>
+          <p>The run records the combined gradient L2 norm for diagnosis but does not clip it. That deliberate simplicity leaves clipping and schedules as controlled improvements rather than hidden ingredients.</p>
+        </>,
+      },
+      {
+        id: 'optimizer', title: 'Let AdamW translate slopes into cautious weight movements', body: <>
+          <p>The <Term id="adamw">AdamW optimiser</Term> keeps running summaries of recent gradients and squared gradients for each weight. It uses those histories to scale the update, then applies decoupled weight decay. Our first recipe fixes learning rate <code>0.0003</code> and weight decay <code>0.01</code> for all 500 <Term id="training-step">training steps</Term>.</p>
+          <p>The <Term id="learning-rate">learning rate</Term> is the master scale on the proposed movement. Too large can jump across useful regions; too small can make progress painfully slow. These values are a documented starting recipe, not an optimum. The <Source href="https://ml-explore.github.io/mlx/build/html/python/optimizers/_autosummary/mlx.optimizers.AdamW.html">MLX AdamW reference</Source> gives the exact update rule and defaults used by the implementation.</p>
+          <Code>{`loss, gradients = value_and_grad(model, inputs, targets, loss_mask)
+optimiser.update(model, gradients)
+mx.eval(model.parameters(), optimiser.state)`}</Code>
+        </>,
+      },
+      {
+        id: 'checkpoints', title: 'Keep the awkward middle instead of showing only the finish', body: <>
+          <p>The model is evaluated and invoked at steps 0, 1, 10, 50, 100, 250, and 500. Each evaluation walks all 442 validation windows and excludes padding exactly as Lesson 5 did. Each prompt uses the same text, sampling seed, temperature 0.9, and 64-token limit.</p>
+          <p>A <Term id="checkpoint">checkpoint</Term> at each non-zero stage stores model weights and a checksum. Lesson 6 intentionally does not yet serialize optimiser momentum or the exact shuffle position, so these files support comparison and inference but are not fully resumable training snapshots. That missing machinery becomes Lesson 7.</p>
+        </>,
+      },
+      {
+        id: 'command', title: 'Run the learner-owned training experiment', body: <>
+          <Code>{`uv run --no-sync python ml/tinystories_first_pretraining.py`}</Code>
+          <p>The command reads the frozen TinyStories JSONL files, selected tokenizer, Lesson 4 batching evidence, Lesson 5 baseline evidence, and checkpoint zero. It performs real GPU-backed forward calculations, backward differentiation, and AdamW updates.</p>
+          <p>It writes ignored <code>public/data/local/tinystories-first-pretraining.json</code>, <code>work/experiments/tinystories-first-pretraining-001/config.json</code>, and staged <code>.safetensors</code> weight files. The JSON is atomically refreshed at every checkpoint, so an open My Lab page can update without reading a half-written file. Reference evidence remains untouched.</p>
+        </>,
+      },
+      {
+        id: 'evidence', title: 'Read numbers and completions as different kinds of evidence', body: <>
+          <p>Complete validation loss aggregates tens of thousands of held-out next-token questions, so its direction is more trustworthy than one attractive sentence. Fixed-prompt completions answer a different question: what does one sampled path through the learned probabilities look like to a reader?</p>
+          <p>A falling loss supports “the model predicts this held-out split better.” Cleaner spaces, words, and sentence fragments make that change visible. Neither alone establishes factuality, safety, coherent plots, or performance outside this small synthetic corpus.</p>
+          <TinyStoriesPretrainingPanel />
+        </>,
+      },
+      {
+        id: 'limits-next', title: 'Name what this run still cannot do', body: <>
+          <p>This is one seed, one recipe, 500 updates, and a deliberately small development corpus. Reusing those 1,000 stories for several equivalent passes can teach local style quickly and eventually overfit. Validation loss detects part of that risk, but the validation split has already influenced course decisions and is not a pristine final test.</p>
+          <p>Lesson 7 will turn weight-only milestones into resumable checkpoints by saving optimiser state, update number, and data-order state, then strengthen live metrics around the same evidence boundaries. Only after reliable interruption and recovery should Lesson 8 compare learning-rate schedules, clipping, or longer budgets.</p>
         </>,
       },
     ],

@@ -158,6 +158,20 @@ The random-baseline experiment requires that learner-local batching result. It v
 
 The script loads that checkpoint strictly into a fresh matching architecture and requires a fixed logit slice to remain identical. Loss, probability, prompt, forward-throughput, and MLX allocator measurements are all before-state evidence: the experiment constructs no optimiser and performs zero weight updates. Its peak allocation excludes total process and system memory, while forward throughput excludes backward, gradient, and optimiser work. Lower-memory adaptations may choose the documented width-192 candidate, but must record that architecture change rather than compare it as if it were the official baseline.
 
+The first-pretraining experiment requires the learner-local batching and random-baseline results. It verifies the frozen data, tokenizer, and checkpoint-zero hashes; loads the exact measured starting weights; and then adds masked automatic differentiation plus AdamW with learning rate `0.0003` and weight decay `0.01`. Run:
+
+```sh
+uv run --no-sync python ml/tinystories_first_pretraining.py
+```
+
+The seeded data order shuffles all 2,292 training windows, includes the final short batch, and reshuffles after a complete pass. Full held-out evaluation, fixed-prompt generation, and weight-only checkpoints are captured at steps 0, 1, 10, 50, 100, 250, and 500. It creates:
+
+- `public/data/local/tinystories-first-pretraining.json`;
+- `work/experiments/tinystories-first-pretraining-001/config.json`; and
+- `work/experiments/tinystories-first-pretraining-001/checkpoint-*.safetensors`.
+
+Expect several hundred megabytes of checkpoint files and a larger MLX allocation than the forward-only baseline because gradients and AdamW state must coexist with weights and activations. Do not compare wall time or peak memory as though they were hardware-independent. These Lesson 6 files preserve weights for evaluation and inference, but not AdamW moments or the shuffle cursor; exact interrupted-run continuation is intentionally deferred to the resumable-checkpoint lesson.
+
 ## 9. Keep your work private or publish it deliberately
 
 My Lab artifacts are ignored. To preserve your journey, create a separate branch or repository policy for selected JSON/configuration files; do not commit raw datasets or every checkpoint by default. Review dataset terms and remove private prompts before sharing.
