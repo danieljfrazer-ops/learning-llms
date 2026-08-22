@@ -7,8 +7,7 @@ import EvaluationPanel from '@/app/components/EvaluationPanel';
 import TrainingImprovementsPanel from '@/app/components/TrainingImprovementsPanel';
 import ScalingPanel from '@/app/components/ScalingPanel';
 import FinalModelPanel from '@/app/components/FinalModelPanel';
-import { BeginnerLessonIntro, BeginnerSectionNote } from '@/app/components/BeginnerGuidance';
-import { BeginnerOnly } from '@/app/components/BeginnerMode';
+import { BeginnerLessonIntro, BeginnerSectionNote, PlannedBeginnerGuide } from '@/app/components/BeginnerGuidance';
 import { getProject, projects } from '@/lib/wiki-data';
 import { getShakespeareLesson } from '@/lib/shakespeare-lessons';
 
@@ -52,7 +51,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
         <div className="lesson-body">{richLesson.sections.map((section, index) => <section id={section.id} key={section.id}><div className="section-number">{String(index + 1).padStart(2, '0')}</div><h2>{section.title}</h2><BeginnerSectionNote lessonSlug={lessonSlug} sectionId={section.id} />{section.body}</section>)}</div>
       </div> : <section className="planned-lesson">
         <p className="kicker">PLANNED LESSON</p><h2>What this stage will cover</h2><p>{stage.lesson}</p>
-        <BeginnerOnly className="beginner-section-note"><strong>Beginner’s preview</strong><p>{project.slug === 'tinystories' ? 'This future stage moves from individual letters to reusable word pieces and a larger model. Think of graduating from spelling with alphabet tiles to building sentences with small Lego word-blocks.' : 'This future stage teaches a pretrained language model to translate an everyday question into SQL—the precise instruction a database can execute. Think of it as training a bilingual interpreter between human questions and database commands.'}</p></BeginnerOnly>
+        <PlannedBeginnerGuide lessonSlug={lessonSlug} />
         <div className="planned-grid"><article><strong>Before we begin</strong><p>We will record the exact dataset state, model configuration and baseline that this stage inherits.</p></article><article><strong>During the work</strong><p>Commands, code decisions and newly introduced concepts will be explained inline as they occur.</p></article><article><strong>Evidence required</strong><p>No result will be claimed without measured output, a saved configuration and a comparison with the preceding stage.</p></article></div>
       </section>}
 

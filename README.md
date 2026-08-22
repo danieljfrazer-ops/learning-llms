@@ -4,7 +4,7 @@ An executable course in building small language models on a 32 GB Apple-silicon 
 
 ## Beginner Mode
 
-Use the **Beginner Mode** switch in the wiki's top bar to reveal an extra teaching layer without replacing the concise technical lesson. It adds an everyday mental model and plain-language goal to each lesson, a contextual explanation after every lesson section, and inline definitions when linked technical terms first appear. The choice is remembered as you move between pages.
+Use the **Beginner Mode** switch in the wiki's top bar to reveal an extra teaching layer without replacing the concise technical lesson. Each lesson begins with prerequisite background, a mapped mental model, a likely misconception, and a learning goal. Every substantive section then explains why the idea exists, what actually happens, a useful comparison, and where that comparison stops. Linked technical terms expand in place. The choice is remembered as you move between pages.
 
 The red-team findings that shaped this layer are recorded in `docs/beginner-red-team.md`. Future lesson changes should pass the skill's coverage audit:
 
