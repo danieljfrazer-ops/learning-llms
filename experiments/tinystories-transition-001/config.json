@@ -1,0 +1,14 @@
+{
+  "runId": "tinystories-transition-001",
+  "stage": "pipeline smoke test; no optimiser updates",
+  "seed": 42,
+  "vocabularySize": 2048,
+  "contextSize": 128,
+  "modelSize": 128,
+  "attentionHeads": 4,
+  "transformerBlocks": 2,
+  "parameterCount": 938496,
+  "tokenizer": "provisional byte-level BPE trained on the bounded training sample",
+  "tokenizersVersion": "0.23.1",
+  "mlxDevice": "Device(gpu, 0)"
+}

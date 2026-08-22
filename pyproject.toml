@@ -3,7 +3,9 @@ name = "learning-llms-lab"
 version = "0.1.0"
 description = "Small language-model experiments explained by a living wiki"
 requires-python = ">=3.12,<3.14"
-dependencies = []
+dependencies = [
+  "tokenizers==0.23.1",
+]
 
 [project.optional-dependencies]
 apple = ["mlx==0.32.0; sys_platform == 'darwin' and platform_machine == 'arm64'"]

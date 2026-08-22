@@ -4,7 +4,7 @@ Hardware affects speed, memory limits, supported numerical libraries, and the ex
 
 ## What has been verified
 
-The reference course was run on a 32 GB Apple-silicon MacBook Air using Python 3.12 and MLX 0.32.0. The largest recorded Shakespeare scaling candidate used approximately 406 MB of MLX peak accelerator memory, although total process and system memory are larger than this allocator measurement.
+The reference course was run on a 32 GB Apple-silicon MacBook Air using Python 3.12 and MLX 0.32.0. The largest recorded Shakespeare scaling candidate used approximately 406 MB of MLX peak accelerator memory, although total process and system memory are larger than this allocator measurement. TinyStories Lesson 1 also verified a 938,496-parameter random model with a 128-token context: the recorded warmed rerun of the bounded-sample audit, provisional tokenizer and inference smoke test took approximately 0.33 seconds and reported 30.7 MB peak MLX allocation. This was not a training benchmark; the first cold invocation took longer.
 
 The repository includes install profiles for platforms currently documented by MLX:
 

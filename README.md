@@ -29,7 +29,7 @@ No previous machine-learning knowledge is assumed. **Beginner Mode** adds deeper
 | Project | Purpose | Starting point | Status in the reference course |
 |---|---|---|---|
 | 01 · Tiny Shakespeare | Expose the complete language-model loop at character scale | Random weights | 12 lessons complete |
-| 02 · TinyStories | Train a small GPT-like model on simple English using subword tokens | Random weights | Planned |
+| 02 · TinyStories | Train a small GPT-like model on simple English using subword tokens | Random weights | Lesson 1 of 12 complete |
 | 03 · English → SQL | Contrast pretraining with task adaptation and executable evaluation | Pretrained small model | Planned |
 | 04 · Sentiment laboratory | Independently build a classifier with robustness and calibration checks | Fully scaffolded extension | Optional |
 | 05 · Dialogue summarisation | Ask your coding agent to scaffold a careful sequence-to-sequence project | Agent brief only | Optional |
@@ -108,6 +108,17 @@ uv run --no-sync python ml/shakespeare_inference_server.py
 The later scaling and three-seed confirmation runs intentionally cost more time. Do not treat matching the reference numbers exactly as success: hardware, low-level numerical execution, and random paths can produce small differences. Reproduction means preserving the method, measuring your result, and explaining meaningful divergence.
 
 For a blank-canvas walkthrough, expected artifacts, troubleshooting, and reduced-compute options, read [Reproduce the course](docs/reproduce-course.md).
+
+## Begin TinyStories
+
+Project 2 adds Hugging Face Tokenizers 0.23.1 but continues to use the same platform-specific MLX profile. Its first lesson downloads only a deterministic 1,200-story sample and invokes a provisional random model; it performs no pretraining:
+
+```sh
+uv run --no-sync python scripts/download_tinystories_sample.py
+uv run --no-sync python ml/tinystories_transition.py
+```
+
+Open `/projects/tinystories/lessons/transition-to-subwords` in the wiki. Reference results contain the reviewed course run; My Lab reads your ignored `tinystories-transition.json` and local checkpoint.
 
 ## Repository map
 

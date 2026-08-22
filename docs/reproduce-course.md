@@ -100,7 +100,29 @@ Do not require identical floating-point values. Check instead that:
 
 Investigate large differences in dataset hash, vocabulary size, parameter count, configuration, device, dependency version, and random seed before blaming hardware.
 
-## 8. Keep your work private or publish it deliberately
+## 8. Start Project 2 without pretraining
+
+TinyStories Lesson 1 adds one cross-platform dependency, Hugging Face Tokenizers, through the existing lock file. Re-run the selected `uv sync --extra ...` command after pulling that change.
+
+Download the deterministic bounded sample and invoke the provisional random model:
+
+```sh
+uv run --no-sync python scripts/download_tinystories_sample.py
+uv run --no-sync python ml/tinystories_transition.py
+```
+
+The downloader retains 1,000 rows from the official training split and 200 from the validation split, with source row numbers, selected page offsets and SHA-256 hashes in `data/raw/tinystories-sample/manifest.json`. If matching files already exist, it verifies and reuses them.
+
+The transition experiment trains a provisional 2,048-piece byte-level BPE tokenizer, creates a 938,496-parameter random transformer, performs one fixed validation forward pass and saves a step-zero checkpoint. It performs zero optimiser updates. Expected local artifacts are:
+
+- `public/data/local/tinystories-transition.json`;
+- `work/experiments/tinystories-transition-001/config.json`;
+- `work/experiments/tinystories-transition-001/provisional-tokenizer.json`; and
+- `work/experiments/tinystories-transition-001/checkpoint-0000.safetensors`.
+
+The fetched dataset can change upstream. Compare your manifest and resulting measurements with Reference results rather than assuming future hashes must match forever. A hash mismatch is a reason to inspect provenance, not permission to copy the reference metric into My Lab.
+
+## 9. Keep your work private or publish it deliberately
 
 My Lab artifacts are ignored. To preserve your journey, create a separate branch or repository policy for selected JSON/configuration files; do not commit raw datasets or every checkpoint by default. Review dataset terms and remove private prompts before sharing.
 

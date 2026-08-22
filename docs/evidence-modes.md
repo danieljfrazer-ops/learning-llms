@@ -47,10 +47,12 @@ The local inference server prefers checkpoints in `work/experiments/`. During th
 Promotion is a maintainer action, not a learner step. First review the local JSON, configurations, samples, data provenance, hardware metadata, and lesson conclusions. Then run:
 
 ```sh
-python3 scripts/promote_reference_results.py --confirm
+python3 scripts/promote_reference_results.py --confirm \
+  --run-id tinystories-transition-001 \
+  tinystories-transition.json
 ```
 
-The explicit flag exists because promotion overwrites committed reference JSON. Inspect the Git diff and rerun all audits before committing. Never promote automatically after training.
+Name specific JSON files and run identifiers whenever possible. A promoted run copies only its reviewed `config.json`; checkpoint weights stay local. Omitting filenames retains the older all-local-results behaviour and therefore demands especially careful review. The explicit flag exists because promotion overwrites committed reference evidence. Inspect the Git diff and rerun all audits before committing. Never promote automatically after training.
 
 ## Future improvements
 

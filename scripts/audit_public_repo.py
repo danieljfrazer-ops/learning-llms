@@ -15,7 +15,7 @@ required = [
     "docs/hardware.md", "docs/reproduce-course.md", "docs/evidence-modes.md",
     "docs/agent-workflow.md", "docs/independent-projects.md", "docs/public-release-checklist.md",
     "docs/publishing-github-and-cloudflare.md",
-    "scripts/download_tiny_shakespeare.py", "scripts/system_report.py",
+    "scripts/download_tiny_shakespeare.py", "scripts/download_tinystories_sample.py", "scripts/system_report.py",
 ]
 for relative in required:
     if not (ROOT / relative).is_file():

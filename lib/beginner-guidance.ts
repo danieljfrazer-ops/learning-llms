@@ -1,3 +1,5 @@
+import { tinyStoriesBeginnerGuidance } from './tinystories-beginner-guidance';
+
 export type BeginnerSectionGuide = {
   why: string;
   mechanism: string;
@@ -16,6 +18,7 @@ export type BeginnerGuide = {
 const note = (why: string, mechanism: string, analogy: string, boundary?: string): BeginnerSectionGuide => ({ why, mechanism, analogy, boundary });
 
 export const beginnerGuidance: Record<string, BeginnerGuide> = {
+  ...tinyStoriesBeginnerGuidance,
   'lab-setup': {
     background: 'Training a model is not one mysterious program. It is a chain of ordinary jobs: fetch text, turn it into numbers, run mathematical operations, adjust stored numbers, save results, and display evidence. The setup in this lesson gives each job a known tool and a known place so later results can be explained and repeated.',
     picture: 'Think of preparing a teaching laboratory. Python is the language on the instruction cards, MLX supplies the numerical equipment, the Apple GPU performs many calculations together, and the wiki is the lab notebook that connects actions to observations.',

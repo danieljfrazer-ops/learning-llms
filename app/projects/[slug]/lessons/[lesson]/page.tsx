@@ -11,6 +11,7 @@ import { BeginnerLessonIntro, BeginnerSectionNote, PlannedBeginnerGuide } from '
 import { LocalEvidencePlaceholder, LocalOnly, ReferenceOnly, StageState } from '@/app/components/EvidenceMode';
 import { getProject, projects } from '@/lib/wiki-data';
 import { getShakespeareLesson } from '@/lib/shakespeare-lessons';
+import { getTinyStoriesLesson } from '@/lib/tinystories-lessons';
 
 const referenceEvidenceSections: Record<string, string[]> = {
   'random-baseline': ['sample'],
@@ -34,7 +35,9 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
   const stageIndex = project?.stages.findIndex(stage => stage.slug === lessonSlug) ?? -1;
   const stage = project?.stages[stageIndex];
   if (!project || !stage) notFound();
-  const richLesson = project.slug === 'shakespeare' ? getShakespeareLesson(lessonSlug) : undefined;
+  const richLesson = project.slug === 'shakespeare'
+    ? getShakespeareLesson(lessonSlug)
+    : project.slug === 'tinystories' ? getTinyStoriesLesson(lessonSlug) : undefined;
   const previous = project.stages[stageIndex - 1];
   const next = project.stages[stageIndex + 1];
   const onward = project.slug === 'shakespeare' ? { href: '/projects/tinystories', label: 'Next project · TinyStories' } : project.slug === 'tinystories' ? { href: '/projects/sql', label: 'Next project · English → SQL' } : { href: '/continue', label: 'Continue independently' };
@@ -51,7 +54,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
         {project.stages.map((item, index) => <Link key={item.slug} className={item.slug === lessonSlug ? 'current' : ''} href={`/projects/${project.slug}/lessons/${item.slug}`}><span>{String(index + 1).padStart(2, '0')}</span><strong>{item.name}</strong><small><StageState reference={item.state} /></small></Link>)}
       </nav>
 
-      {project.slug === 'shakespeare' && <BeginnerLessonIntro lessonSlug={lessonSlug} />}
+      {richLesson && <BeginnerLessonIntro lessonSlug={lessonSlug} />}
 
       {project.slug === 'shakespeare' && ['context-windows', 'self-attention', 'tiny-transformer'].includes(lessonSlug) && <ModelComparison />}
       {project.slug === 'shakespeare' && lessonSlug === 'evaluation' && <EvaluationPanel />}
