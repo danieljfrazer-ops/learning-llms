@@ -8,8 +8,21 @@ import TrainingImprovementsPanel from '@/app/components/TrainingImprovementsPane
 import ScalingPanel from '@/app/components/ScalingPanel';
 import FinalModelPanel from '@/app/components/FinalModelPanel';
 import { BeginnerLessonIntro, BeginnerSectionNote, PlannedBeginnerGuide } from '@/app/components/BeginnerGuidance';
+import { LocalEvidencePlaceholder, LocalOnly, ReferenceOnly, StageState } from '@/app/components/EvidenceMode';
 import { getProject, projects } from '@/lib/wiki-data';
 import { getShakespeareLesson } from '@/lib/shakespeare-lessons';
+
+const referenceEvidenceSections: Record<string, string[]> = {
+  'random-baseline': ['sample'],
+  'bigram-training': ['checkpoints', 'interpret'],
+  'context-windows': ['results'],
+  'self-attention': ['results', 'interpret'],
+  'tiny-transformer': ['results', 'comparison'],
+  evaluation: ['metrics', 'prompt-test', 'decision'],
+  'training-improvements': ['checkpoints', 'frozen-results', 'generation', 'limits'],
+  'scaling-experiment': ['results', 'sample', 'decision'],
+  'final-evaluation': ['three-seeds', 'selection', 'journey'],
+};
 
 export function generateStaticParams() {
   return projects.flatMap(project => project.stages.map(stage => ({ slug: project.slug, lesson: stage.slug })));
@@ -24,17 +37,18 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
   const richLesson = project.slug === 'shakespeare' ? getShakespeareLesson(lessonSlug) : undefined;
   const previous = project.stages[stageIndex - 1];
   const next = project.stages[stageIndex + 1];
+  const onward = project.slug === 'shakespeare' ? { href: '/projects/tinystories', label: 'Next project · TinyStories' } : project.slug === 'tinystories' ? { href: '/projects/sql', label: 'Next project · English → SQL' } : { href: '/continue', label: 'Continue independently' };
 
   return <WikiChrome active={project.slug}>
     <article className="article-page lesson-page">
       <div className="breadcrumbs"><Link href="/">Dashboard</Link><span>/</span><Link href={`/projects/${project.slug}`}>{project.shortName}</Link><span>/</span><strong>{stage.name}</strong></div>
       <header className="lesson-hero">
         <div><p className="kicker">{project.name.toUpperCase()} · LESSON {String(stageIndex + 1).padStart(2, '0')}</p><h1>{richLesson?.title ?? stage.name}</h1><p>{richLesson?.summary ?? stage.lesson}</p></div>
-        <aside><span className={`lesson-status lesson-status-${stage.state}`}>{stage.state}</span><small>LESSON OUTCOME</small><strong>{richLesson?.outcome ?? 'This lesson is planned. Its detailed procedure and measured evidence will be added when work begins.'}</strong>{richLesson && <p>{richLesson.evidence}</p>}</aside>
+        <aside><ReferenceOnly><span className={`lesson-status lesson-status-${stage.state}`}>{stage.state}</span><small>REFERENCE OUTCOME</small><strong>{richLesson?.outcome ?? 'This lesson is planned. Its detailed procedure and measured evidence will be added when work begins.'}</strong>{richLesson && <p>{richLesson.evidence}</p>}</ReferenceOnly><LocalOnly><span className="lesson-status lesson-status-planned">your lab</span><small>REPRODUCTION GOAL</small><strong>{stage.lesson}</strong><p>Your measured outcome remains blank until you run this stage.</p></LocalOnly></aside>
       </header>
 
       <nav className="lesson-switcher" aria-label="Project lessons">
-        {project.stages.map((item, index) => <Link key={item.slug} className={item.slug === lessonSlug ? 'current' : ''} href={`/projects/${project.slug}/lessons/${item.slug}`}><span>{String(index + 1).padStart(2, '0')}</span><strong>{item.name}</strong><small>{item.state}</small></Link>)}
+        {project.stages.map((item, index) => <Link key={item.slug} className={item.slug === lessonSlug ? 'current' : ''} href={`/projects/${project.slug}/lessons/${item.slug}`}><span>{String(index + 1).padStart(2, '0')}</span><strong>{item.name}</strong><small><StageState reference={item.state} /></small></Link>)}
       </nav>
 
       {project.slug === 'shakespeare' && <BeginnerLessonIntro lessonSlug={lessonSlug} />}
@@ -48,7 +62,10 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
 
       {richLesson ? <div className="lesson-layout">
         <aside className="lesson-toc"><p>IN THIS LESSON</p>{richLesson.sections.map(section => <a key={section.id} href={`#${section.id}`}>{section.title}</a>)}</aside>
-        <div className="lesson-body">{richLesson.sections.map((section, index) => <section id={section.id} key={section.id}><div className="section-number">{String(index + 1).padStart(2, '0')}</div><h2>{section.title}</h2><BeginnerSectionNote lessonSlug={lessonSlug} sectionId={section.id} />{section.body}</section>)}</div>
+        <div className="lesson-body">{richLesson.sections.map((section, index) => {
+          const isReferenceEvidence = referenceEvidenceSections[lessonSlug]?.includes(section.id);
+          return <section id={section.id} key={section.id}><div className="section-number">{String(index + 1).padStart(2, '0')}</div><h2>{section.title}</h2>{isReferenceEvidence ? <><ReferenceOnly><BeginnerSectionNote lessonSlug={lessonSlug} sectionId={section.id} />{section.body}</ReferenceOnly><LocalEvidencePlaceholder title={section.title} /></> : <><BeginnerSectionNote lessonSlug={lessonSlug} sectionId={section.id} />{section.body}</>}</section>;
+        })}</div>
       </div> : <section className="planned-lesson">
         <p className="kicker">PLANNED LESSON</p><h2>What this stage will cover</h2><p>{stage.lesson}</p>
         <PlannedBeginnerGuide lessonSlug={lessonSlug} />
@@ -57,7 +74,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
 
       <footer className="lesson-pagination">
         {previous ? <Link href={`/projects/${project.slug}/lessons/${previous.slug}`}><small>← PREVIOUS LESSON</small><strong>{previous.name}</strong></Link> : <span />}
-        {next ? <Link className="next" href={`/projects/${project.slug}/lessons/${next.slug}`}><small>NEXT LESSON →</small><strong>{next.name}</strong></Link> : <Link className="next" href={`/projects/${project.slug}`}><small>BACK TO</small><strong>Project overview</strong></Link>}
+        {next ? <Link className="next" href={`/projects/${project.slug}/lessons/${next.slug}`}><small>NEXT LESSON →</small><strong>{next.name}</strong></Link> : <Link className="next" href={onward.href}><small>CONTINUE →</small><strong>{onward.label}</strong></Link>}
       </footer>
     </article>
   </WikiChrome>;

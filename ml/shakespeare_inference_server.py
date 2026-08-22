@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any
 
 import mlx.core as mx
+from paths import available_run
 
 from shakespeare_transformer import (
     DEFAULT_DATA,
@@ -33,13 +34,14 @@ class InferenceRuntime:
     def __init__(self, data_path: Path, run_dir: Path):
         _, _, self.vocabulary, self.char_to_id = load_data(data_path)
         self.run_directories = {
-            "baseline": run_dir,
-            "warmup-cosine": ROOT / "experiments" / "shakespeare-warmup-cosine-001",
-            "final": ROOT / "experiments" / "shakespeare-final-seed-043",
+            "baseline": run_dir if run_dir.exists() else available_run("shakespeare-transformer-001"),
+            "warmup-cosine": available_run("shakespeare-warmup-cosine-001"),
+            "final": available_run("shakespeare-final-seed-043"),
         }
         self.run_directories = {
             run_id: directory for run_id, directory in self.run_directories.items()
             if (directory / "config.json").exists()
+            and any(directory.glob("checkpoint-*.safetensors"))
         }
         self.configs = {
             run_id: json.loads((directory / "config.json").read_text(encoding="utf-8"))
@@ -135,7 +137,7 @@ def handler_for(runtime: InferenceRuntime) -> type[BaseHTTPRequestHandler]:
         def do_GET(self) -> None:  # noqa: N802
             if self.path == "/health":
                 self.json_response(HTTPStatus.OK, {
-                    "status": "ready",
+                    "status": "ready" if runtime.run_directories else "no-checkpoints",
                     "runs": [
                         {"id": run_id, "checkpoints": runtime.steps[run_id], "contextSize": runtime.configs[run_id]["contextSize"]}
                         for run_id in runtime.run_directories

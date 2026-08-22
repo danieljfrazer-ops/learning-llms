@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useEvidenceUrl } from './EvidenceMode';
 
 type Checkpoint = { label: string; step: number; trainLoss: number | null; validationLoss: number | null; sample: string };
 type Metrics = { status: string; runId: string; model: string; parameters: number | null; updatedAt: string; checkpoints: Checkpoint[] };
@@ -8,14 +9,16 @@ type Metrics = { status: string; runId: string; model: string; parameters: numbe
 const empty: Metrics = { status: 'Not run yet', runId: 'shakespeare-bigram-001', model: 'Character bigram', parameters: null, updatedAt: '', checkpoints: [] };
 
 export default function LiveMetrics() {
-  const [metrics, setMetrics] = useState<Metrics>(empty);
+  const [loaded, setLoaded] = useState<{ url: string; data: Metrics }>({ url: '', data: empty });
+  const evidenceUrl = useEvidenceUrl('shakespeare-metrics.json');
   useEffect(() => {
     let active = true;
     const refresh = async () => {
-      try { const response = await fetch(`/data/shakespeare-metrics.json?t=${Date.now()}`, { cache: 'no-store' }); if (response.ok && active) setMetrics(await response.json()); } catch { /* The first run may not have written metrics yet. */ }
+      try { const response = await fetch(`${evidenceUrl}?t=${Date.now()}`, { cache: 'no-store' }); if (active) setLoaded({ url: evidenceUrl, data: response.ok ? await response.json() : empty }); } catch { if (active) setLoaded({ url: evidenceUrl, data: empty }); }
     };
     refresh(); const timer = window.setInterval(refresh, 2000); return () => { active = false; window.clearInterval(timer); };
-  }, []);
+  }, [evidenceUrl]);
+  const metrics = loaded.url === evidenceUrl ? loaded.data : empty;
   const losses = metrics.checkpoints.map(c => c.validationLoss).filter((v): v is number => v !== null);
   const max = Math.max(...losses, 1); const min = Math.min(...losses, 0);
   return <section className="metrics-panel" id="live-results">

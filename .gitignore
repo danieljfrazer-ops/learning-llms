@@ -19,6 +19,7 @@
 # misc
 .DS_Store
 data/raw/
+public/data/local/
 experiments/**/*.safetensors
 .venv/
 __pycache__/

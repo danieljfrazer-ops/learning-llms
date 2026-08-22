@@ -7,8 +7,9 @@ import mlx.core as mx
 import mlx.nn as nn
 import mlx.optimizers as optim
 from shakespeare_transformer import DEFAULT_DATA, TinyTransformerLanguageModel, atomic_json_write, estimate_loss, generate_from_prompt, get_batch, load_data, loss_fn
+from paths import LOCAL_EXPERIMENTS_DIR, local_result
 
-ROOT=Path(__file__).resolve().parents[1]; OUT=ROOT/'public/data/shakespeare-scaling.json'; EXP=ROOT/'experiments'; SEED=42; STEPS=3000
+ROOT=Path(__file__).resolve().parents[1]; OUT=local_result('shakespeare-scaling.json'); EXP=LOCAL_EXPERIMENTS_DIR; SEED=42; STEPS=3000
 VARIANTS=[
  ('shakespeare-scale-reference-001','Reference','Reference 64×2 · context 64',64,2,64,4),
  ('shakespeare-scale-width-001','Width','Wider 128×2 · context 64',128,2,64,4),

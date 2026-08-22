@@ -17,12 +17,13 @@ from pathlib import Path
 import mlx.core as mx
 import mlx.nn as nn
 import mlx.optimizers as optim
+from paths import RAW_DATA_DIR, local_result, local_run
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_DATA = ROOT / "data" / "raw" / "tiny-shakespeare.txt"
-DEFAULT_METRICS = ROOT / "public" / "data" / "shakespeare-context-metrics.json"
-DEFAULT_RUN_DIR = ROOT / "experiments" / "shakespeare-context-001"
+DEFAULT_DATA = RAW_DATA_DIR / "tiny-shakespeare.txt"
+DEFAULT_METRICS = local_result("shakespeare-context-metrics.json")
+DEFAULT_RUN_DIR = local_run("shakespeare-context-001")
 
 
 class FixedContextLanguageModel(nn.Module):

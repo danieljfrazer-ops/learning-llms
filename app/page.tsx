@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { projects as projectRecords } from '@/lib/wiki-data';
 import { BeginnerModeToggle, BeginnerOnly } from '@/app/components/BeginnerMode';
+import { EvidenceMachineCard, EvidenceModeToggle, LocalOnly, ReferenceOnly } from '@/app/components/EvidenceMode';
 
 const projects = projectRecords.map(project => ({ ...project, href: `/projects/${project.slug}` }));
 
@@ -17,15 +18,17 @@ export default function Home() {
           <Link className="nav-link" href="/projects/shakespeare"><span>01</span> Shakespeare</Link>
           <Link className="nav-link" href="/projects/tinystories"><span>02</span> TinyStories</Link>
           <Link className="nav-link" href="/projects/sql"><span>03</span> English → SQL</Link>
+          <p className="nav-label">INDEPENDENT</p>
+          <Link className="nav-link" href="/continue"><span>04+</span> Continue yourself</Link>
           <p className="nav-label">REFERENCE</p>
           <Link className="nav-link" href="/glossary"><span>A–Z</span> Glossary</Link>
           <a className="nav-link" href="#toolkit"><span>⌘</span> Toolkit</a>
         </nav>
-        <div className="machine-card"><span className="live-dot" /> LOCAL LAB<strong>MacBook Air · 32 GB</strong><small>Apple silicon · MLX</small></div>
+        <EvidenceMachineCard />
       </aside>
 
       <main className="main-content">
-        <header className="topbar"><div><span className="eyebrow">LIVING WIKI</span><span className="sync-state">● Documentation synced</span></div><div className="topbar-tools"><BeginnerModeToggle /><a className="search-link" href="#projects">Jump to projects <kbd>↓</kbd></a></div></header>
+        <header className="topbar"><div><span className="eyebrow">LIVING WIKI</span><span className="sync-state">● Documentation synced</span></div><div className="topbar-tools"><EvidenceModeToggle /><BeginnerModeToggle /><a className="search-link" href="#projects">Jump to projects <kbd>↓</kbd></a></div></header>
         <section className="hero">
           <div>
             <p className="kicker">BUILDING LANGUAGE MODELS FROM FIRST PRINCIPLES</p>
@@ -36,8 +39,8 @@ export default function Home() {
           </div>
           <div className="terminal-card" aria-label="Current experiment status">
             <div className="terminal-title"><span>● ● ●</span><code>shakespeare · progression</code></div>
-            <pre><span className="muted">$ course.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">shakespeare_project</span>: <span className="value">&quot;complete&quot;</span>,{'\n'}  <span className="key">final_mean_validation_loss</span>: <span className="value">1.5846</span>,{'\n'}  <span className="key">next</span>: <span className="value">&quot;TinyStories&quot;</span>{'\n'}{'}'}</pre>
-            <div className="terminal-footer"><span className="live-dot" /> Final 420,673-parameter model ready to prompt</div>
+            <ReferenceOnly><pre><span className="muted">$ course.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">shakespeare_project</span>: <span className="value">&quot;complete&quot;</span>,{'\n'}  <span className="key">final_mean_validation_loss</span>: <span className="value">1.5846</span>,{'\n'}  <span className="key">next</span>: <span className="value">&quot;TinyStories&quot;</span>{'\n'}{'}'}</pre><div className="terminal-footer"><span className="live-dot" /> Published 32 GB Apple-silicon reference run</div></ReferenceOnly>
+            <LocalOnly><pre><span className="muted">$ my_lab.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">results</span>: <span className="value">&quot;not run yet&quot;</span>,{'\n'}  <span className="key">writes_to</span>: <span className="value">&quot;ignored local workspace&quot;</span>,{'\n'}  <span className="key">start</span>: <span className="value">&quot;Shakespeare lesson 01&quot;</span>{'\n'}{'}'}</pre><div className="terminal-footer"><span className="live-dot" /> Your dashboards populate as scripts complete</div></LocalOnly>
           </div>
         </section>
 

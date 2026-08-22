@@ -17,6 +17,7 @@ from pathlib import Path
 import mlx.core as mx
 import mlx.nn as nn
 import mlx.optimizers as optim
+from paths import LOCAL_EXPERIMENTS_DIR, local_result
 
 from shakespeare_transformer import (
     DEFAULT_DATA,
@@ -32,8 +33,8 @@ from shakespeare_transformer import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "public" / "data" / "shakespeare-training-improvements.json"
-EXPERIMENT_ROOT = ROOT / "experiments"
+OUTPUT = local_result("shakespeare-training-improvements.json")
+EXPERIMENT_ROOT = LOCAL_EXPERIMENTS_DIR
 EXPERIMENT_DIR = EXPERIMENT_ROOT / "shakespeare-training-improvements-001"
 SEED = 42
 STEPS = 3_000

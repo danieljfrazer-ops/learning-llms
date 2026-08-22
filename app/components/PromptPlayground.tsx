@@ -6,7 +6,6 @@ type Health = { status: string; runs: { id: string; checkpoints: number[]; conte
 type Completion = { prompt: string; continuation: string; run: string; checkpoint: number; temperature: number; seed: number; generatedCharacters: number; contextCharactersUsed: number; elapsedSeconds: number };
 
 const endpoint = 'http://127.0.0.1:8001';
-const fallbackCheckpoints = [0, 1, 50, 250, 1000, 2000, 3000];
 const presets = ['To be, or not to be', 'My lord, the night is', 'ROMEO:\n'];
 
 function checkpointLabel(run: string, step: number) {
@@ -31,9 +30,16 @@ export default function PromptPlayground() {
   useEffect(() => {
     fetch(`${endpoint}/health`)
       .then(response => response.ok ? response.json() : Promise.reject(new Error('Inference service did not respond')))
-      .then(setHealth)
+      .then((nextHealth: Health) => {
+        setHealth(nextHealth);
+        const firstRun = nextHealth.runs[0];
+        const firstCheckpoint = firstRun?.checkpoints[0];
+        if (firstRun && firstCheckpoint !== undefined) setSelection(`${firstRun.id}:${firstCheckpoint}`);
+      })
       .catch(() => setError('The local inference service is offline. Start it with the command shown below.'));
   }, []);
+
+  const hasCheckpoints = Boolean(health?.runs.some(run => run.checkpoints.length));
 
   async function requestCompletion(run: string, step: number) {
     const response = await fetch(`${endpoint}/generate`, {
@@ -50,7 +56,7 @@ export default function PromptPlayground() {
     try {
       const [selectedRun, selectedStep] = selection.split(':');
       const comparisons: [string, number][] = compareAll
-        ? [...fallbackCheckpoints.map(step => ['baseline', step] as [string, number]), ['warmup-cosine', 3000], ['final', 3000]]
+        ? (health?.runs.flatMap(run => run.checkpoints.map(step => [run.id, step] as [string, number])) ?? [])
         : [[selectedRun, Number(selectedStep)]];
       const completions = [];
       for (const [run, step] of comparisons) completions.push(await requestCompletion(run, step));
@@ -61,16 +67,17 @@ export default function PromptPlayground() {
   }
 
   return <section className="playground" id="prompt-playground">
-    <div className="playground-heading"><div><p className="kicker">LIVE LOCAL INFERENCE</p><h2>Prompt the model yourself</h2><p>Every completion comes from a saved model checkpoint on your Mac. Comparing all checkpoints keeps the prompt, temperature and seed fixed so training is the variable you can see.</p></div><span className={`service-state ${health ? 'ready' : 'offline'}`}>{health ? `● Ready · ${health.device}` : '○ Service offline'}</span></div>
+    <div className="playground-heading"><div><p className="kicker">LIVE LOCAL INFERENCE</p><h2>Prompt the model yourself</h2><p>Every completion comes from a checkpoint you trained locally. Comparing checkpoints keeps the prompt, temperature and seed fixed so training is the variable you can see.</p></div><span className={`service-state ${hasCheckpoints ? 'ready' : 'offline'}`}>{hasCheckpoints ? `● Ready · ${health?.device}` : health ? '○ No local checkpoints' : '○ Service offline'}</span></div>
     <div className="playground-grid">
       <div className="playground-controls">
         <label>Beginning of the passage<textarea value={prompt} maxLength={2000} rows={5} onChange={event => setPrompt(event.target.value)} /></label>
         <div className="preset-row">{presets.map(preset => <button type="button" key={preset} onClick={() => setPrompt(preset)}>{preset.replace('\n', ' ↵')}</button>)}</div>
-        <label>Model checkpoint<select value={selection} onChange={event => setSelection(event.target.value)}>{(health?.runs ?? [{ id: 'baseline', checkpoints: fallbackCheckpoints, contextSize: 64 }]).flatMap(run => run.checkpoints.map(step => <option value={`${run.id}:${step}`} key={`${run.id}:${step}`}>{checkpointLabel(run.id, step)}</option>))}</select></label>
+        <label>Model checkpoint<select value={hasCheckpoints ? selection : ''} disabled={!hasCheckpoints} onChange={event => setSelection(event.target.value)}>{hasCheckpoints ? health?.runs.flatMap(run => run.checkpoints.map(step => <option value={`${run.id}:${step}`} key={`${run.id}:${step}`}>{checkpointLabel(run.id, step)}</option>)) : <option value="">Train a checkpoint first</option>}</select></label>
         <div className="control-pair"><label>Temperature <strong>{temperature.toFixed(1)}</strong><input type="range" min="0.1" max="1.5" step="0.1" value={temperature} onChange={event => setTemperature(Number(event.target.value))} /></label><label>New characters <strong>{characters}</strong><input type="range" min="40" max="400" step="20" value={characters} onChange={event => setCharacters(Number(event.target.value))} /></label></div>
         <label>Random seed<input type="number" value={seed} onChange={event => setSeed(Number(event.target.value))} /></label>
-        <div className="playground-actions"><button type="button" className="run-button" disabled={busy || !prompt} onClick={() => generate(false)}>{busy ? 'Generating…' : 'Complete with selected checkpoint'}</button><button type="button" className="compare-button" disabled={busy || !prompt} onClick={() => generate(true)}>Compare every checkpoint</button></div>
-        {error && <aside className="playground-error"><strong>{error}</strong><code>.venv/bin/python ml/shakespeare_inference_server.py</code></aside>}
+        <div className="playground-actions"><button type="button" className="run-button" disabled={busy || !prompt || !hasCheckpoints} onClick={() => generate(false)}>{busy ? 'Generating…' : 'Complete with selected checkpoint'}</button><button type="button" className="compare-button" disabled={busy || !prompt || !hasCheckpoints} onClick={() => generate(true)}>Compare every checkpoint</button></div>
+        {health && !hasCheckpoints && <aside className="playground-error"><strong>This is the intended blank-canvas state.</strong><span>Complete the Tiny transformer lesson to create your first local checkpoints, then restart this service.</span><code>uv run --no-sync python ml/shakespeare_transformer.py</code></aside>}
+        {error && <aside className="playground-error"><strong>{error}</strong><code>uv run --no-sync python ml/shakespeare_inference_server.py</code></aside>}
       </div>
       <div className="completion-list" aria-live="polite">{results.length ? results.map(result => <article className="completion-card" key={`${result.run}:${result.checkpoint}`}><div><strong>{checkpointLabel(result.run, result.checkpoint)}</strong><span>{result.elapsedSeconds.toFixed(3)} s · {result.contextCharactersUsed}/64 prompt characters visible</span></div><pre><mark>{result.prompt}</mark>{result.continuation}</pre></article>) : <div className="completion-empty"><strong>Your continuation will appear here.</strong><p>Try the improved checkpoint first, then compare it with random weights using the same prompt.</p></div>}</div>
     </div>

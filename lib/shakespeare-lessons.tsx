@@ -51,8 +51,8 @@ export const shakespeareLessons: RichLesson[] = [
       },
       {
         id: 'environment-command', title: 'The reproducible Python environment', body: <>
-          <p>The project declares MLX in <code>pyproject.toml</code>, while <code>uv.lock</code> records the resolved package versions. This command created <code>.venv/</code> with Python 3.12 and installed MLX plus its Metal package:</p>
-          <Code>{`uv sync --python 3.12`}</Code>
+          <p>The project declares platform-specific MLX profiles in <code>pyproject.toml</code>, while <code>uv.lock</code> records the resolved package versions. This reference run used the Apple profile, which created <code>.venv/</code> with Python 3.12 and installed MLX plus its Metal backend:</p>
+          <Code>{`uv sync --python 3.12 --extra apple`}</Code>
           <p>A <Term id="virtual-environment">virtual environment</Term> prevents packages required by this course from silently mixing with packages used by unrelated projects. The lock file makes a future reinstall far more likely to reproduce this environment.</p>
         </>,
       },
@@ -61,8 +61,10 @@ export const shakespeareLessons: RichLesson[] = [
           <Code>{`LearningLLMs/
 ├── ml/                 readable training programs
 ├── data/raw/           downloaded source text (not committed)
-├── experiments/        run configuration and model checkpoints
-├── public/data/        metrics consumed by the live dashboard
+├── experiments/        committed reference configurations
+├── work/experiments/   ignored learner checkpoints and configurations
+├── public/data/reference/  committed reference dashboard evidence
+├── public/data/local/      ignored learner dashboard evidence
 ├── app/ and lib/       wiki pages and structured lesson content
 ├── pyproject.toml      Python dependencies
 ├── uv.lock             exact Python resolution
@@ -72,7 +74,7 @@ export const shakespeareLessons: RichLesson[] = [
       },
       {
         id: 'live-refresh', title: 'How the open wiki refreshes', body: <>
-          <p>Hand-authored lesson changes use hot module reload. During training, the Python process atomically rewrites <code>public/data/shakespeare-metrics.json</code>. The dashboard requests that file every two seconds with caching disabled. This separates model training from presentation: Python only emits a small evidence record, while the wiki decides how to display it.</p>
+          <p>Hand-authored lesson changes use hot module reload. During training, the Python process atomically rewrites <code>public/data/local/shakespeare-metrics.json</code>. In My Lab mode the dashboard requests that file every two seconds with caching disabled. Reference mode instead reads the committed file under <code>public/data/reference/</code>, so a learner run cannot overwrite the published comparison accidentally.</p>
           <p>The local server is started with <code>npm run dev</code>. The current application requires Node 22.13 or newer; this project used Node 24.14.0.</p>
         </>,
       },
@@ -215,7 +217,7 @@ logits = model(current)[-1]`}</Code>
     sections: [
       {
         id: 'command', title: 'The command that ran the experiment', body: <>
-          <Code>{`.venv/bin/python ml/shakespeare_bigram.py --steps 400`}</Code>
+          <Code>{`uv run --no-sync python ml/shakespeare_bigram.py --steps 400`}</Code>
           <p>The command uses the project&apos;s isolated Python interpreter. Default arguments select seed 42, batch size 64, block size 64, learning rate 0.03, the downloaded dataset and the run identifier <code>shakespeare-bigram-001</code>.</p>
         </>,
       },
@@ -302,7 +304,7 @@ logits = self.output(hidden)                   # (128, 65)`}</Code>
         <p>The model has roughly ten times the bigram&apos;s 4,225 parameters. Better results therefore demonstrate the capability of this small fixed-context architecture as configured—not a pure context-length ablation.</p>
       </> },
       { id: 'invoke', title: 'Train and invoke the fixed-window model', body: <>
-        <Code>{`.venv/bin/python ml/shakespeare_context.py --steps 2000`}</Code>
+        <Code>{`uv run --no-sync python ml/shakespeare_context.py --steps 2000`}</Code>
         <p>Training used AdamW, learning rate 0.003, weight decay 0.01 and batch size 128. At generation time the model starts with eight line-break tokens, predicts one next token, discards the oldest context token and appends the new token:</p>
         <Code>{`context = context[1:] + [next_id]
 logits = model(mx.array([context]))[0] / 0.9`}</Code>
@@ -367,7 +369,7 @@ logits = self.output(hidden)`}</Code>
         <table className="lesson-table"><thead><tr><th>Component</th><th>Parameters</th></tr></thead><tbody><tr><td>Token embedding: 65 × 64</td><td>4,160</td></tr><tr><td>Position embedding: 64 × 64</td><td>4,096</td></tr><tr><td>Query, key, value and projection: 4 × 64 × 64</td><td>16,384</td></tr><tr><td>Layer normalisation scale + bias</td><td>128</td></tr><tr><td>Output weights + bias: 64 × 65 + 65</td><td>4,225</td></tr><tr><td><strong>Total</strong></td><td><strong>28,993</strong></td></tr></tbody></table>
       </> },
       { id: 'run', title: 'Run the attention experiment', body: <>
-        <Code>{`.venv/bin/python ml/shakespeare_attention.py --steps 2000`}</Code>
+        <Code>{`uv run --no-sync python ml/shakespeare_attention.py --steps 2000`}</Code>
         <p>The run used batch size 32, context length 64, model width 64, AdamW learning rate 0.003, weight decay 0.01, and the same seed 42. Each batch predicts the next character at all 64 positions, giving 2,048 token predictions per update.</p>
       </> },
       { id: 'results', title: 'Record the surprising result', body: <>
@@ -446,7 +448,7 @@ output = hidden + self.feed_forward(
         <p>The four heads split the same attention width, so increasing from one to four heads does not itself multiply the QKV parameter count. Most new parameters come from the two feed-forward networks and the second block.</p>
       </> },
       { id: 'run', title: 'Run the complete model', body: <>
-        <Code>{`.venv/bin/python ml/shakespeare_transformer.py --steps 3000`}</Code>
+        <Code>{`uv run --no-sync python ml/shakespeare_transformer.py --steps 3000`}</Code>
         <p>The run used batch size 32, context length 64, width 64, four heads, two blocks, AdamW learning rate 0.001, weight decay 0.01 and seed 42. Checkpoints were captured at steps 0, 1, 50, 250, 1,000, 2,000 and 3,000.</p>
         <p>Generation invokes the full model on the most recent 64 tokens, selects the last position&apos;s logits, samples one character at temperature 0.9, appends it and repeats.</p>
       </> },
@@ -498,9 +500,9 @@ output = hidden + self.feed_forward(
         <p>The same seed schedule selects the same window starts for every checkpoint. We report the mean and population standard deviation across the five repeats. This is not five separately trained models: it measures batch-sampling variability for one saved model.</p>
       </> },
       { id: 'run', title: 'Run the read-only evaluator', body: <>
-        <Code>{`.venv/bin/python ml/shakespeare_evaluate.py`}</Code>
+        <Code>{`uv run --no-sync python ml/shakespeare_evaluate.py`}</Code>
         <p>The evaluator uses Python 3.12.13 and MLX 0.32.0 on <code>Device(gpu, 0)</code>. It reconstructs the exact 112,065-parameter architecture from <code>experiments/shakespeare-transformer-001/config.json</code>, then calls MLX <code>load_weights</code> for each Safetensors file. See the <Source href="https://ml-explore.github.io/mlx/build/html/python/nn/module.html">official MLX module documentation</Source>.</p>
-        <p>Raw results are written to <code>public/data/shakespeare-evaluation.json</code>; the frozen protocol and timing are also recorded under <code>experiments/shakespeare-evaluation-001/config.json</code>. The complete evaluation took 2.319 seconds.</p>
+        <p>Learner results are written to <code>public/data/local/shakespeare-evaluation.json</code>; the frozen protocol and timing are recorded under <code>work/experiments/shakespeare-evaluation-001/config.json</code>. The committed reference copies preserve this course&apos;s 2.319-second evaluation separately.</p>
       </> },
       { id: 'metrics', title: 'Read loss, perplexity and the generalisation gap together', body: <>
         <p><Term id="perplexity">Perplexity</Term> is <code>exp(cross-entropy loss)</code>. It expresses average predictive uncertainty on a multiplicative scale: 5.59 is substantially less uncertain than 72.17, but it does not mean the model has exactly 5.59 equally likely characters at every position. The relationship between cross-entropy and perplexity is described in the <Source href="https://web.stanford.edu/~jurafsky/slp3/3.pdf">Stanford Speech and Language Processing chapter</Source>.</p>
@@ -549,7 +551,7 @@ MLX model on Apple GPU`}</Code>
 npm run dev
 
 # Terminal 2 — checkpoint inference
-.venv/bin/python ml/shakespeare_inference_server.py`}</Code>
+uv run --no-sync python ml/shakespeare_inference_server.py`}</Code>
         <p>The browser checks <code>GET http://127.0.0.1:8001/health</code> when the page loads. A green “Ready” badge confirms that Python found the baseline and improved-recipe checkpoint files and MLX reports the Apple GPU. If Python stops, the lesson remains readable and the playground shows the exact restart command.</p>
         <p>The server is built with Python&apos;s standard <code>ThreadingHTTPServer</code>. Python explicitly warns that <Source href="https://docs.python.org/3/library/http.server.html">http.server is not recommended for production</Source>; it is appropriate here only because this is a local teaching service with bounded inputs.</p>
       </> },
@@ -647,8 +649,8 @@ optimiser.update(model, gradients)`}</Code>
         <p>Clipping can stabilise training when rare exploding gradients cause destructive updates, a technique studied in <Source href="https://arxiv.org/abs/1211.5063">On the difficulty of training recurrent neural networks</Source>. It is not automatically beneficial: if gradients are already well behaved, clipping changes almost nothing or can suppress useful movement.</p>
       </> },
       { id: 'run', title: 'Run both variants and preserve checkpoints', body: <>
-        <Code>{`.venv/bin/python ml/shakespeare_training_improvements.py`}</Code>
-        <p>The Python 3.12.13 and MLX 0.32.0 script trained both variants on the Apple GPU. Each run saved checkpoints at steps 0, 250, 1,000, 2,000 and 3,000 plus a JSON configuration. The comparison dashboard reads <code>public/data/shakespeare-training-improvements.json</code>.</p>
+        <Code>{`uv run --no-sync python ml/shakespeare_training_improvements.py`}</Code>
+        <p>The Python 3.12.13 and MLX 0.32.0 script trained both variants on the Apple GPU. Each run saved checkpoints at steps 0, 250, 1,000, 2,000 and 3,000 plus a JSON configuration. My Lab reads <code>public/data/local/shakespeare-training-improvements.json</code>; the reference dashboard reads its committed counterpart.</p>
         <p>The measured experiment took 30.03 seconds overall. Peak Metal allocation was 170.8 MB for both new runs. Per-run times are not compared as a speed benchmark because the original baseline captured more generated samples during training than the two new variants.</p>
       </> },
       { id: 'checkpoints', title: 'Watch the learning-rate schedule change the path', body: <>
@@ -686,7 +688,7 @@ One and semberdant which unsight from the advilo&apos;s eame…</blockquote>
     sections: [
       { id: 'design', title: 'Ask three different scaling questions', body: <><p>More <Term id="capacity">capacity</Term> can come from wider token representations, more sequential blocks, or more visible context. We compare these separately against the 64-wide, two-block, 64-context reference. Seed 42, data order, batch size 32, 3,000 updates, weight decay and warmup/cosine recipe remain fixed.</p><table className="lesson-table"><thead><tr><th>Candidate</th><th>Width</th><th>Blocks</th><th>Context</th><th>Changed factor</th></tr></thead><tbody><tr><td>Reference</td><td>64</td><td>2</td><td>64</td><td>None</td></tr><tr><td>Wider</td><td>128</td><td>2</td><td>64</td><td>Width only</td></tr><tr><td>Deeper</td><td>64</td><td>4</td><td>64</td><td>Depth only</td></tr><tr><td>Longer context</td><td>64</td><td>2</td><td>128</td><td>Context only</td></tr></tbody></table></> },
       { id: 'cost', title: 'Predict how each change affects cost', body: <><p>Doubling width makes most dense matrices roughly four times larger because both matrix axes grow. Doubling depth duplicates transformer blocks. Doubling context adds few weights, but attention work grows approximately with sequence length squared: a 128 × 128 attention-score grid contains four times as many entries as a 64 × 64 grid.</p><p>This is why parameter count alone cannot predict memory or runtime. The experiment records peak Metal allocation and elapsed time as well as loss.</p></> },
-      { id: 'run', title: 'Train all four candidates', body: <><Code>{`.venv/bin/python ml/shakespeare_scaling.py`}</Code><p>Python 3.12.13 and MLX 0.32.0 trained on the Apple GPU. Every run saved random, 250, 1,000, 2,000 and 3,000-step Safetensors checkpoints, timestamps, configuration and generated evidence. The full comparison took 106.21 seconds.</p></> },
+      { id: 'run', title: 'Train all four candidates', body: <><Code>{`uv run --no-sync python ml/shakespeare_scaling.py`}</Code><p>Python 3.12.13 and MLX 0.32.0 trained on the Apple GPU. Every run saved random, 250, 1,000, 2,000 and 3,000-step Safetensors checkpoints, timestamps, configuration and generated evidence. The full comparison took 106.21 seconds.</p></> },
       { id: 'results', title: 'Compare quality and resource use', body: <><table className="lesson-table"><thead><tr><th>Candidate</th><th>Parameters</th><th>Validation loss</th><th>Perplexity</th><th>Time</th><th>Peak Metal</th></tr></thead><tbody><tr><td>Reference</td><td>112,065</td><td>1.7051</td><td>5.50</td><td>15.4 s</td><td>170 MB</td></tr><tr><td><strong>Wider</strong></td><td><strong>420,673</strong></td><td><strong>1.5862</strong></td><td><strong>4.89</strong></td><td>23.4 s</td><td>295 MB</td></tr><tr><td>Deeper</td><td>211,521</td><td>1.6504</td><td>5.21</td><td>29.0 s</td><td>198 MB</td></tr><tr><td>Longer context</td><td>116,161</td><td>1.6827</td><td>5.38</td><td>36.2 s</td><td>406 MB</td></tr></tbody></table><p>All three changes improved loss. Width won on absolute quality; depth delivered a smaller but cheaper parameter increase. Longer context added few weights yet cost the most memory and runtime because attention processed longer sequences.</p></> },
       { id: 'sample', title: 'Inspect the wider model under the frozen prompt', body: <><blockquote className="model-sample">To be, or not to be that says who<br/>We may base your with whose thine, and yet you.<br/><br/>VOLUMNIA:<br/>Stay as a grace that safe! I find him…</blockquote><p>The output has stronger dialogue formatting and longer grammatical fragments, but invented words and incoherent meaning remain. The numerical result—not this one sample—is the selection basis.</p></> },
       { id: 'decision', title: 'Select width, then demand replication', body: <><p>The 128-wide candidate improves validation loss by 0.1190 over the same-recipe reference, while remaining comfortably within the Mac&apos;s memory. We select it for final confirmation.</p><p>This comparison still uses one training seed and a validation split already used for development. The final lesson repeats the selected architecture with seeds 42, 43 and 44. It cannot retroactively create an untouched test set, so the final claim remains explicitly in-domain and development-evaluated.</p></> },
@@ -699,7 +701,7 @@ One and semberdant which unsight from the advilo&apos;s eame…</blockquote>
     evidence: 'Complete · shakespeare-final-001 · 3 training seeds · final checkpoint seed 43',
     sections: [
       { id: 'final-spec', title: 'Freeze the final specification', body: <><table className="lesson-table"><tbody><tr><th>Architecture</th><td>Decoder-only transformer; width 128, 2 blocks, 4 heads, context 64</td></tr><tr><th>Parameters</th><td>420,673</td></tr><tr><th>Training</th><td>3,000 updates; batch 32; AdamW; weight decay 0.01</td></tr><tr><th>Schedule</th><td>100-step warmup 0.0001 → 0.001; cosine decay to 0.0001</td></tr><tr><th>Data</th><td>1,003,854 training and 111,540 validation characters; vocabulary 65</td></tr><tr><th>Hardware</th><td>Apple GPU through MLX on the 32 GB MacBook Air</td></tr></tbody></table><p>Nothing except the <Term id="seed">training seed</Term> changes between confirmation runs.</p></> },
-      { id: 'repeat', title: 'Repeat complete training, not just evaluation batches', body: <><Code>{`.venv/bin/python ml/shakespeare_final.py`}</Code><p>Seed 42 reuses the identical scaling checkpoint. Seeds 43 and 44 start from independently initialised random weights and receive their own deterministic batch sequences. This measures <Term id="training-seed-variance">training-seed variance</Term>, unlike the five evaluation repeats that only vary sampled evaluation windows.</p></> },
+      { id: 'repeat', title: 'Repeat complete training, not just evaluation batches', body: <><Code>{`uv run --no-sync python ml/shakespeare_final.py`}</Code><p>Seed 42 reuses the identical scaling checkpoint. Seeds 43 and 44 start from independently initialised random weights and receive their own deterministic batch sequences. This measures <Term id="training-seed-variance">training-seed variance</Term>, unlike the five evaluation repeats that only vary sampled evaluation windows.</p></> },
       { id: 'three-seeds', title: 'Read the replicated result', body: <><table className="lesson-table"><thead><tr><th>Seed</th><th>Validation loss ± batch std</th><th>Perplexity</th><th>Training time</th></tr></thead><tbody><tr><td>42</td><td>1.5862 ± 0.0091</td><td>4.89</td><td>23.45 s</td></tr><tr><td><strong>43</strong></td><td><strong>1.5791 ± 0.0109</strong></td><td><strong>4.85</strong></td><td>21.52 s</td></tr><tr><td>44</td><td>1.5885 ± 0.0128</td><td>4.90</td><td>21.93 s</td></tr></tbody></table><p>The mean across independently trained models is <strong>1.5846</strong>, with between-seed population standard deviation <strong>0.0040</strong>. All three beat the 64-wide model at 1.7051, so the width result is not dependent on seed 42 alone.</p></> },
       { id: 'selection', title: 'Select seed 43 without overstating it', body: <><p>Seed 43 has the lowest observed validation loss and becomes the default playground model. Its frozen-prompt continuation begins:</p><blockquote className="model-sample">To be, or not to be that says with<br/>Clifford and grace loves<br/>so his pulpisy&apos;d years.<br/><br/>BALTHASAR:<br/>How banished that safe!…</blockquote><p>The tiny loss difference between seeds is not an architectural discovery. Seed 43 is a practical checkpoint choice; the three-seed mean is the more honest architecture summary.</p></> },
       { id: 'journey', title: 'Measure the full learning journey', body: <><table className="lesson-table"><thead><tr><th>Stage</th><th>Parameters</th><th>Context</th><th>Validation loss</th></tr></thead><tbody><tr><td>Random transformer</td><td>112,065</td><td>64</td><td>4.2790</td></tr><tr><td>Bigram</td><td>4,225</td><td>1</td><td>≈2.489</td></tr><tr><td>Fixed-context MLP</td><td>43,361</td><td>8</td><td>1.9456</td></tr><tr><td>First transformer</td><td>112,065</td><td>64</td><td>1.7205</td></tr><tr><td>Improved recipe</td><td>112,065</td><td>64</td><td>1.7051</td></tr><tr><td><strong>Final wider model</strong></td><td><strong>420,673</strong></td><td>64</td><td><strong>1.5846 mean</strong></td></tr></tbody></table><p>The main gains came from learning context-sensitive structure and then adding width; optimisation refinement helped modestly.</p></> },

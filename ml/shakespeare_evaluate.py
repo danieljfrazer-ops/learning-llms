@@ -16,6 +16,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 import mlx.core as mx
+from paths import available_run, local_result, local_run
 
 from shakespeare_transformer import (
     DEFAULT_DATA,
@@ -29,8 +30,8 @@ from shakespeare_transformer import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUTPUT = ROOT / "public" / "data" / "shakespeare-evaluation.json"
-DEFAULT_EVALUATION_DIR = ROOT / "experiments" / "shakespeare-evaluation-001"
+DEFAULT_OUTPUT = local_result("shakespeare-evaluation.json")
+DEFAULT_EVALUATION_DIR = local_run("shakespeare-evaluation-001")
 CHECKPOINT_STEPS = (0, 1, 50, 250, 1_000, 2_000, 3_000)
 PROMPTS = (
     "To be, or not to be",
@@ -66,7 +67,7 @@ def repeated_loss(
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=Path, default=DEFAULT_DATA)
-    parser.add_argument("--run-dir", type=Path, default=DEFAULT_RUN_DIR)
+    parser.add_argument("--run-dir", type=Path, default=available_run("shakespeare-transformer-001"))
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--evaluation-dir", type=Path, default=DEFAULT_EVALUATION_DIR)
     parser.add_argument("--repeats", type=int, default=5)
