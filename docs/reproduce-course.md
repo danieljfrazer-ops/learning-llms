@@ -202,6 +202,16 @@ The five probes are the 256-wide/six-block/context-128 control, width 320, eight
 
 After applying that frozen rule, the script rebuilds only the selected architecture and trains it for 700 updates: constant `3e-4` through update 600 and cosine decay to `3e-5` over the final 100. Live evidence is `public/data/local/tinystories-scaling-budget.json`; protocol, probe weights, traces, selection, and the complete selected checkpoint are under `work/experiments/tinystories-scaling-budget-001/`. The recorded run used about 195 MiB. Treat its hardware timings as local measurements and its 1,000-story quality screen as development evidence, not full-dataset scaling proof.
 
+Lesson 10 freezes all weights and evaluates three checkpoints—the random before-state, Lesson 8's inherited-history step 700, and Lesson 9's clean-history step 700—under one protocol:
+
+```sh
+uv run --no-sync python ml/tinystories_story_evaluation.py
+```
+
+The command grades every held-out target, then generates five declared scenarios with three fixed seeds, temperature `0.8`, and a 64-token cap. It separately records scenario-keyword and contradiction-list proxies, repeated four-grams, distinct bigrams, cross-seed three-gram similarity, sentence closure, exact 5–12-word training spans, and maximum five-gram Jaccard overlap. These are deterministic surface measurements rather than semantic judges; inspect their fixed outputs and limitations beside the aggregate values.
+
+The evaluator writes no checkpoint and performs no optimiser update. Its protocol and full result live under `work/experiments/tinystories-story-evaluation-001/`; the polling dashboard reads `public/data/local/tinystories-story-evaluation.json`. Rerunning requires an empty run directory so an older frozen protocol cannot be silently mixed with new evidence.
+
 ## 9. Keep your work private or publish it deliberately
 
 My Lab artifacts are ignored. To preserve your journey, create a separate branch or repository policy for selected JSON/configuration files; do not commit raw datasets or every checkpoint by default. Review dataset terms and remove private prompts before sharing.

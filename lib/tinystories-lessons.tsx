@@ -7,6 +7,7 @@ import TinyStoriesPretrainingPanel from '@/app/components/TinyStoriesPretraining
 import TinyStoriesCheckpointPanel from '@/app/components/TinyStoriesCheckpointPanel';
 import TinyStoriesRecipePanel from '@/app/components/TinyStoriesRecipePanel';
 import TinyStoriesScalingPanel from '@/app/components/TinyStoriesScalingPanel';
+import TinyStoriesStoryEvaluationPanel from '@/app/components/TinyStoriesStoryEvaluationPanel';
 import TinyStoriesTokenizerPanel from '@/app/components/TinyStoriesTokenizerPanel';
 import TinyStoriesTransitionPanel from '@/app/components/TinyStoriesTransitionPanel';
 import type { RichLesson } from './shakespeare-lessons';
@@ -721,6 +722,72 @@ optimiser.update(model, gradients)`}</Code>
         id: 'limits-next', title: 'Carry the selected recipe forward without universalising it', body: <>
           <p>Cosine decay won this one 100-update continuation from this step-600 state on a deliberately small 1,000-story development corpus. It may behave differently from random weights, over a longer budget, with more data, after a batch-size change, or in a larger model. We have one controlled local result, not a universal optimiser law.</p>
           <p>The selected step-700 directory is a complete resumable checkpoint, so Lesson 9 can benchmark width, depth, context and dataset-scale options without losing the course&apos;s state discipline. Scaling will change architecture or data and must therefore measure memory, speed and quality as a new comparison rather than silently extending this recipe claim.</p>
+        </>,
+      },
+    ],
+  },
+  {
+    slug: 'story-evaluation',
+    title: 'Evaluate story behaviour',
+    summary: 'Hold checkpoint weights fixed and examine next-token prediction, scenario following, contradiction rules, repetition, diversity, sentence closure, training-text overlap, and fixed examples as separate questions.',
+    outcome: 'Both trained checkpoints cut complete validation loss roughly in half, but passed only 4 of 15 narrow scenario-keyword trials. Neither produced an exact eight-word training span; fixed examples still showed event drift, character switching, malformed words, and broken grammar.',
+    evidence: 'Complete · tinystories-story-evaluation-001 · 3 checkpoints · 5 scenarios × 3 seeds · 45 fixed generations · inference only',
+    sections: [
+      {
+        id: 'evaluation-question', title: 'Replace one “quality” score with several answerable questions', body: <>
+          <p>Held-out <Term id="cross-entropy">cross-entropy</Term> asks whether the checkpoint gives more probability to the true next tokens in unseen stories. It does not directly ask whether a sampled paragraph follows a particular prompt, preserves characters, avoids repetition, or copies training text. Lesson 10 therefore uses a <Term id="multi-metric-evaluation">multi-metric evaluation</Term>: several measurements remain separate because they describe different behaviours.</p>
+          <p>The weights are frozen throughout. Text becomes token IDs, the checkpoint produces next-token probabilities, and generation samples from them, but there is no loss-to-gradient-to-update step. Evaluation observes a state; it does not improve that state.</p>
+          <aside className="lesson-caveat"><strong>No hidden “story understanding” meter</strong><p>A score can be precise only about the rule that produced it. Surface keywords and repeated word groups are inspectable, reproducible proxies; they cannot recognise meaning, causality, truth, safety or a coherent plot.</p></aside>
+        </>,
+      },
+      {
+        id: 'checkpoint-cohort', title: 'Apply one protocol to three identifiable histories', body: <>
+          <p>The first checkpoint is Lesson 5&apos;s seeded random before-state. The second is Lesson 8&apos;s step-700 model, whose history crosses the first 500 updates, a declared AdamW reset, checkpoint continuation, and the selected cosine branch. The third is Lesson 9&apos;s clean 700-update path from random weights.</p>
+          <p>All have the same 2,048-piece tokenizer and 5,816,320-parameter architecture, so they accept identical inputs. Their training histories differ. The evaluation compares them descriptively to reveal the effect of training and the shape of remaining failures; it does not retroactively crown one trained history from this reused development evidence.</p>
+        </>,
+      },
+      {
+        id: 'scenario-protocol', title: 'Freeze five situations and three sampling paths each', body: <>
+          <p>Five prompts state a simple situation: caring for a cold kitten, repairing a broken toy, responding to a leaking boat, observing a watered seed, and reassuring a dragon afraid of fire. Each has a predeclared set of related keywords and a small list of obviously unrelated terms. Every checkpoint receives all prompts at temperature <code>0.8</code>, maximum 64 generated tokens, and seeds <code>3101</code>, <code>3102</code>, and <code>3103</code>.</p>
+          <p>Changing the <Term id="seed">seed</Term> follows another repeatable sampling path through the same probability distributions. Three paths expose some output variation without pretending to cover every possible continuation. The prompts and word lists are written into <code>protocol.json</code> before model output is inspected.</p>
+        </>,
+      },
+      {
+        id: 'measurement-lenses', title: 'Define exactly what every proxy can and cannot see', body: <>
+          <table className="lesson-table"><thead><tr><th>Lens</th><th>Exact operation</th><th>Blind spot</th></tr></thead><tbody>
+            <tr><td>Scenario-keyword proxy</td><td>Pass if any predeclared related word occurs</td><td>A word can appear inside nonsense or an inconsistent event</td></tr>
+            <tr><td>Contradiction-list proxy</td><td>Pass if none of a few unrelated terms occurs</td><td>Most contradictions are not on the list</td></tr>
+            <tr><td>Repetition</td><td>Count duplicated generated word four-grams</td><td>Semantic repetition with different wording is invisible</td></tr>
+            <tr><td><Term id="lexical-diversity">Lexical diversity</Term></td><td>Count distinct bigrams and compare three-gram sets across seeds</td><td>Random noise is maximally diverse without being useful</td></tr>
+            <tr><td>Training overlap</td><td>Search exact 5–12-word spans and five-gram Jaccard similarity</td><td>Paraphrased memorisation can escape an exact surface check</td></tr>
+          </tbody></table>
+          <p>Distinct n-gram ratios are a longstanding surface-diversity measure; the <Source href="https://arxiv.org/abs/1510.03055">Li et al. dialogue diversity paper</Source> is one early use. Exact-span checks address only one form of memorisation risk; large-model extraction research such as <Source href="https://www.usenix.org/conference/usenixsecurity21/presentation/carlini-extracting">Carlini et al.</Source> shows why absence of one detected copy pattern should not be treated as proof that training data cannot be reproduced.</p>
+        </>,
+      },
+      {
+        id: 'command', title: 'Invoke checkpoints without changing a single weight', body: <>
+          <Code>{`uv run --no-sync python ml/tinystories_story_evaluation.py`}</Code>
+          <p>The script verifies the dataset, tokenizer, random checkpoint hash, and both trained checkpoint manifests. It reconstructs the transformer three times, loads one model weight file each time, calls complete validation, performs 45 autoregressive generations, builds a word-shingle index over the 1,000 training stories, and calculates the declared surface metrics.</p>
+          <p>It writes <code>work/experiments/tinystories-story-evaluation-001/protocol.json</code> before scoring, then stores the full result beside it and atomically refreshes <code>public/data/local/tinystories-story-evaluation.json</code>. The run created about 192 KiB because it references existing weights instead of duplicating checkpoints.</p>
+        </>,
+      },
+      {
+        id: 'measured-evidence', title: 'Observe better prediction and still-weak scenario following together', body: <>
+          <p>Complete validation loss fell from random <code>7.7524</code> to <code>3.7904</code> for the inherited-history checkpoint and <code>3.8216</code> for the clean checkpoint. The frozen keyword proxy passed 1/15 random trials and 4/15 trials for each trained checkpoint. Random&apos;s accidental hit came from the word <em>took</em> inside otherwise broken fragments—direct evidence that a keyword hit is not meaning.</p>
+          <p>Mean repeated four-gram fraction was <code>0.0000</code> for random and inherited outputs and <code>0.0015</code> for clean outputs. No checkpoint emitted an exact eight-word training span; both trained models reached a maximum detected exact span of seven words. Those results reduce concern about obvious copying in these 45 samples but cannot establish non-memorisation.</p>
+          <TinyStoriesStoryEvaluationPanel />
+        </>,
+      },
+      {
+        id: 'fixed-examples', title: 'Use fixed examples to reveal what aggregate proxies hide', body: <>
+          <p>The trained models produce punctuation, familiar story rhythms, dialogue markers, names and recognisable phrases. Yet they frequently abandon the starting event. The inherited kitten continuation turns toward a squirrel and garden game; its leaking-boat continuation moves to a yard and then a squirrel. The clean broken-toy continuation never repairs or apologises and drifts through dinner, a squirrel and a “brain.”</p>
+          <p>Both models invent fragments such as <em>visitorrow</em>, <em>squousrog</em>, and <em>craatrue</em>, switch names and pronouns, and often reach the 64-token cap mid-sentence. These are fixed seed-3101 examples chosen before output, not a hand-picked worst-of gallery. The dashboard lets every scenario and checkpoint remain inspectable.</p>
+        </>,
+      },
+      {
+        id: 'limits-next', title: 'State the bounded conclusion and prepare controlled prompting', body: <>
+          <p>On this 1,000/200-story development sample, training substantially improved next-token probability and converted random fragments into recognisable simple-story surface patterns. It did not yield reliable prompt adherence or stable short plots under the tested settings. The evaluation contains only three seeds per prompt, reuses development validation, and has no independent human raters.</p>
+          <p>Lesson 11 can now expose the evaluated local checkpoints in a prompt playground. Temperature, seed, checkpoint and token limit must remain visible so learner-written prompts become reproducible inference experiments rather than unexplained demonstrations.</p>
         </>,
       },
     ],

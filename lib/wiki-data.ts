@@ -51,7 +51,7 @@ export const projects: Project[] = [
   {
     slug: 'tinystories', number: '02', name: 'TinyStories', shortName: 'TinyStories',
     description: 'Scale the same ideas into a small GPT that learns simple, coherent English stories.',
-    stage: 'Lesson 9 of 12 complete', progress: 75, status: 'ACTIVE', method: 'Train from scratch',
+    stage: 'Lesson 10 of 12 complete', progress: 83, status: 'ACTIVE', method: 'Train from scratch',
     objective: 'Move from character imitation to subword language modelling and train a roughly 5–15M parameter transformer on a deliberately simple language distribution.',
     dataset: { name: 'TinyStories', detail: 'Synthetic short stories written with vocabulary familiar to young children. We will begin with a bounded subset before choosing whether to scale.', source: 'https://www.microsoft.com/en-us/research/publication/tinystories-how-small-can-language-models-be-and-still-speak-coherent-english/', sourceLabel: 'Microsoft Research' },
     stages: [
@@ -64,8 +64,8 @@ export const projects: Project[] = [
       { slug: 'checkpoints-dashboard', name: 'Checkpoints and live metrics', state: 'complete', lesson: 'Save comparable training states and make token loss, throughput, memory and fixed-prompt samples visible in the wiki.' },
       { slug: 'training-recipe', name: 'Improve the training recipe', state: 'complete', lesson: 'Branch one complete state into matched learning-rate policies and select with a predeclared validation threshold.' },
       { slug: 'scaling-budget', name: 'Scale within the laptop budget', state: 'complete', lesson: 'Benchmark width, depth, context and dataset size before selecting a longer run that fits the MacBook Air.' },
-      { slug: 'story-evaluation', name: 'Evaluate story behaviour', state: 'active', lesson: 'Combine frozen held-out loss with prompt adherence, consistency, repetition, diversity and overlap checks.' },
-      { slug: 'tinystories-playground', name: 'TinyStories prompt playground', state: 'planned', lesson: 'Complete learner-written story openings with selected local checkpoints under controlled generation settings.' },
+      { slug: 'story-evaluation', name: 'Evaluate story behaviour', state: 'complete', lesson: 'Combine frozen held-out loss with prompt adherence, consistency, repetition, diversity and overlap checks.' },
+      { slug: 'tinystories-playground', name: 'TinyStories prompt playground', state: 'active', lesson: 'Complete learner-written story openings with selected local checkpoints under controlled generation settings.' },
       { slug: 'final-story-model', name: 'Final model and comparison', state: 'planned', lesson: 'Confirm the selected model across seeds and compare character-level Shakespeare with subword TinyStories honestly.' },
     ],
     concepts: [
@@ -150,6 +150,7 @@ export const glossary = [
   ['Jaccard similarity', 'A set-overlap score: the number of items shared by two sets divided by the number of distinct items present across either set.'],
   ['Learning rate', 'The scale of each optimiser update; too high can destabilise training and too low can make it impractically slow.'],
   ['Learning-rate schedule', 'A rule that changes the learning rate over training instead of keeping it constant.'],
+  ['Lexical diversity', 'Variation in the surface words or word groups used across text. High lexical diversity can describe useful variety or meaningless noise, so it must be interpreted beside quality evidence.'],
   ['Layer normalisation', 'Normalisation of features within each token representation, with learned scale and bias.'],
   ['Logit', 'An unnormalised score assigned to one possible output before scores are converted into probabilities.'],
   ['Loss', 'A numerical measure of prediction error. Training uses gradients of loss to update weights; evaluation uses loss without changing the model.'],
@@ -157,6 +158,7 @@ export const glossary = [
   ['Model depth', 'The number of sequential blocks or layers in a neural network. More depth adds processing stages as well as parameters and computation.'],
   ['Model architecture', 'The fixed arrangement of layers and mathematical connections that determines how inputs can be transformed. Training changes weights inside that arrangement, not the arrangement itself.'],
   ['Model width', 'The number of features used to represent each token inside the model. Wider representations increase both capacity and computation; course architectures use different widths.'],
+  ['Multi-metric evaluation', 'Assessing a model with several separately reported measurements because prediction, adherence, repetition, diversity, copying, safety, and other behaviours are not interchangeable.'],
   ['Multi-head attention', 'Several attention heads run in parallel on different learned subspaces; their outputs are concatenated and projected back to the model width.'],
   ['Near duplicate', 'A pair of examples that are not byte-for-byte identical but share enough wording or structure to risk counting essentially the same material twice.'],
   ['Normalisation', 'A declared transformation that puts equivalent-looking text into a consistent form, such as standardising Unicode representation, letter case, or whitespace.'],
