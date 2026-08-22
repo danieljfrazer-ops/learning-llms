@@ -172,6 +172,16 @@ The seeded data order shuffles all 2,292 training windows, includes the final sh
 
 Expect several hundred megabytes of checkpoint files and a larger MLX allocation than the forward-only baseline because gradients and AdamW state must coexist with weights and activations. Do not compare wall time or peak memory as though they were hardware-independent. These Lesson 6 files preserve weights for evaluation and inference, but not AdamW moments or the shuffle cursor; exact interrupted-run continuation is intentionally deferred to the resumable-checkpoint lesson.
 
+Lesson 7 starts a declared continuation segment from the Lesson 6 step-500 weights. It cannot reconstruct the optimiser history that Lesson 6 never saved, so it initializes fresh AdamW and data-order state once, records that boundary, and tests a later save at step 550:
+
+```sh
+uv run --no-sync python ml/tinystories_checkpoint_resume.py
+```
+
+The control route saves at step 550 and continues in memory to step 600. A second Python process loads that exact step-550 directory and independently continues to 600. Each loadable directory contains `model.safetensors`, `optimizer.safetensors`, `trainer-state.json`, and a checksum-bearing `manifest.json` written last. Live evidence is written to `public/data/local/tinystories-checkpoints-dashboard.json`; protocol, traces, and complete saves live under `work/experiments/tinystories-checkpoint-resume-001/`.
+
+Model and optimiser tensors must reload with zero difference before continuation. Batch hashes, target counts, cursor, and next-batch identity must match exactly. Separate accelerator processes may not be bitwise deterministic, so the protocol records numerical tolerances before the comparison and reports every observed floating-point difference. Do not call a run exact when it merely falls inside tolerance, and do not treat resume validation as evidence that model quality improved.
+
 ## 9. Keep your work private or publish it deliberately
 
 My Lab artifacts are ignored. To preserve your journey, create a separate branch or repository policy for selected JSON/configuration files; do not commit raw datasets or every checkpoint by default. Review dataset terms and remove private prompts before sharing.

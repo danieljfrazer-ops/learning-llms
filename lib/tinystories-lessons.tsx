@@ -4,6 +4,7 @@ import TinyStoriesBatchingPanel from '@/app/components/TinyStoriesBatchingPanel'
 import TinyStoriesDatasetAuditPanel from '@/app/components/TinyStoriesDatasetAuditPanel';
 import TinyStoriesRandomBaselinePanel from '@/app/components/TinyStoriesRandomBaselinePanel';
 import TinyStoriesPretrainingPanel from '@/app/components/TinyStoriesPretrainingPanel';
+import TinyStoriesCheckpointPanel from '@/app/components/TinyStoriesCheckpointPanel';
 import TinyStoriesTokenizerPanel from '@/app/components/TinyStoriesTokenizerPanel';
 import TinyStoriesTransitionPanel from '@/app/components/TinyStoriesTransitionPanel';
 import type { RichLesson } from './shakespeare-lessons';
@@ -483,6 +484,88 @@ mx.eval(model.parameters(), optimiser.state)`}</Code>
         id: 'limits-next', title: 'Name what this run still cannot do', body: <>
           <p>This is one seed, one recipe, 500 updates, and a deliberately small development corpus. Reusing those 1,000 stories for several equivalent passes can teach local style quickly and eventually overfit. Validation loss detects part of that risk, but the validation split has already influenced course decisions and is not a pristine final test.</p>
           <p>Lesson 7 will turn weight-only milestones into resumable checkpoints by saving optimiser state, update number, and data-order state, then strengthen live metrics around the same evidence boundaries. Only after reliable interruption and recovery should Lesson 8 compare learning-rate schedules, clipping, or longer budgets.</p>
+        </>,
+      },
+    ],
+  },
+  {
+    slug: 'checkpoints-dashboard',
+    title: 'Make training resumable and observable',
+    summary: 'Replace weight-only milestones with a four-part checkpoint, reconstruct training in a fresh process, compare it with an uninterrupted control, and expose live operational metrics without confusing them with evaluation.',
+    outcome: 'The resumable-checkpoint procedure and My Lab dashboard are complete. The learner experiment verifies exact serialization round-trip and separately measures fresh-process floating-point continuity against declared tolerances.',
+    evidence: 'Executable lesson · steps 500→600 · process restart at step 550 · reference evidence intentionally unpromoted',
+    sections: [
+      {
+        id: 'reliability-question', title: 'Why is a weight file not yet a training save?', body: <>
+          <p>Lesson 6 checkpoints can generate text because they preserve model weights. Continuing training needs more. AdamW carries running numerical summaries from earlier gradients, and the batch dealer has a precise position inside a seeded shuffle. Recreating only the weights would send the next update down a different path.</p>
+          <p>A <Term id="resumable-checkpoint">resumable checkpoint</Term> therefore answers a stricter question than an inference checkpoint: after stopping the program, can a fresh process reconstruct the state required to choose the same next batch and calculate an equivalent next update?</p>
+          <aside className="lesson-caveat"><strong>Reliability is not quality</strong><p>A perfectly resumable weak model remains weak. This lesson tests whether work survives interruption; Lesson 8 will test whether a different training recipe improves prediction.</p></aside>
+        </>,
+      },
+      {
+        id: 'honest-boundary', title: 'Declare the state Lesson 6 did not save', body: <>
+          <p>The step-500 model weights are genuine, but Lesson 6 did not serialize AdamW’s moving averages or its exact data-order cursor. We cannot recover those missing values from the weight file. Pretending otherwise would make “resume from step 500” a false claim.</p>
+          <p>Lesson 7 instead starts a named 100-update continuation segment from the step-500 weights. It initializes fresh <Term id="optimiser-state">optimiser state</Term> and a new shuffled order exactly once, records that boundary in <code>protocol.json</code>, saves all state at step 550, and tests only the 550→600 restart.</p>
+        </>,
+      },
+      {
+        id: 'checkpoint-anatomy', title: 'Store four different kinds of state', body: <>
+          <table className="lesson-table"><thead><tr><th>File</th><th>What it preserves</th><th>Why the next update needs it</th></tr></thead><tbody>
+            <tr><td><code>model.safetensors</code></td><td>All 5,816,320 model weights</td><td>Reconstructs the current next-token calculation</td></tr>
+            <tr><td><code>optimizer.safetensors</code></td><td>AdamW step, learning rate, first moments, and second moments</td><td>Reconstructs how gradients are scaled into changes</td></tr>
+            <tr><td><code>trainer-state.json</code></td><td>Absolute step, target exposure, shuffled example order, cursor, and Python random-generator state</td><td>Selects the same next windows and later reshuffles</td></tr>
+            <tr><td><code>manifest.json</code></td><td>Schema version, protocol identity, byte sizes, and SHA-256 checksums</td><td>Marks the save complete and rejects missing or changed files</td></tr>
+          </tbody></table>
+          <p>Safetensors stores arrays without executable pickle payloads. JSON keeps the small control state inspectable. The manifest connects the pieces into one checkpoint contract rather than four unrelated files.</p>
+        </>,
+      },
+      {
+        id: 'optimizer-state', title: 'Preserve AdamW’s numerical logbook', body: <>
+          <p>AdamW does not use only the current gradient. For each trainable weight it maintains moving averages of recent gradients and squared gradients. Those arrays are <Term id="optimiser-state">optimiser state</Term>: they affect the next update even though inference does not use them.</p>
+          <p>MLX’s <Source href="https://ml-explore.github.io/mlx/build/html/python/optimizers.html#saving-and-loading">official saving-and-loading guide</Source> flattens the nested state tree, saves its named arrays, reloads them, and reconstructs the tree. It also warns that not every optimiser configuration value is stored, so our protocol separately records AdamW type, learning rate, weight decay, and software version.</p>
+          <Code>{`state = tree_flatten(optimiser.state, destination={})
+mx.save_safetensors("optimizer.safetensors", state)
+
+optimiser.state = tree_unflatten(mx.load("optimizer.safetensors"))`}</Code>
+        </>,
+      },
+      {
+        id: 'data-state', title: 'Save where the dealer is standing in the shuffled deck', body: <>
+          <p>The current shuffle is a 2,292-number permutation plus a cursor pointing to the next undealt example. A <Term id="random-number-generator-state">random-number generator state</Term> is also saved because after the cursor reaches the end, it determines the next shuffle. Seed 4242 alone would restart the first shuffle rather than continue the current sequence.</p>
+          <p>The loader checks that the stored order is a complete permutation, that the cursor lies within it, and that a cloned dealer produces the same next-batch SHA-256. Saving only an epoch number would be insufficient because a checkpoint may occur partway through a pass.</p>
+        </>,
+      },
+      {
+        id: 'safe-save', title: 'Treat the manifest as the “safe to load” sign', body: <>
+          <p>A crash can occur between files. The script creates a new checkpoint directory, writes tensors and trainer state, calculates their hashes, and writes <code>manifest.json</code> last. The loader refuses any directory without that completion marker or with a checksum mismatch.</p>
+          <p>This is an <Term id="atomic-write">atomic-write</Term> pattern at the evidence boundary: individual JSON replacement and the final manifest prevent a half-written collection from masquerading as complete. It does not make four large file writes occur as one indivisible hardware operation; it makes incomplete state detectable.</p>
+        </>,
+      },
+      {
+        id: 'parity-design', title: 'Compare saving-and-continuing with saving-exiting-loading', body: <>
+          <p>The upper control route trains 500→550, saves, then continues in the same process to 600. The lower route starts a fresh process, verifies and loads that exact step-550 save, then performs the same remaining 50 updates. Batch hashes, valid-target counts, model state, optimiser state, losses, gradients, final validation, and the next batch are compared.</p>
+          <p>The tensor files must round-trip with zero difference before training resumes. Separate GPU processes, however, may schedule floating-point reductions differently. We therefore report whether continuation is bitwise identical and also apply a recorded <Term id="numerical-tolerance">numerical tolerance</Term>. A tolerance is not permission to hide arbitrary drift: discrete batches must match exactly, every difference is reported, and exceeding any pre-recorded bound fails the run.</p>
+          <aside className="lesson-caveat"><strong>Reproducible is not always bitwise identical</strong><p>Matching method, state, and batches can yield tiny low-level numerical differences across processes or devices. Scientific reproducibility asks whether those differences alter the conclusion; checkpoint integrity separately asks whether saved bytes reload exactly.</p></aside>
+        </>,
+      },
+      {
+        id: 'command', title: 'Run the multi-process continuation proof', body: <>
+          <Code>{`uv run --no-sync python ml/tinystories_checkpoint_resume.py`}</Code>
+          <p>The orchestrator verifies Lesson 6’s step-500 checksum, writes a frozen protocol, launches the control process, then launches the resume process. Each worker reconstructs the tokenizer, story-isolated windows, architecture, and AdamW recipe from recorded inputs rather than inheriting hidden Python objects.</p>
+          <p>It writes ignored live evidence to <code>public/data/local/tinystories-checkpoints-dashboard.json</code> every ten updates. Complete saves, traces, protocol, and results live under <code>work/experiments/tinystories-checkpoint-resume-001/</code>. Expect roughly 200 MiB because each complete model-plus-AdamW save is about three times the model-only weight file.</p>
+        </>,
+      },
+      {
+        id: 'evidence', title: 'Separate operational monitoring from model evaluation', body: <>
+          <p>Live batch loss, gradient norm, throughput, memory, phase, and update number answer “is the job progressing and behaving plausibly?” They are intentionally noisy. Complete validation loss answers the broader model-quality question over every held-out target and runs only at the declared endpoints.</p>
+          <p>The dashboard also distinguishes exact serialized-state round-trip from tolerance-based cross-process continuation. A successful restart should not be advertised as bitwise identity if the measured tensors say otherwise.</p>
+          <TinyStoriesCheckpointPanel />
+        </>,
+      },
+      {
+        id: 'limits-next', title: 'Use the reliable save path without overreading the extra updates', body: <>
+          <p>The 100 control updates exist to test checkpoint behaviour. Any step-600 validation movement is secondary and may worsen because the small corpus has already been traversed several times, the new segment reset AdamW history, and the recipe remains intentionally untuned. A more fluent single sample cannot override held-out loss.</p>
+          <p>Lesson 8 can now compare schedules, clipping, or other recipe changes without risking an untestable restart mechanism. It should start every candidate from the same checkpoint and state contract, use matched data order and budgets, and select on frozen validation evidence rather than live training curves.</p>
         </>,
       },
     ],
