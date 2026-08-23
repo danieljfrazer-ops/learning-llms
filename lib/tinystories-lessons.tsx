@@ -792,6 +792,90 @@ optimiser.update(model, gradients)`}</Code>
       },
     ],
   },
+  {
+    slug: 'tinystories-playground',
+    title: 'Prompt the evaluated TinyStories checkpoints',
+    summary: 'Connect the wiki to a loopback-only Python service, type a story opening, and compare random and trained checkpoints while every sampling control remains visible.',
+    outcome: 'The wiki can send learner-written openings to all three Lesson 10 checkpoints and display checkpoint identity, temperature, seed, token limit, context use, stopping reason, and generation time without updating weights.',
+    evidence: 'Complete · local API on 127.0.0.1:8002 · 3 checksum-verified evaluated checkpoints · inference only',
+    sections: [
+      {
+        id: 'purpose-boundary', title: 'Turn free prompting into a controlled inspection', body: <>
+          <p>Lesson 10 used frozen prompts so the checkpoint comparison could not be redesigned after seeing results. This playground asks a complementary question: what happens on an opening that <em>you</em> supply? It keeps <Term id="checkpoint">checkpoint</Term>, <Term id="temperature">temperature</Term>, <Term id="seed">sampling seed</Term>, and maximum new-token count beside every output so a completion remains an inspectable <Term id="inference">inference</Term> run.</p>
+          <p>Typing more prompts produces more observations, not more training. The service never calculates loss or gradients, constructs no optimiser, writes no checkpoint, and returns <code>weightsUpdated: false</code>. Interesting examples can suggest a future evaluation, but cannot replace Lesson 10&apos;s predeclared evidence.</p>
+          <aside className="lesson-caveat"><strong>A probe, not a capability score</strong><p>A person naturally tries again after a poor sample. Keeping only the nicest continuation is cherry-picking. Compare checkpoints with identical controls and retain failures when drawing conclusions.</p></aside>
+        </>,
+      },
+      {
+        id: 'two-processes', title: 'Connect the browser process to the model process', body: <>
+          <p>The Next.js wiki cannot directly invoke MLX tensors inside the browser. A small <Term id="inference-service">inference service</Term> forms a boundary: JavaScript sends a JSON request through an <Term id="api">API</Term>, Python validates it and invokes MLX, then JSON carries the continuation and metadata back.</p>
+          <Code>{`Browser wiki :3000
+  │ POST /generate { prompt, checkpoint, temperature, maximumTokens, seed }
+  ▼
+Python service :8002
+  │ verify contract → tokenize → load weights → sample tokens
+  ▼
+MLX TinyStories model on the local device`}</Code>
+          <p>The server binds to <code>127.0.0.1</code>, this computer&apos;s <Term id="loopback-address">loopback address</Term>, and permits browser requests only from the local wiki origins. Python&apos;s <Source href="https://docs.python.org/3/library/http.server.html">standard HTTP server documentation</Source> warns that <code>http.server</code> is not for production; this bounded service is deliberately local teaching infrastructure, not a public endpoint.</p>
+        </>,
+      },
+      {
+        id: 'start-service', title: 'Start the two local processes', body: <>
+          <Code>{`# Terminal 1 — wiki
+npm run dev
+
+# Terminal 2 — TinyStories inference
+uv run --no-sync python ml/tinystories_inference_server.py`}</Code>
+          <p>Starting the service reads <code>public/data/local/tinystories-story-evaluation.json</code>, <code>work/experiments/tinystories-tokenizer-001/tokenizer.json</code>, and the three checkpoint paths admitted by Lesson 10. It verifies tokenizer and checkpoint SHA-256 hashes, opens port <code>8002</code> on loopback, and writes no file.</p>
+          <p>The page calls <code>GET /health</code>. “Ready” means the contract and files were found; it does not mean a completion has already been generated. A fresh learner sees an honest missing-Lesson-10 message instead of borrowed Reference weights.</p>
+        </>,
+      },
+      {
+        id: 'checkpoint-loading', title: 'Rebuild the architecture before loading saved tensors', body: <>
+          <Code>{`model = TinyTransformerLanguageModel(
+    vocabulary_size=2048, context_size=128,
+    model_size=256, head_count=8, block_count=6,
+)
+model.load_weights(checkpoint_path, strict=True)
+model.eval()`}</Code>
+          <p>A Safetensors file contains named numerical arrays, not the Python class that connects them. The server reconstructs the Lesson 10 architecture from frozen metadata, uses strict loading to reject missing or incompatible arrays, and switches the model to evaluation mode. The first request for a checkpoint loads it; later requests reuse the cached in-memory model.</p>
+          <p>The selectable cohort is intentionally closed: random step 0, inherited-history step 700, and clean-history step 700. The service does not silently expose an unevaluated file merely because it exists in <code>work/experiments/</code>.</p>
+        </>,
+      },
+      {
+        id: 'request-path', title: 'Trace one opening from text to returned text', body: <>
+          <ol><li>The browser serialises the visible controls into JSON.</li><li>Python rejects an unknown checkpoint, empty or oversized prompt, or out-of-range control.</li><li>The frozen byte-level BPE tokenizer converts the opening into subword token IDs and prepends <code>&lt;bos&gt;</code>.</li><li>Only the last 128 IDs fit the first prediction&apos;s <Term id="context-window">context window</Term>.</li><li>The model produces 2,048 <Term id="logit">logits</Term>; temperature rescales them and categorical sampling selects one ID.</li><li>That ID is appended, the window slides, and the calculation repeats until <code>&lt;eos&gt;</code> or the token limit.</li><li>The tokenizer decodes only the new IDs and the server returns text plus metadata.</li></ol>
+          <p>The prompt remains highlighted in the result while only the continuation is model output. The metadata reports original prompt-token count and initially visible count, preventing a long opening from creating the false impression that the model saw all of it.</p>
+        </>,
+      },
+      {
+        id: 'sampling-controls', title: 'Change one sampling control at a time', body: <>
+          <table className="lesson-table"><thead><tr><th>Control</th><th>What it changes</th><th>What it does not change</th></tr></thead><tbody>
+            <tr><td>Checkpoint</td><td>The saved weight values used for every forward pass</td><td>The tokenizer and architecture</td></tr>
+            <tr><td>Temperature</td><td>How concentrated the next-token probabilities become before each draw</td><td>The learned logits or weights</td></tr>
+            <tr><td>Seed</td><td>The repeatable sequence of pseudo-random categorical draws</td><td>The probability distribution produced by the model</td></tr>
+            <tr><td>Maximum tokens</td><td>The upper bound on repeated forward passes</td><td>The 128-token context size</td></tr>
+          </tbody></table>
+          <p>At temperature below 1, dividing logits by a smaller number spreads their numerical differences and favours high-scoring tokens more strongly. Higher temperature flattens the resulting <Term id="softmax">softmax</Term> probabilities and makes lower-scoring choices more likely. It does not add creativity or understanding; it changes a sampling distribution.</p>
+        </>,
+      },
+      {
+        id: 'controlled-comparison', title: 'Use “compare all” as the primary experiment', body: <>
+          <p>Begin with one opening, temperature <code>0.8</code>, seed <code>42</code>, and 64 new tokens. “Compare all three checkpoints” sends those identical inputs sequentially. Random fragments reveal the before-state; the trained outputs reveal what 700 updates changed and what remains weak.</p>
+          <p>Then hold the clean checkpoint fixed and change only temperature, only seed, or only token limit. Repeating the exact same request should reproduce the same text on this recorded software/device path. The cards record whether <code>&lt;eos&gt;</code> ended generation or the requested limit stopped it, because those are different events.</p>
+          <Code>{`curl -X POST http://127.0.0.1:8002/generate \
+  -H 'Content-Type: application/json' \
+  --data '{"prompt":"Once upon a time, a small fox","checkpoint":"clean-700","temperature":0.8,"maximumTokens":64,"seed":42}'`}</Code>
+        </>,
+      },
+      {
+        id: 'limits-next', title: 'Keep the playground beside—not above—the evaluation', body: <>
+          <p>These models saw only the bounded 1,000-story development sample and trained for 700 updates. They have no instruction tuning, retrieval, factual grounding, safety layer, or persistent conversation memory. A story-like response is generated continuation, not evidence that the model understood an instruction or planned a plot.</p>
+          <p>Lesson 12 will move from exploratory prompting back to selection evidence: confirm the chosen training specification across independent seeds, compare variability and resource cost, then make a careful Project 1 versus Project 2 comparison. The playground remains available as a qualitative inspection tool throughout.</p>
+        </>,
+      },
+    ],
+  },
 ];
 
 export function getTinyStoriesLesson(slug: string) {

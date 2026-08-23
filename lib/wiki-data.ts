@@ -51,7 +51,7 @@ export const projects: Project[] = [
   {
     slug: 'tinystories', number: '02', name: 'TinyStories', shortName: 'TinyStories',
     description: 'Scale the same ideas into a small GPT that learns simple, coherent English stories.',
-    stage: 'Lesson 10 of 12 complete', progress: 83, status: 'ACTIVE', method: 'Train from scratch',
+    stage: 'Lesson 11 of 12 complete', progress: 92, status: 'ACTIVE', method: 'Train from scratch',
     objective: 'Move from character imitation to subword language modelling and train a roughly 5–15M parameter transformer on a deliberately simple language distribution.',
     dataset: { name: 'TinyStories', detail: 'Synthetic short stories written with vocabulary familiar to young children. We will begin with a bounded subset before choosing whether to scale.', source: 'https://www.microsoft.com/en-us/research/publication/tinystories-how-small-can-language-models-be-and-still-speak-coherent-english/', sourceLabel: 'Microsoft Research' },
     stages: [
@@ -65,8 +65,8 @@ export const projects: Project[] = [
       { slug: 'training-recipe', name: 'Improve the training recipe', state: 'complete', lesson: 'Branch one complete state into matched learning-rate policies and select with a predeclared validation threshold.' },
       { slug: 'scaling-budget', name: 'Scale within the laptop budget', state: 'complete', lesson: 'Benchmark width, depth, context and dataset size before selecting a longer run that fits the MacBook Air.' },
       { slug: 'story-evaluation', name: 'Evaluate story behaviour', state: 'complete', lesson: 'Combine frozen held-out loss with prompt adherence, consistency, repetition, diversity and overlap checks.' },
-      { slug: 'tinystories-playground', name: 'TinyStories prompt playground', state: 'active', lesson: 'Complete learner-written story openings with selected local checkpoints under controlled generation settings.' },
-      { slug: 'final-story-model', name: 'Final model and comparison', state: 'planned', lesson: 'Confirm the selected model across seeds and compare character-level Shakespeare with subword TinyStories honestly.' },
+      { slug: 'tinystories-playground', name: 'TinyStories prompt playground', state: 'complete', lesson: 'Complete learner-written story openings with selected local checkpoints under controlled generation settings.' },
+      { slug: 'final-story-model', name: 'Final model and comparison', state: 'active', lesson: 'Confirm the selected model across seeds and compare character-level Shakespeare with subword TinyStories honestly.' },
     ],
     concepts: [
       { term: 'Subword token', explanation: 'A reusable piece of a word, allowing a finite vocabulary to represent unfamiliar words efficiently.' },
@@ -155,6 +155,7 @@ export const glossary = [
   ['Logit', 'An unnormalised score assigned to one possible output before scores are converted into probabilities.'],
   ['Loss', 'A numerical measure of prediction error. Training uses gradients of loss to update weights; evaluation uses loss without changing the model.'],
   ['Loss mask', 'A one-or-zero weight beside each target that determines whether its per-position loss contributes to the batch result. It excludes padding; it does not control attention visibility.'],
+  ['Loopback address', 'A network address, usually 127.0.0.1, that routes back to the same computer. A service bound only to loopback is reachable locally but not exposed as a public network endpoint.'],
   ['Model depth', 'The number of sequential blocks or layers in a neural network. More depth adds processing stages as well as parameters and computation.'],
   ['Model architecture', 'The fixed arrangement of layers and mathematical connections that determines how inputs can be transformed. Training changes weights inside that arrangement, not the arrangement itself.'],
   ['Model width', 'The number of features used to represent each token inside the model. Wider representations increase both capacity and computation; course architectures use different widths.'],

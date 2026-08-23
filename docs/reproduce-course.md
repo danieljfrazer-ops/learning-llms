@@ -212,6 +212,16 @@ The command grades every held-out target, then generates five declared scenarios
 
 The evaluator writes no checkpoint and performs no optimiser update. Its protocol and full result live under `work/experiments/tinystories-story-evaluation-001/`; the polling dashboard reads `public/data/local/tinystories-story-evaluation.json`. Rerunning requires an empty run directory so an older frozen protocol cannot be silently mixed with new evidence.
 
+Lesson 11 reuses exactly that evaluated cohort. Keep the wiki running and start a second process:
+
+```sh
+uv run --no-sync python ml/tinystories_inference_server.py
+```
+
+The service reads and verifies the Lesson 10 local evidence, frozen tokenizer, and all three checkpoint hashes, then binds only to `127.0.0.1:8002`. It writes no files and never constructs an optimiser. Open the TinyStories prompt-playground lesson, enter an opening, and keep checkpoint, temperature, seed, and maximum new-token count visible. “Compare all three checkpoints” holds those sampling inputs fixed and invokes the random, inherited-history, and clean-history weights sequentially. The page reports prompt tokens initially visible inside context 128, generated-token count, EOS versus token-limit stopping, elapsed time, and the explicit fact that weights were not updated.
+
+If the service reports missing or mismatched files, rerun the prerequisite lesson that owns the artifact rather than copying Reference evidence. This is a local development server built with Python's `http.server`; do not expose port 8002 publicly. The eventual public wiki requires the separately planned browser-executable export and parity checks, not this Python endpoint.
+
 ## 9. Keep your work private or publish it deliberately
 
 My Lab artifacts are ignored. To preserve your journey, create a separate branch or repository policy for selected JSON/configuration files; do not commit raw datasets or every checkpoint by default. Review dataset terms and remove private prompts before sharing.

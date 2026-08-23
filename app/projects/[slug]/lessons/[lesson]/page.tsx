@@ -7,6 +7,7 @@ import EvaluationPanel from '@/app/components/EvaluationPanel';
 import TrainingImprovementsPanel from '@/app/components/TrainingImprovementsPanel';
 import ScalingPanel from '@/app/components/ScalingPanel';
 import FinalModelPanel from '@/app/components/FinalModelPanel';
+import TinyStoriesPromptPlayground from '@/app/components/TinyStoriesPromptPlayground';
 import { BeginnerLessonIntro, BeginnerSectionNote, PlannedBeginnerGuide } from '@/app/components/BeginnerGuidance';
 import { LocalEvidencePlaceholder, LocalOnly, ReferenceOnly, StageState } from '@/app/components/EvidenceMode';
 import { getProject, projects } from '@/lib/wiki-data';
@@ -62,6 +63,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       {project.slug === 'shakespeare' && lessonSlug === 'training-improvements' && <TrainingImprovementsPanel />}
       {project.slug === 'shakespeare' && lessonSlug === 'scaling-experiment' && <ScalingPanel />}
       {project.slug === 'shakespeare' && lessonSlug === 'final-evaluation' && <FinalModelPanel />}
+      {project.slug === 'tinystories' && lessonSlug === 'tinystories-playground' && <TinyStoriesPromptPlayground />}
 
       {richLesson ? <div className="lesson-layout">
         <aside className="lesson-toc"><p>IN THIS LESSON</p>{richLesson.sections.map(section => <a key={section.id} href={`#${section.id}`}>{section.title}</a>)}</aside>
