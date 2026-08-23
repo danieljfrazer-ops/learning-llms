@@ -839,7 +839,7 @@ uv run --no-sync python ml/tinystories_inference_server.py`}</Code>
 model.load_weights(checkpoint_path, strict=True)
 model.eval()`}</Code>
           <p>A Safetensors file contains named numerical arrays, not the Python class that connects them. The server reconstructs the Lesson 10 architecture from frozen metadata, uses strict loading to reject missing or incompatible arrays, and switches the model to evaluation mode. The first request for a checkpoint loads it; later requests reuse the cached in-memory model.</p>
-          <p>The selectable cohort is intentionally closed: random step 0, inherited-history step 700, and clean-history step 700. The service does not silently expose an unevaluated file merely because it exists in <code>work/experiments/</code>.</p>
+          <p>The Lesson 10 cohort is intentionally closed: random step 0, inherited-history step 700, and clean-history step 700. After Lesson 12 completes, the service may add its checksum-verified selected final seed. It never silently exposes an unevaluated file merely because it exists in <code>work/experiments/</code>.</p>
         </>,
       },
       {
@@ -861,7 +861,7 @@ model.eval()`}</Code>
       },
       {
         id: 'controlled-comparison', title: 'Use “compare all” as the primary experiment', body: <>
-          <p>Begin with one opening, temperature <code>0.8</code>, seed <code>42</code>, and 64 new tokens. “Compare all three checkpoints” sends those identical inputs sequentially. Random fragments reveal the before-state; the trained outputs reveal what 700 updates changed and what remains weak.</p>
+          <p>Begin with one opening, temperature <code>0.8</code>, seed <code>42</code>, and 64 new tokens. “Compare all available checkpoints” sends those identical inputs sequentially—three after Lesson 10 and four after Lesson 12 adds its selected final seed. Random fragments reveal the before-state; the trained outputs reveal what 700 updates changed and what remains weak.</p>
           <p>Then hold the clean checkpoint fixed and change only temperature, only seed, or only token limit. Repeating the exact same request should reproduce the same text on this recorded software/device path. The cards record whether <code>&lt;eos&gt;</code> ended generation or the requested limit stopped it, because those are different events.</p>
           <Code>{`curl -X POST http://127.0.0.1:8002/generate \
   -H 'Content-Type: application/json' \
@@ -872,6 +872,91 @@ model.eval()`}</Code>
         id: 'limits-next', title: 'Keep the playground beside—not above—the evaluation', body: <>
           <p>These models saw only the bounded 1,000-story development sample and trained for 700 updates. They have no instruction tuning, retrieval, factual grounding, safety layer, or persistent conversation memory. A story-like response is generated continuation, not evidence that the model understood an instruction or planned a plot.</p>
           <p>Lesson 12 will move from exploratory prompting back to selection evidence: confirm the chosen training specification across independent seeds, compare variability and resource cost, then make a careful Project 1 versus Project 2 comparison. The playground remains available as a qualitative inspection tool throughout.</p>
+        </>,
+      },
+    ],
+  },
+  {
+    slug: 'final-story-model',
+    title: 'Confirm the final TinyStories recipe and close Project 2',
+    summary: 'Repeat the complete 700-update recipe across independent seeds, report the distribution instead of one lucky minimum, select a practical checkpoint, and compare TinyStories with Shakespeare using compatible dimensions.',
+    outcome: 'Three independent training paths averaged validation loss 3.8154 ± 0.0449. Seed 43 was selected at 3.7576, but all seeds retained weak scenario adherence, rare sentence closure, malformed words, and event drift.',
+    evidence: 'Complete · tinystories-final-001 · seeds 42–44 · 2 new 700-update runs · 45 fixed behaviour generations per seed · selected seed 43',
+    sections: [
+      {
+        id: 'final-question', title: 'Replace “the final run” with a distribution of runs', body: <>
+          <p>Lesson 9 observed one clean 700-update path. A single path can be unusually favourable or unfavourable because random initialisation and batch order change the sequence of numerical corrections. Lesson 12 measures <Term id="training-seed-variance">training-seed variance</Term>: three complete runs share one frozen recipe while a declared training seed controls each run&apos;s starting weights and shuffled data order.</p>
+          <p>The architecture claim is summarised by the mean, standard deviation, and range across seeds. The lowest validation checkpoint is selected only as a practical file for inference. It is not presented as the result every rerun should achieve.</p>
+          <aside className="lesson-caveat"><strong>Replication is not resampling</strong><p>Changing only the generation seed explores different text from one fixed model. Here seeds 43 and 44 repeat weight initialisation, all 700 gradient updates, validation, checkpoint saving, and behaviour evaluation.</p></aside>
+        </>,
+      },
+      {
+        id: 'frozen-spec', title: 'Freeze every non-random part of the final specification', body: <>
+          <table className="lesson-table"><tbody>
+            <tr><th>Data</th><td><code>tinystories-development-v1</code>: 1,000 synthetic training stories and 200 validation stories; source hashes unchanged</td></tr>
+            <tr><th>Tokenizer</th><td>2,048-piece byte-level BPE; checksum <code>cf8392…7c6e</code></td></tr>
+            <tr><th>Architecture</th><td>5,816,320 parameters; width 256; 8 heads; 6 blocks; context 128</td></tr>
+            <tr><th>Training</th><td>700 updates; batch 32; AdamW; weight decay 0.01</td></tr>
+            <tr><th>Schedule</th><td>Constant <code>3e-4</code> through update 600; cosine decay to <code>3e-5</code> over updates 601–700</td></tr>
+            <tr><th>Replicates</th><td>Training seeds 42, 43, 44; batch-order seeds 4242, 4243, 4244; fixed 700-batch budget</td></tr>
+            <tr><th>Evaluation</th><td>Every held-out target plus Lesson 10&apos;s five scenarios × three sampling seeds at temperature 0.8</td></tr>
+          </tbody></table>
+          <p>MLX&apos;s <Source href="https://ml-explore.github.io/mlx/build/html/python/random.html">random-number functions</Source> create reproducible pseudo-random sequences from a seed on this software path. A seed does not remove floating-point or hardware variation, and matching one seed across different algorithms would not guarantee identical draws. Because story windows have variable padding, different shuffled orders exposed 2,235,288–2,236,576 non-padding targets—a 1,288-target or 0.058% range—despite the same 700 batches.</p>
+        </>,
+      },
+      {
+        id: 'reuse-boundary', title: 'Reuse seed 42 only after proving identity', body: <>
+          <p>Lesson 9 already trained seed 42 under the exact final architecture, batch seed 4242, update count, and schedule. Repeating it would spend compute without creating an independent observation. The final protocol therefore verifies that Lesson 10&apos;s clean checkpoint checksum is still <code>519812…4a49</code> and reuses its complete validation and behaviour record.</p>
+          <p>Seeds 43 and 44 do not start from seed 42 or resume its optimiser. Each creates fresh random arrays, fresh AdamW moments, and a separately shuffled data order. Their weight-only final checkpoints are about 22 MiB each. Together with protocol, traces, samples, configurations, and results, Lesson 12 added about 46 MiB under <code>work/experiments/tinystories-final-001/</code>.</p>
+        </>,
+      },
+      {
+        id: 'command', title: 'Run two fresh confirmations and watch honest live state', body: <>
+          <Code>{`uv run --no-sync python ml/tinystories_final.py`}</Code>
+          <p>The parent process verifies Lessons 4, 5, 9, and 10, writes <code>protocol.json</code> before training, and atomically creates <code>public/data/local/tinystories-final.json</code>. Separate worker processes train seeds 43 and 44, reporting every 25 updates. Each then saves <code>checkpoint-0700.safetensors</code>, grades all 44,277 validation targets, and applies the unchanged 15-generation behaviour protocol.</p>
+          <p>The two new training and evaluation paths took 122.47 seconds on the 32 GB Apple-silicon Mac. They reported about 83 ms mean update time and 1.80 GB peak MLX allocation; seed 42&apos;s earlier Lesson 9 timing was slower, illustrating why wall-clock and allocator measurements need their run context rather than being treated as model quality.</p>
+        </>,
+      },
+      {
+        id: 'measured-results', title: 'Read the mean, spread, and individual runs together', body: <>
+          <table className="lesson-table"><thead><tr><th>Training seed</th><th>Valid targets seen</th><th>Validation loss</th><th>Perplexity</th><th>Role</th></tr></thead><tbody>
+            <tr><td>42</td><td>2,236,576</td><td>3.8216</td><td>45.68</td><td>Checksum-verified Lesson 9 reuse</td></tr>
+            <tr><td><strong>43</strong></td><td>2,236,488</td><td><strong>3.7576</strong></td><td><strong>42.85</strong></td><td>Lowest observed; selected checkpoint</td></tr>
+            <tr><td>44</td><td>2,235,288</td><td>3.8671</td><td>47.80</td><td>Independent confirmation</td></tr>
+          </tbody></table>
+          <p>The across-seed population mean is <strong>3.8154</strong>, standard deviation <strong>0.0449</strong>, and range <strong>0.1095</strong>. All three are far below the exact random baseline of 7.7524, so improvement is not dependent on seed 42. The spread is large enough that quoting only 3.7576 would materially overstate the typical outcome.</p>
+        </>,
+      },
+      {
+        id: 'behaviour', title: 'Confirm that better probability still leaves story failures', body: <>
+          <p>The narrow prompt-keyword proxy passed 4/15 trials for seed 42, 5/15 for seed 43, and 4/15 for seed 44. Sentence punctuation closed only 2/15, 2/15, and 1/15 continuations. Every seed&apos;s longest detected exact training span was seven words, and none emitted an exact eight-word training span in the frozen 45-sample cohort.</p>
+          <p>Seed 43&apos;s fixed opening <em>Once upon a time, there was</em> continues with a girl, work, friends, and a coat, then invents fragments such as <em>coatge coll</em> and <em>swink</em>. Seed 44 begins with a boy named Jimmy but switches among Timmy, a bunny, “she,” a teddy girl, and a bear. These are recognisable simple-story patterns without stable entity tracking or plot planning.</p>
+          <p>The <Source href="https://arxiv.org/abs/2305.07759">TinyStories paper</Source> demonstrates what substantially larger training corpora and experimental budgets can enable in small models. Our 1,000-story laptop course is intentionally a bounded learning experiment, not a reproduction of the paper&apos;s strongest models.</p>
+        </>,
+      },
+      {
+        id: 'selection', title: 'Select seed 43 while retaining the ensemble result', body: <>
+          <p>The predeclared rule chooses the lowest complete validation loss, with the lower seed breaking an exact tie. Seed 43 therefore becomes the practical final checkpoint at <code>work/experiments/tinystories-final-001/seed-043/checkpoint-0700.safetensors</code>, checksum <code>bcba50…5c94c</code>. The playground can load this file for qualitative use.</p>
+          <p>This selection reuses a validation set already involved in dataset, tokenizer, recipe, and architecture decisions. Seed 43 is the best observed development checkpoint, not an unbiased estimate of future performance. The architecture result remains 3.8154 ± 0.0449 across three paths.</p>
+        </>,
+      },
+      {
+        id: 'cross-project', title: 'Compare projects without comparing incompatible losses', body: <>
+          <p>Shakespeare predicts one of 65 characters; TinyStories predicts one of 2,048 subword pieces. Their <Term id="cross-entropy">cross-entropy</Term> and perplexity use different prediction units and vocabularies, so <code>1.5846</code> versus <code>3.8154</code> is not a model ranking. We compare representation, context coverage, parameters, training evidence, and visible capability instead.</p>
+          <table className="lesson-table"><thead><tr><th>Dimension</th><th>Shakespeare final</th><th>TinyStories final</th></tr></thead><tbody>
+            <tr><td>Token interface</td><td>65 characters</td><td>2,048 byte-level BPE pieces</td></tr>
+            <tr><td>Context coverage</td><td>64 tokens = 64 characters</td><td>128 tokens ≈ 459 validation characters</td></tr>
+            <tr><td>Parameters</td><td>420,673</td><td>5,816,320 · 13.8× larger</td></tr>
+            <tr><td>Within-project random-to-final loss reduction</td><td>63.4%</td><td>50.8%</td></tr>
+            <tr><td>Visible specialisation</td><td>Shakespeare-like layout and local phrasing</td><td>Simple-story cadence and common event fragments</td></tr>
+          </tbody></table>
+          <p>The approximate TinyStories character coverage multiplies the measured 3.584 validation characters per token by 128. It is a corpus average, not a guarantee for a particular prompt. Likewise, normalising each loss against its own random baseline makes within-project learning visible but does not create a shared downstream capability test.</p>
+        </>,
+      },
+      {
+        id: 'complete-next', title: 'Close pretraining and prepare to learn adaptation', body: <>
+          <p>Project 2 has now covered provenance, auditing, subword tokenisation, boundary-safe batching, a random GPT, first pretraining, resumable state, recipe selection, laptop scaling, behavioural evaluation, interactive inference, and seed replication. The final claim is bounded: this recipe repeatedly learned useful in-domain next-token structure from 1,000 synthetic stories, while reliable prompt following and coherent story planning remain unestablished.</p>
+          <p>Project 3 changes the learning question. Instead of creating every weight from random values, English → SQL will begin from a small pretrained base, freeze a baseline, then adapt a limited set of parameters with LoRA and judge generated queries by executing them against a sandbox database.</p>
         </>,
       },
     ],

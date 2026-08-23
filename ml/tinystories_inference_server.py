@@ -25,6 +25,7 @@ from tinystories_random_baseline import random_completion
 
 
 DEFAULT_EVIDENCE = local_result("tinystories-story-evaluation.json")
+DEFAULT_FINAL_EVIDENCE = local_result("tinystories-final.json")
 DEFAULT_TOKENIZER = local_run("tinystories-tokenizer-001") / "tokenizer.json"
 DEFAULT_PORT = 8002
 ALLOWED_ORIGINS = {"http://localhost:3000", "http://127.0.0.1:3000"}
@@ -41,9 +42,10 @@ def file_sha256(path: Path) -> str:
 class InferenceRuntime:
     """Validate Lesson 10 and lazily cache read-only checkpoint models."""
 
-    def __init__(self, evidence_path: Path, tokenizer_path: Path):
+    def __init__(self, evidence_path: Path, tokenizer_path: Path, final_evidence_path: Path):
         self.evidence_path = evidence_path
         self.tokenizer_path = tokenizer_path
+        self.final_evidence_path = final_evidence_path
         self.lock = threading.Lock()
         self.models: dict[str, TinyTransformerLanguageModel] = {}
         self.error: str | None = None
@@ -87,6 +89,19 @@ class InferenceRuntime:
 
         if set(candidates) != {"random", "inherited-700", "clean-700"}:
             raise RuntimeError("Lesson 10 must identify random, inherited-700, and clean-700 checkpoints")
+        if self.final_evidence_path.is_file():
+            final_evidence = json.loads(self.final_evidence_path.read_text(encoding="utf-8"))
+            if final_evidence.get("status") == "Complete":
+                selected = final_evidence["selectedCheckpoint"]
+                checkpoint = Path(selected["path"])
+                if not checkpoint.is_file() or file_sha256(checkpoint) != selected["sha256"]:
+                    raise RuntimeError("Lesson 12 selected checkpoint checksum failed")
+                selected_seed = final_evidence["selectedSeed"]
+                candidates["final-selected"] = {
+                    "id": "final-selected", "label": f"Final selected · seed {selected_seed} · step 700",
+                    "history": f"Lesson 12 lowest observed complete validation loss across seeds 42–44; training seed {selected_seed}",
+                    "checkpoint": checkpoint, "checkpointSha256": selected["sha256"],
+                }
         self.architecture = architecture
         self.candidates = candidates
         self.tokenizer = Tokenizer.from_file(str(self.tokenizer_path))
@@ -228,9 +243,10 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--evidence", type=Path, default=DEFAULT_EVIDENCE)
     parser.add_argument("--tokenizer", type=Path, default=DEFAULT_TOKENIZER)
+    parser.add_argument("--final-evidence", type=Path, default=DEFAULT_FINAL_EVIDENCE)
     parser.add_argument("--port", type=int, default=DEFAULT_PORT)
     args = parser.parse_args()
-    runtime = InferenceRuntime(args.evidence, args.tokenizer)
+    runtime = InferenceRuntime(args.evidence, args.tokenizer, args.final_evidence)
     server = ThreadingHTTPServer(("127.0.0.1", args.port), handler_for(runtime))
     print(f"TinyStories inference ready at http://127.0.0.1:{args.port}", flush=True)
     print(f"Runtime status: {'ready' if runtime.ready else runtime.error}", flush=True)

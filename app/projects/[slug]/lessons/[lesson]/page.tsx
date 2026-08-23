@@ -8,6 +8,7 @@ import TrainingImprovementsPanel from '@/app/components/TrainingImprovementsPane
 import ScalingPanel from '@/app/components/ScalingPanel';
 import FinalModelPanel from '@/app/components/FinalModelPanel';
 import TinyStoriesPromptPlayground from '@/app/components/TinyStoriesPromptPlayground';
+import TinyStoriesFinalPanel from '@/app/components/TinyStoriesFinalPanel';
 import { BeginnerLessonIntro, BeginnerSectionNote, PlannedBeginnerGuide } from '@/app/components/BeginnerGuidance';
 import { LocalEvidencePlaceholder, LocalOnly, ReferenceOnly, StageState } from '@/app/components/EvidenceMode';
 import { getProject, projects } from '@/lib/wiki-data';
@@ -24,6 +25,7 @@ const referenceEvidenceSections: Record<string, string[]> = {
   'training-improvements': ['checkpoints', 'frozen-results', 'generation', 'limits'],
   'scaling-experiment': ['results', 'sample', 'decision'],
   'final-evaluation': ['three-seeds', 'selection', 'journey'],
+  'final-story-model': ['measured-results', 'behaviour', 'selection', 'cross-project'],
 };
 
 export function generateStaticParams() {
@@ -48,7 +50,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       <div className="breadcrumbs"><Link href="/">Dashboard</Link><span>/</span><Link href={`/projects/${project.slug}`}>{project.shortName}</Link><span>/</span><strong>{stage.name}</strong></div>
       <header className="lesson-hero">
         <div><p className="kicker">{project.name.toUpperCase()} · LESSON {String(stageIndex + 1).padStart(2, '0')}</p><h1>{richLesson?.title ?? stage.name}</h1><p>{richLesson?.summary ?? stage.lesson}</p></div>
-        <aside><ReferenceOnly><span className={`lesson-status lesson-status-${stage.state}`}>{stage.state}</span><small>REFERENCE OUTCOME</small><strong>{richLesson?.outcome ?? 'This lesson is planned. Its detailed procedure and measured evidence will be added when work begins.'}</strong>{richLesson && <p>{richLesson.evidence}</p>}</ReferenceOnly><LocalOnly><span className="lesson-status lesson-status-planned">your lab</span><small>REPRODUCTION GOAL</small><strong>{stage.lesson}</strong><p>Your measured outcome remains blank until you run this stage.</p></LocalOnly></aside>
+        <aside><ReferenceOnly><span className={`lesson-status lesson-status-${stage.state}`}>{stage.state}</span><small>REFERENCE OUTCOME</small><strong>{richLesson?.outcome ?? 'This lesson is planned. Its detailed procedure and measured evidence will be added when work begins.'}</strong>{richLesson && <p>{richLesson.evidence}</p>}</ReferenceOnly><LocalOnly><span className="lesson-status lesson-status-planned">your lab</span><small>REPRODUCTION GOAL</small><strong>{stage.lesson}</strong><p>Your measured outcome appears in the local dashboard when you run this stage.</p></LocalOnly></aside>
       </header>
 
       <nav className="lesson-switcher" aria-label="Project lessons">
@@ -64,6 +66,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       {project.slug === 'shakespeare' && lessonSlug === 'scaling-experiment' && <ScalingPanel />}
       {project.slug === 'shakespeare' && lessonSlug === 'final-evaluation' && <FinalModelPanel />}
       {project.slug === 'tinystories' && lessonSlug === 'tinystories-playground' && <TinyStoriesPromptPlayground />}
+      {project.slug === 'tinystories' && lessonSlug === 'final-story-model' && <TinyStoriesFinalPanel />}
 
       {richLesson ? <div className="lesson-layout">
         <aside className="lesson-toc"><p>IN THIS LESSON</p>{richLesson.sections.map(section => <a key={section.id} href={`#${section.id}`}>{section.title}</a>)}</aside>

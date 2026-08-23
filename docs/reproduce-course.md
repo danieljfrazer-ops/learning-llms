@@ -218,9 +218,21 @@ Lesson 11 reuses exactly that evaluated cohort. Keep the wiki running and start 
 uv run --no-sync python ml/tinystories_inference_server.py
 ```
 
-The service reads and verifies the Lesson 10 local evidence, frozen tokenizer, and all three checkpoint hashes, then binds only to `127.0.0.1:8002`. It writes no files and never constructs an optimiser. Open the TinyStories prompt-playground lesson, enter an opening, and keep checkpoint, temperature, seed, and maximum new-token count visible. “Compare all three checkpoints” holds those sampling inputs fixed and invokes the random, inherited-history, and clean-history weights sequentially. The page reports prompt tokens initially visible inside context 128, generated-token count, EOS versus token-limit stopping, elapsed time, and the explicit fact that weights were not updated.
+The service reads and verifies the Lesson 10 local evidence, frozen tokenizer, and all three checkpoint hashes, then binds only to `127.0.0.1:8002`. It writes no files and never constructs an optimiser. Open the TinyStories prompt-playground lesson, enter an opening, and keep checkpoint, temperature, seed, and maximum new-token count visible. “Compare all available checkpoints” holds those sampling inputs fixed and invokes the random, inherited-history, and clean-history weights sequentially; after Lesson 12 it also includes the checksum-verified final selected seed. The page reports prompt tokens initially visible inside context 128, generated-token count, EOS versus token-limit stopping, elapsed time, and the explicit fact that weights were not updated.
 
 If the service reports missing or mismatched files, rerun the prerequisite lesson that owns the artifact rather than copying Reference evidence. This is a local development server built with Python's `http.server`; do not expose port 8002 publicly. The eventual public wiki requires the separately planned browser-executable export and parity checks, not this Python endpoint.
+
+Lesson 12 freezes the clean Lesson 9 recipe and repeats complete training across seeds 42, 43, and 44:
+
+```sh
+uv run --no-sync python ml/tinystories_final.py
+```
+
+The command verifies and reuses seed 42's exact Lesson 9/Lesson 10 checkpoint, then launches two separate MLX workers. Seeds 43 and 44 each create fresh random model weights, fresh AdamW state, and independent batch orders before performing all 700 updates. Every checkpoint receives complete held-out evaluation and the unchanged Lesson 10 five-prompt/three-sampling-seed behaviour protocol. The command writes live and final evidence to `public/data/local/tinystories-final.json`; protocol, traces, configurations, and the two new weight-only checkpoints live under `work/experiments/tinystories-final-001/`.
+
+The selection rule keeps the lowest complete validation loss as a practical inference checkpoint, with the lower seed breaking an exact tie. Report the across-seed mean, population standard deviation, and range as the recipe result rather than quoting only that selected minimum. The cross-project table uses committed Shakespeare reference evidence and labels that provenance explicitly; absolute character-token and subword-token losses are not ranked. On lower-memory or slower hardware, run one fresh seed first as a pipeline check, but record that reduced run as incomplete confirmation rather than copying or inventing the missing seeds.
+
+After Lesson 12, restart `ml/tinystories_inference_server.py`. Its checksum-verified checkpoint list adds the selected final seed when `tinystories-final.json` is complete.
 
 ## 9. Keep your work private or publish it deliberately
 

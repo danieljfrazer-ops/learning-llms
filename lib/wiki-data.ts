@@ -51,7 +51,7 @@ export const projects: Project[] = [
   {
     slug: 'tinystories', number: '02', name: 'TinyStories', shortName: 'TinyStories',
     description: 'Scale the same ideas into a small GPT that learns simple, coherent English stories.',
-    stage: 'Lesson 11 of 12 complete', progress: 92, status: 'ACTIVE', method: 'Train from scratch',
+    stage: 'Complete', progress: 100, status: 'COMPLETE', method: 'Train from scratch',
     objective: 'Move from character imitation to subword language modelling and train a roughly 5–15M parameter transformer on a deliberately simple language distribution.',
     dataset: { name: 'TinyStories', detail: 'Synthetic short stories written with vocabulary familiar to young children. We will begin with a bounded subset before choosing whether to scale.', source: 'https://www.microsoft.com/en-us/research/publication/tinystories-how-small-can-language-models-be-and-still-speak-coherent-english/', sourceLabel: 'Microsoft Research' },
     stages: [
@@ -66,7 +66,7 @@ export const projects: Project[] = [
       { slug: 'scaling-budget', name: 'Scale within the laptop budget', state: 'complete', lesson: 'Benchmark width, depth, context and dataset size before selecting a longer run that fits the MacBook Air.' },
       { slug: 'story-evaluation', name: 'Evaluate story behaviour', state: 'complete', lesson: 'Combine frozen held-out loss with prompt adherence, consistency, repetition, diversity and overlap checks.' },
       { slug: 'tinystories-playground', name: 'TinyStories prompt playground', state: 'complete', lesson: 'Complete learner-written story openings with selected local checkpoints under controlled generation settings.' },
-      { slug: 'final-story-model', name: 'Final model and comparison', state: 'active', lesson: 'Confirm the selected model across seeds and compare character-level Shakespeare with subword TinyStories honestly.' },
+      { slug: 'final-story-model', name: 'Final model and comparison', state: 'complete', lesson: 'Confirm the selected model across seeds and compare character-level Shakespeare with subword TinyStories honestly.' },
     ],
     concepts: [
       { term: 'Subword token', explanation: 'A reusable piece of a word, allowing a finite vocabulary to represent unfamiliar words efficiently.' },
