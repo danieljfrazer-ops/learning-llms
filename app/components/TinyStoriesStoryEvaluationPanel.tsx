@@ -28,7 +28,6 @@ const percent = (value: number) => `${(value * 100).toFixed(value < .01 ? 1 : 0)
 export default function TinyStoriesStoryEvaluationPanel() {
   const evidenceUrl = useEvidenceUrl('tinystories-story-evaluation.json');
   const [loaded, setLoaded] = useState<{ url: string; data: Evidence | null }>({ url: '', data: null });
-  const [candidateId, setCandidateId] = useState('clean-700');
   const [scenarioId, setScenarioId] = useState('care-for-kitten');
 
   useEffect(() => {
@@ -43,9 +42,11 @@ export default function TinyStoriesStoryEvaluationPanel() {
   }, [evidenceUrl]);
 
   const evidence = loaded.url === evidenceUrl ? loaded.data : null;
-  const selectedResult = useMemo(() => evidence?.results.find(item => item.candidate.id === candidateId) ?? evidence?.results.at(-1), [evidence, candidateId]);
-  const selectedSample = selectedResult?.fixedExamples.find(item => item.scenarioId === scenarioId) ?? selectedResult?.fixedExamples[0];
   const scenario = evidence?.protocol.generation.scenarios.find(item => item.id === scenarioId);
+  const comparedSamples = useMemo(() => evidence?.results.map(result => ({
+    result,
+    sample: result.fixedExamples.find(item => item.scenarioId === scenarioId) ?? result.fixedExamples[0],
+  })) ?? [], [evidence, scenarioId]);
 
   return <section className="evaluation-panel" aria-label="TinyStories story behaviour evaluation evidence">
     <div className="evaluation-head"><div><p className="kicker">LESSON 10 · MULTI-LENS EVALUATION</p><h2>{evidence?.status === 'Complete' ? 'Training improved prediction before it produced reliable story following' : 'Apply several lenses without inventing one story score'}</h2></div><span>{evidence?.status ?? (loaded.url === evidenceUrl ? 'Not run yet' : 'Loading evidence…')}</span></div>
@@ -73,9 +74,9 @@ export default function TinyStoriesStoryEvaluationPanel() {
         <tr><td>Cross-seed 3-gram similarity</td>{evidence.results.map(item => <td key={item.candidate.id}>{percent(item.aggregate.meanPairwiseThreeGramJaccardAcrossSeeds)}</td>)}</tr>
         <tr><td>No narrow contradiction-list hit</td>{evidence.results.map(item => <td key={item.candidate.id}>{percent(item.aggregate.contradictionProxyPassRate)}</td>)}</tr>
       </tbody></table>
-      <div className={styles.selectors}>{evidence.results.map(result => <button key={result.candidate.id} className={selectedResult?.candidate.id === result.candidate.id ? styles.selected : ''} onClick={() => setCandidateId(result.candidate.id)}>{result.candidate.id}</button>)}</div>
+      <div className={styles.sampleComparisonHead}><strong>Same scenario and sampling seed across every checkpoint</strong><p>Select a frozen scenario; the three outputs stay side by side so the trained-versus-random contrast cannot disappear behind a default tab.</p></div>
       <div className={styles.selectors}>{evidence.protocol.generation.scenarios.map(item => <button key={item.id} className={scenarioId === item.id ? styles.selected : ''} onClick={() => setScenarioId(item.id)}>{item.id}</button>)}</div>
-      {selectedSample && <article className={styles.sample}><small>FIXED SEED {evidence.protocol.generation.seeds[0]} · {scenario?.intent}</small><strong>{selectedSample.prompt}</strong><p>{selectedSample.continuation || '〈no visible continuation before EOS〉'}</p><span>Related keyword hits: {selectedSample.expectedKeywordHits.join(', ') || 'none'} · contradiction-list hits: {selectedSample.contradictionHits.join(', ') || 'none'} · longest exact training span: {selectedSample.longestExactTrainingSpanWordsUpTo12} words</span></article>}
+      <div className={styles.sampleGrid}>{comparedSamples.map(({ result, sample }) => sample && <article className={styles.sample} key={result.candidate.id}><small>{result.candidate.label} · FIXED SEED {evidence.protocol.generation.seeds[0]} · {scenario?.intent}</small><strong>{sample.prompt}</strong><p>{sample.continuation || '〈no visible continuation before EOS〉'}</p><span>Related keyword hits: {sample.expectedKeywordHits.join(', ') || 'none'} · contradiction-list hits: {sample.contradictionHits.join(', ') || 'none'} · longest exact training span: {sample.longestExactTrainingSpanWordsUpTo12} words</span></article>)}</div>
       <aside className={styles.boundary}><strong>A perfect proxy can still be useless</strong><p>All three checkpoints avoided the tiny contradiction lists, including random noise. That 100% result does not certify consistency; it demonstrates that a deterministic rule answers only the narrow question encoded in its word list. {evidence.protocol.interpretationBoundary}</p></aside>
       <p className="evaluation-foot">{evidence.elapsedSeconds ? `All complete validation passes, 45 generations and overlap checks took ${evidence.elapsedSeconds.toFixed(2)} seconds.` : 'Evaluation is still running.'} Weights were loaded for inference and never updated.</p>
     </> : <p className="evaluation-foot">Run the Lesson 10 command in My Lab to populate checkpoint comparisons, scenario proxies, repetition/diversity measures, overlap checks and fixed outputs.</p>}

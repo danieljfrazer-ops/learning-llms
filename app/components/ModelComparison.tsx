@@ -28,6 +28,13 @@ export default function ModelComparison() {
     refresh(); const timer = window.setInterval(refresh, 2000); return () => { active = false; window.clearInterval(timer); };
   }, [mode]);
   const runs = loaded.mode === mode ? loaded.runs : {};
+  const completed = sources.flatMap(source => {
+    const run = runs[source.key];
+    const final = run?.checkpoints.at(-1);
+    return final?.validationLoss == null ? [] : [{ source, run, final }];
+  });
+  const lowest = completed.reduce<typeof completed[number] | null>((best, item) =>
+    !best || item.final.validationLoss! < best.final.validationLoss! ? item : best, null);
 
   return <section className="comparison-panel">
     <div className="comparison-heading"><div><p className="kicker">ARCHITECTURE COMPARISON</p><h2>What changed when memory grew?</h2></div><p>Same corpus and character vocabulary. Lower validation loss is better; parameter count and training recipe also changed, so this is a learning comparison rather than a controlled benchmark.</p></div>
@@ -39,6 +46,6 @@ export default function ModelComparison() {
         <pre>{final?.sample ?? 'Waiting for a checkpoint…'}</pre>
       </article>;
     })}</div>
-    <aside className="comparison-conclusion"><strong>Architecture result</strong><p>The original complete transformer won this architecture comparison at 1.7267. A later controlled training-recipe experiment kept that architecture fixed and improved frozen-protocol validation loss to 1.7051 with warmup plus cosine decay.</p></aside>
+    <aside className="comparison-conclusion"><strong>{lowest ? 'Lowest observed endpoint' : 'Comparison boundary'}</strong><p>{lowest ? `${lowest.source.label} recorded the lowest displayed validation loss at ${lowest.final.validationLoss!.toFixed(4)}. Its final sample is shown beside the other models under the same character-level task.` : 'Run the models in this evidence mode to compare their measured endpoints and frozen samples.'} Context, parameter count, and training recipe changed together across this learning sequence, so the display does not attribute the difference to memory alone.</p></aside>
   </section>;
 }

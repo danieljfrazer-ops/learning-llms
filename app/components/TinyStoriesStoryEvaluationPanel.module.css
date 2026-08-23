@@ -17,6 +17,10 @@
 .selectors button { padding: 8px 10px; border: 1px solid #cfc7ba; border-radius: 4px; color: #6d777a; background: #f8f5ef; font: 8px var(--font-geist-mono), monospace; cursor: pointer; }
 .selectors button.selected { border-color: var(--orange); color: #9c442a; background: #f4e7df; }
 .sample { padding: 18px; background: #132330; color: #cbd7da; }
+.sampleGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.sampleComparisonHead { margin-top: 22px; padding-top: 16px; border-top: 1px solid #d8d0c4; }
+.sampleComparisonHead strong { font: 19px Georgia, serif; }
+.sampleComparisonHead p { margin: 6px 0 0; color: #66747a; font-size: 9px; line-height: 1.6; }
 .sample small, .sample strong, .sample span { display: block; }
 .sample small { color: #86a0aa; font-size: 7px; font-weight: 900; letter-spacing: .08em; }
 .sample strong { margin-top: 9px; color: #f3c0af; font: 15px Georgia, serif; }
@@ -26,4 +30,4 @@
 .boundary strong { font: 17px Georgia, serif; }
 .boundary p { margin: 7px 0 0; color: #655f57; font-size: 9px; line-height: 1.65; }
 
-@media (max-width: 800px) { .cards { grid-template-columns: 1fr; } .sample p { min-height: 0; } }
+@media (max-width: 800px) { .cards, .sampleGrid { grid-template-columns: 1fr; } .sample p { min-height: 0; } }

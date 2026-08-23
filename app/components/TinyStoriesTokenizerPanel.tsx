@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useEvidenceUrl } from './EvidenceMode';
 
 type SplitEvidence = {
@@ -28,6 +28,8 @@ type TokenizerEvidence = {
   decision: { selectedVocabularySize: number; rationale: string; scope: string };
 };
 
+const visiblePiece = (piece: string) => piece.replaceAll('Ġ', '␠');
+
 export default function TinyStoriesTokenizerPanel() {
   const evidenceUrl = useEvidenceUrl('tinystories-tokenizer.json');
   const [loaded, setLoaded] = useState<{ url: string; data: TokenizerEvidence | null }>({ url: '', data: null });
@@ -47,6 +49,26 @@ export default function TinyStoriesTokenizerPanel() {
   const selected = evidence?.candidates.find(candidate => candidate.actualVocabularySize === evidence.decision.selectedVocabularySize);
   const maximumTokens = Math.max(...(evidence?.candidates.map(candidate => candidate.validation.tokens) ?? [1]));
   const maximumParameters = Math.max(...(evidence?.candidates.map(candidate => candidate.modelCostProxy.totalVocabularyDependentParameters) ?? [1]));
+  const promptComparisons = useMemo(() => {
+    if (!evidence?.candidates.length) return [];
+    const promptCount = Math.min(...evidence.candidates.map(candidate => candidate.promptPieces.length));
+    return Array.from({ length: promptCount }, (_, promptIndex) => {
+      const rows = evidence.candidates.map(candidate => ({
+        vocabularySize: candidate.actualVocabularySize,
+        pieces: candidate.promptPieces[promptIndex].tokens,
+      }));
+      const counts = rows.map(row => row.pieces.length);
+      return {
+        text: evidence.candidates[0].promptPieces[promptIndex].text,
+        rows,
+        distinctSegmentations: new Set(rows.map(row => row.pieces.join('\u0000'))).size,
+        minimumPieces: Math.min(...counts),
+        maximumPieces: Math.max(...counts),
+      };
+    }).sort((left, right) =>
+      right.distinctSegmentations - left.distinctSegmentations
+      || (right.maximumPieces - right.minimumPieces) - (left.maximumPieces - left.minimumPieces));
+  }, [evidence]);
 
   return <section className="evaluation-panel tokenizer-panel" aria-label="TinyStories tokenizer comparison evidence">
     <div className="evaluation-head"><div><p className="kicker">LESSON 03 · TOKENIZER EVIDENCE</p><h2>{evidence ? `${evidence.decision.selectedVocabularySize.toLocaleString()} pieces balance this development trade-off` : 'Compare shorter sequences with a larger model interface'}</h2></div><span>{evidence?.status ?? (loaded.url === evidenceUrl ? 'Not run yet' : 'Loading evidence…')}</span></div>
@@ -72,7 +94,13 @@ export default function TinyStoriesTokenizerPanel() {
         <article><strong>What the proxy means</strong><p>The parameter count covers the token embedding and output projection for the course&apos;s untied, 256-wide design—not a complete model.</p></article>
         <article><strong>Runtime and scope</strong><p>Four tokenizer candidates completed in {evidence.elapsedSeconds.toFixed(2)} seconds. {evidence.decision.scope}.</p></article>
       </div>
-      {selected && <div className="token-piece-comparison"><small>SAME PROMPT · DIFFERENT PIECE SIZES</small><div>{evidence.candidates.map(candidate => <article key={candidate.actualVocabularySize}><strong>{candidate.actualVocabularySize.toLocaleString()} pieces</strong><p>{candidate.promptPieces[0].tokens.map((token, index) => <code key={`${token}-${index}`}>{token}</code>)}</p></article>)}</div></div>}
+      {selected && <div className="token-piece-comparisons">
+        <div className="token-piece-legend"><small>SAME TEXT · FOUR VOCABULARIES</small><strong>Lead with the prompt that exposes the largest segmentation difference</strong><p><code>␠</code> means “the token begins with a space”. The tokenizer’s raw diagnostic spelling is <code>Ġ</code>; neither symbol is a letter generated into the decoded story.</p></div>
+        {promptComparisons.map((comparison, promptIndex) => <section className="token-piece-comparison" key={comparison.text}>
+          <header><small>{comparison.distinctSegmentations === 1 ? 'STABLE COMMON PHRASE' : promptIndex === 0 ? 'MOST REVEALING EXAMPLE' : 'ADDITIONAL CONTRAST'}</small><h3>{comparison.text}</h3><p>{comparison.distinctSegmentations} distinct segmentation{comparison.distinctSegmentations === 1 ? '' : 's'} · {comparison.maximumPieces === comparison.minimumPieces ? `${comparison.maximumPieces} pieces in every vocabulary` : `${comparison.maximumPieces} → ${comparison.minimumPieces} pieces`}</p></header>
+          <div>{comparison.rows.map(row => <article key={row.vocabularySize}><strong>{row.vocabularySize.toLocaleString()} vocabulary · {row.pieces.length} pieces</strong><p>{row.pieces.map((token, index) => <code key={`${token}-${index}`}>{visiblePiece(token)}</code>)}</p></article>)}</div>
+        </section>)}
+      </div>}
     </> : <p className="evaluation-foot">Run the tokenizer experiment in My Lab to populate this comparison. Reference mode remains blank until a maintainer separately reviews and promotes a course result.</p>}
   </section>;
 }

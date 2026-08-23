@@ -191,8 +191,8 @@ export const tinyStoriesLessons: RichLesson[] = [
     slug: 'tokenizer-experiment',
     title: 'Compare and freeze the subword tokenizer',
     summary: 'Train four byte-level BPE vocabularies on the same frozen stories, test representation integrity and sequence compression on held-out stories, expose model-interface cost, and use a declared rule to select one tokenizer.',
-    outcome: 'The reproducible procedure and My Lab dashboard are ready. Reference evidence remains intentionally unpromoted until a separate maintainer review.',
-    evidence: 'Active lesson · four candidate vocabularies · tokenizer training only · no neural-model updates',
+    outcome: 'The completed My Lab run compared four vocabularies and selected 2,048 pieces: smaller candidates exceeded the allowed validation-token penalty, while 4,096 saved less than the required 20%. Reference promotion remains a separate review.',
+    evidence: 'My Lab complete · tinystories-tokenizer-001 · four candidate vocabularies · no neural-model updates',
     sections: [
       {
         id: 'question', title: 'Why can the tokenizer change the model experiment?', body: <>
@@ -252,6 +252,7 @@ validation_metrics = evaluate_split(tokenizer, validation_rows)`}</Code>
       {
         id: 'decision', title: 'Apply a decision rule written before seeing the result', body: <>
           <p>The provisional 2,048-piece vocabulary is the anchor. A smaller candidate wins only if it adds no more than 10% validation tokens; a larger candidate wins only if it removes at least 20%. Otherwise we retain 2,048. These thresholds deliberately require a material sequence benefit before changing the already working interface.</p>
+          <p>The comparison below shows the same prompts under every vocabulary, ordered by how clearly they expose a difference. Hugging Face’s byte-level tokenizer prints an internal <code>Ġ</code> before pieces that include a leading space; it is a visible stand-in for that space, not the letter G and not text the model should emit. The dashboard renders it as <code>␠</code>, while the <Source href="https://huggingface.co/docs/tokenizers/en/api/pre-tokenizers#tokenizers.pre_tokenizers.ByteLevel">ByteLevel pre-tokenizer</Source> and matching decoder preserve and restore the real whitespace.</p>
           <p>The dashboard below reads the active evidence mode. My Lab shows the learner-owned run; Reference mode remains “Not run yet” unless a maintainer explicitly reviews and promotes a separate reference result.</p>
           <TinyStoriesTokenizerPanel />
         </>,
@@ -269,8 +270,8 @@ validation_metrics = evaluate_split(tokenizer, validation_rows)`}</Code>
     slug: 'sequence-batching',
     title: 'Build causal batches without mixing stories',
     summary: 'Turn differently sized tokenised stories into fixed 32 × 128 input, target, and loss-mask tensors while preserving every legitimate next-token pair and excluding padding.',
-    outcome: 'The reproducible procedure and My Lab dashboard are ready. Reference evidence remains intentionally unpromoted until a separate maintainer review.',
-    evidence: 'Available procedure · story-isolated windows · tensor construction only · no model or optimiser updates',
+    outcome: 'The completed My Lab run preserved all 229,867 legitimate training targets with zero cross-story targets. Story isolation used 78.4% of tensor positions; naïve concatenation reached 100.0% by introducing 999 false boundaries.',
+    evidence: 'My Lab complete · tinystories-batching-001 · story-isolated windows · no model or optimiser updates',
     sections: [
       {
         id: 'why-batching', title: 'Why does the model need batches?', body: <>
@@ -338,8 +339,8 @@ validation_metrics = evaluate_split(tokenizer, validation_rows)`}</Code>
     slug: 'random-gpt-baseline',
     title: 'Freeze and invoke the random GPT baseline',
     summary: 'Select the smallest architecture inside the declared 5–15M range, materialise seeded random weights, evaluate every frozen validation window, inspect prompt probabilities, and prove checkpoint-zero reload parity before training.',
-    outcome: 'The reproducible procedure and My Lab dashboard are ready. Reference evidence remains intentionally unpromoted until a separate maintainer review.',
-    evidence: 'Available procedure · 5.82M-parameter GPT · checkpoint step 0 · zero optimiser updates',
+    outcome: 'The completed My Lab run materialised the 5,816,320-parameter GPT, measured 7.7524 complete-validation loss before training, and proved exact checkpoint-zero reload behaviour.',
+    evidence: 'My Lab complete · tinystories-random-baseline-001 · checkpoint step 0 · zero optimiser updates',
     sections: [
       {
         id: 'why-baseline', title: 'Why freeze an official random baseline?', body: <>
@@ -417,8 +418,8 @@ validation_metrics = evaluate_split(tokenizer, validation_rows)`}</Code>
     slug: 'first-pretraining',
     title: 'Run the first TinyStories pretraining journey',
     summary: 'Load the exact checkpoint-zero control, add masked gradients and AdamW, traverse shuffled training windows, and preserve the model at seven stages so numerical and visible learning can be inspected together.',
-    outcome: 'The learner-local run completes 500 optimiser updates from the frozen random baseline while recording full held-out evaluation and fixed-prompt generations at steps 0, 1, 10, 50, 100, 250, and 500.',
-    evidence: 'Executable lesson · one controlled training recipe · seven staged checkpoints · learner-local evidence only',
+    outcome: 'The completed My Lab run applied 500 optimiser updates from the frozen random baseline. Complete-validation loss fell from 7.7524 to 3.8068 while seven staged checkpoints retained the behavioural path.',
+    evidence: 'My Lab complete · tinystories-first-pretraining-001 · 500 updates · seven staged checkpoints',
     sections: [
       {
         id: 'meaning', title: 'What does “pretraining” mean in this small experiment?', body: <>
@@ -495,8 +496,8 @@ mx.eval(model.parameters(), optimiser.state)`}</Code>
     slug: 'checkpoints-dashboard',
     title: 'Make training resumable and observable',
     summary: 'Replace weight-only milestones with a four-part checkpoint, reconstruct training in a fresh process, compare it with an uninterrupted control, and expose live operational metrics without confusing them with evaluation.',
-    outcome: 'The resumable-checkpoint procedure and My Lab dashboard are complete. The learner experiment verifies exact serialization round-trip and separately measures fresh-process floating-point continuity against declared tolerances.',
-    evidence: 'Executable lesson · steps 500→600 · process restart at step 550 · reference evidence intentionally unpromoted',
+    outcome: 'The completed My Lab run saved and reloaded full training state at step 550. All 50 subsequent batches matched; fresh-process arithmetic was not bitwise identical but stayed within the declared parity tolerances.',
+    evidence: 'My Lab complete · tinystories-checkpoint-resume-001 · steps 500→600 · fresh-process restart at step 550',
     sections: [
       {
         id: 'reliability-question', title: 'Why is a weight file not yet a training save?', body: <>
