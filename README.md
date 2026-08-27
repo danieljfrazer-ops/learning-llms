@@ -30,7 +30,7 @@ No previous machine-learning knowledge is assumed. **Beginner Mode** adds deeper
 |---|---|---|---|
 | 01 · Tiny Shakespeare | Expose the complete language-model loop at character scale | Random weights | 12 lessons complete |
 | 02 · TinyStories | Train a small GPT-like model on simple English using subword tokens | Random weights → resumable pretraining | 12 executable lessons complete; reference promotion remains separate |
-| 03 · English → SQL | Contrast pretraining with task adaptation and executable evaluation | Pretrained small model | Lesson 1 executable; reference evidence not yet promoted |
+| 03 · English → SQL | Contrast pretraining with task adaptation and executable evaluation | Pretrained small model | 5 executable lessons complete; reference evidence not yet promoted |
 | 04 · Sentiment laboratory | Independently build a classifier with robustness and calibration checks | Fully scaffolded extension | Optional |
 | 05 · Dialogue summarisation | Ask your coding agent to scaffold a careful sequence-to-sequence project | Agent brief only | Optional |
 | 06 · Your own question | Choose a domain, task, data, baseline, and evidence standard | Themes only | Open exploration |
@@ -146,6 +146,17 @@ uv run --no-sync python ml/sql_task_dataset_audit.py
 ```
 
 The downloader verifies the official WikiSQL 1.1 archive and writes raw files only under `data/raw/`. The audit performs no model training: it validates the structured examples, measures split overlap, and smoke-tests a restricted read-only evaluator. Dataset redistribution remains blocked pending review because the upstream repository does not explicitly resolve the dataset licence.
+
+Continue through the development-only model and prompt selections, bounded LoRA adaptation, and one-time sampled test evaluation:
+
+```sh
+uv run python ml/sql_base_model_selection.py
+uv run python ml/sql_prompt_formatting.py
+uv run python ml/sql_lora_fine_tuning.py
+uv run python ml/sql_execution_evaluation.py
+```
+
+The first three commands never load the test split. Generated text is not executed directly: it must parse into the restricted WikiSQL logical form before the evaluator rebuilds parameterized SQL for a read-only SQLite database. All measurements and adapter files remain learner-local unless a maintainer separately reviews and explicitly promotes reference evidence.
 
 ## Repository map
 

@@ -252,7 +252,41 @@ The audit checks all structured examples against their table schemas, measures e
 
 Keep the test split closed during base-model selection. A successful audit proves the declared checks and evaluator work; it does not measure model accuracy, establish SQL safety beyond the benchmark, or grant dataset redistribution rights.
 
-## 10. Keep your work private or publish it deliberately
+## 10. Select a local base model without opening test
+
+```sh
+uv run python ml/sql_base_model_selection.py
+```
+
+Lesson 2 pins two Apache-2.0 instruction-model conversions and evaluates a seeded 24-example development sample with greedy decoding. Each candidate runs in a separate process so its MLX peak allocation is measured and released independently. The predeclared rule requires a successful pinned load below 8 GiB, then selects by development execution accuracy, logical-form exact match, valid restricted SQL, memory, and model ID. A failed download is recorded as an ineligible mechanical failure, not an accuracy result.
+
+Generated text never reaches SQLite. It must parse into the course's selected-column, optional-aggregation, and `AND`-condition structure; only that structure is rebuilt with quoted identifiers and parameterized values. Evidence is written to `public/data/local/sql-base-model-selection.json` and `work/experiments/sql-base-model-selection-001/`. Zero execution accuracy remains a valid pre-adaptation baseline.
+
+## 11. Freeze a prompt serialization
+
+```sh
+uv run python ml/sql_prompt_formatting.py
+```
+
+Lesson 3 reads the selected model revision instead of choosing again. On a fresh seeded development sample it changes only schema serialization: compact column descriptors, a DDL-like declaration, or JSON. All variants contain column IDs, original names, and types but no table rows, reference query, expected answer, or demonstrations. The selection hierarchy is execution, exact match, validity, prompt-token count, then style name. Outputs live under the corresponding local JSON and ignored experiment directory.
+
+## 12. Train and inspect a bounded LoRA adapter
+
+```sh
+uv run python ml/sql_lora_fine_tuning.py
+```
+
+Lesson 4 hashes 512 seeded training examples and 64 development examples serialized with the frozen prompt. It uses MLX-LM rank-8 LoRA on the final eight layers, batch size 2, prompt-masked completion loss, learning rate `1e-5`, and 100 optimizer updates. The command first saves a zero-update random adapter and verifies that its outputs match the base, because MLX-LM initializes the LoRA B matrix to zero. It then saves the trained adapter, loss trace, adapter checksum, and development behavior comparison. The base weights remain frozen and required for inference; test stays closed.
+
+## 13. Open a sampled test protocol once
+
+```sh
+uv run python ml/sql_execution_evaluation.py
+```
+
+Lesson 5 freezes the base revision, trained-adapter checksum, selected prompt, greedy decoder, 96-token limit, test seed, and default 100-example sample before loading test. It compares only the base and already trained adapter, reports execution as primary, and groups failures by restricted grammar, selected column, aggregation, condition count, and condition details. The sample is not the full WikiSQL test set, and no post-test model or prompt selection is allowed. The final result and full records remain under learner-local evidence paths.
+
+## 14. Keep your work private or publish it deliberately
 
 My Lab artifacts are ignored. To preserve your journey, create a separate branch or repository policy for selected JSON/configuration files; do not commit raw datasets or every checkpoint by default. Review dataset terms and remove private prompts before sharing.
 

@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Small language-model experiments explained by a living wiki"
 requires-python = ">=3.12,<3.14"
 dependencies = [
+  "mlx-lm[train]==0.31.3",
   "tokenizers==0.23.1",
 ]
 
