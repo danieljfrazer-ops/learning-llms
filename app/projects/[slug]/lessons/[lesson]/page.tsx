@@ -14,6 +14,7 @@ import { LocalEvidencePlaceholder, LocalOnly, ReferenceOnly, StageState } from '
 import { getProject, projects } from '@/lib/wiki-data';
 import { getShakespeareLesson } from '@/lib/shakespeare-lessons';
 import { getTinyStoriesLesson } from '@/lib/tinystories-lessons';
+import { LessonVisual } from '@/app/components/LearningVisual';
 
 const referenceEvidenceSections: Record<string, string[]> = {
   'random-baseline': ['sample'],
@@ -58,6 +59,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       </nav>
 
       {richLesson && <BeginnerLessonIntro lessonSlug={lessonSlug} />}
+      <LessonVisual lessonSlug={lessonSlug} />
 
       {project.slug === 'shakespeare' && ['context-windows', 'self-attention', 'tiny-transformer'].includes(lessonSlug) && <ModelComparison />}
       {project.slug === 'shakespeare' && lessonSlug === 'evaluation' && <EvaluationPanel />}

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { projects as projectRecords } from '@/lib/wiki-data';
 import { BeginnerModeToggle, BeginnerOnly } from '@/app/components/BeginnerMode';
 import { EvidenceMachineCard, EvidenceModeToggle, LocalOnly, ReferenceOnly } from '@/app/components/EvidenceMode';
+import { CourseMapVisual } from '@/app/components/LearningVisual';
 
 const projects = projectRecords.map(project => ({ ...project, href: `/projects/${project.slug}` }));
 
@@ -46,6 +47,7 @@ export default function Home() {
 
         <section className="section" id="projects">
           <div className="section-heading"><div><p className="kicker">THE CURRICULUM</p><h2>Three models, one mental map</h2></div><p>We begin with random noise, scale into language, then learn how fine-tuning differs from training from scratch.</p></div>
+          <CourseMapVisual />
           <div className="project-grid">
             {projects.map((project) => <Link href={project.href} className="project-card" key={project.name}><div className="project-card-top"><span className="project-number">{project.number}</span><span className={`status status-${project.progress ? 'active' : 'planned'}`}>{project.status}</span></div><h3>{project.name}</h3><p>{project.description}</p><div className="progress-label"><span>{project.stage}</span><span>{project.progress}%</span></div><div className="progress-track"><span style={{ width: `${Math.max(project.progress, 2)}%` }} /></div></Link>)}
           </div>

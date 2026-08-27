@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import WikiChrome from '@/app/components/WikiChrome';
 import { BeginnerOnly } from '@/app/components/BeginnerMode';
+import { LearningVisual } from '@/app/components/LearningVisual';
 
 const steps = [
   { number: '1', title: 'Define the question', standard: 'State what the model should learn and how we will tell whether it learned it.', why: 'Without a promised measurement, “make it better” invites us to favour whatever output happens to look impressive afterward.', explain: 'Name the input, desired output, comparison baseline, metric, and important constraint before changing code.', picture: 'Mark the finish line and timing method before runners start.' },
@@ -17,6 +18,12 @@ export default function TrainingLifecycle() {
   return <WikiChrome active="path"><article className="article-page">
     <div className="breadcrumbs"><Link href="/">Dashboard</Link><span>/</span><strong>Learning path</strong></div>
     <header className="article-hero single"><div><p className="kicker">THE REPEATABLE LOOP</p><h1>From raw text to evidence</h1><p>Every project follows the same scientific shape. The models and datasets change; the discipline of making comparable, reproducible experiments does not.</p></div></header>
+    <LearningVisual title="The course’s recurring causal chain" description="Training changes weights; checkpointing preserves them; evaluation observes them without further updates." kind="cycle" steps={[
+      { label: 'Text → tokens', detail: 'Create numerical model inputs', tone: 'input' },
+      { label: 'Logits → loss', detail: 'Score next-token predictions', tone: 'warning' },
+      { label: 'Gradients → updates', detail: 'Change trainable weights', tone: 'process' },
+      { label: 'Checkpoint → evaluation', detail: 'Save and measure the resulting state', tone: 'evidence' },
+    ]} footer="Inference uses the saved weights to generate; it does not continue the correction loop." />
     <BeginnerOnly className="beginner-lesson-intro"><p className="kicker">BEGINNER MODE · THE BIG PICTURE</p><h2>Training is a correction loop, not a knowledge upload</h2><p>We do not place rules or sentences directly inside the model. We arrange a prediction exercise, calculate how poor its probability assignments were, and repeatedly adjust numerical weights. Separate evaluation tells us whether those adjustments help on text excluded from practice.</p><div className="beginner-intro-grid"><section><strong>Think like a coach</strong><p>Prepare → practise → score → correct → save → examine → change one condition.</p></section><section><strong>Do not overread the metaphor</strong><p>The model is not a pupil with beliefs or motivation. “Practice” and “correction” name numerical forward passes, loss calculations, gradients, and updates.</p></section></div></BeginnerOnly>
     <section className="lifecycle">{steps.map(step => <article key={step.number}><span>{step.number}</span><div><h2>{step.title}</h2><p>{step.standard}</p><BeginnerOnly className="lifecycle-plain"><dl><div><dt>Why</dt><dd>{step.why}</dd></div><div><dt>What happens</dt><dd>{step.explain}</dd></div><div><dt>Picture it</dt><dd>{step.picture}</dd></div></dl></BeginnerOnly></div></article>)}</section>
     <aside className="principle-card"><p className="kicker">CORE PRINCIPLE</p><h2>Never improve a model you have not measured.</h2><p>A simple baseline makes progress legible. Without it, added complexity may produce more impressive-looking code without producing a better model.</p></aside>

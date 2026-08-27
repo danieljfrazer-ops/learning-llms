@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import WikiChrome from '@/app/components/WikiChrome';
+import { LearningVisual } from '@/app/components/LearningVisual';
 
 const sentimentStages = [
   ['01', 'Frame classification', 'Define positive/negative prediction, class balance, accuracy, F1, calibration, and an untouched test set.'],
@@ -16,6 +17,12 @@ export default function ContinueLearning() {
   return <WikiChrome active="continue"><article className="article-page">
     <div className="breadcrumbs"><Link href="/">Dashboard</Link><span>/</span><strong>Continue independently</strong></div>
     <header className="article-hero single"><div><p className="kicker">PROJECTS 04–06 · GRADUALLY REMOVE THE SCAFFOLD</p><h1>Make the learning path yours</h1><p>These three extensions deliberately provide decreasing structure. The first gives you a complete lesson spine, the second gives your coding agent a design brief, and the third leaves you with themes and questions.</p></div></header>
+    <LearningVisual title="Scaffolding decreases as your experimental judgement grows" description="The evidence standard stays fixed even while the course supplies fewer design decisions." kind="compare" steps={[
+      { label: 'Full lesson spine', detail: 'Sentiment: follow and then question the structure', tone: 'input' },
+      { label: 'Scientific brief', detail: 'Summarisation: design lessons within guardrails', tone: 'process' },
+      { label: 'Open theme', detail: 'Choose the question, data, baseline, and measures', tone: 'warning' },
+      { label: 'Independent evidence', detail: 'Defend the claim and its limitations', tone: 'evidence' },
+    ]} />
 
     <section className="lesson-section"><div className="lesson-title"><span>04</span><div><p className="kicker">FULL SCAFFOLD · SUPERVISED CLASSIFICATION</p><h2>Movie-review sentiment laboratory</h2><p className="section-intro">Learn how a language model becomes a classifier and why evaluation needs more than one accuracy number.</p></div></div><div className="two-column"><div><h3>The task</h3><p>Use Stanford’s <a className="inline-source" href="https://nlp.stanford.edu/~amaas/data/sentiment/" target="_blank" rel="noreferrer">Large Movie Review Dataset</a>: 25,000 labelled training reviews and 25,000 labelled test reviews. Compare a simple non-neural baseline, zero-shot prompting, and parameter-efficient adaptation of a small pretrained model.</p></div><aside className="callout"><strong>New ideas introduced</strong><p>Classification heads, precision/recall/F1, calibration, confusion matrices, dataset shortcuts, robustness slices, and model cards.</p></aside></div><div className="stage-list independent-stage-list">{sentimentStages.map(stage => <article className="stage-row" key={stage[0]}><span className="stage-index">{stage[0]}</span><div><h3>{stage[1]}</h3><p>{stage[2]}</p></div><span className="stage-action"><strong>scaffolded</strong></span></article>)}</div></section>
 

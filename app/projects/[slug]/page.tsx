@@ -6,6 +6,7 @@ import ModelComparison from '@/app/components/ModelComparison';
 import { getProject, projects } from '@/lib/wiki-data';
 import { BeginnerProjectGuide } from '@/app/components/BeginnerGuidance';
 import { LocalOnly, ReferenceOnly, StageState } from '@/app/components/EvidenceMode';
+import { ProjectJourneyVisual } from '@/app/components/LearningVisual';
 
 export function generateStaticParams() { return projects.map(project => ({ slug: project.slug })); }
 
@@ -16,6 +17,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <div className="breadcrumbs"><Link href="/">Dashboard</Link><span>/</span><span>Projects</span><span>/</span><strong>{project.shortName}</strong></div>
       <header className="article-hero"><div><p className="kicker">PROJECT {project.number} · {project.method.toUpperCase()}</p><h1>{project.name}</h1><p>{project.objective}</p></div><ReferenceOnly><div className="stage-stamp"><span>REFERENCE COURSE</span><strong>{project.stage}</strong><small>{project.progress}% of planned journey</small><div className="progress-track"><i style={{ width: `${Math.max(project.progress, 2)}%` }} /></div></div></ReferenceOnly><LocalOnly><div className="stage-stamp local-stage-stamp"><span>YOUR LOCAL LAB</span><strong>Ready to reproduce</strong><small>Run lessons in order; your dashboards begin empty.</small><div className="progress-track"><i style={{ width: '2%' }} /></div></div></LocalOnly></header>
       <BeginnerProjectGuide project={project.slug} />
+      <ProjectJourneyVisual name={project.shortName} stages={project.stages} />
 
       {project.slug === 'shakespeare' && <LiveMetrics />}
       {project.slug === 'shakespeare' && <ModelComparison />}
