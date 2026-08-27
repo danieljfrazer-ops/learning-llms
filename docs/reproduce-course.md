@@ -234,7 +234,25 @@ The selection rule keeps the lowest complete validation loss as a practical infe
 
 After Lesson 12, restart `ml/tinystories_inference_server.py`. Its checksum-verified checkpoint list adds the selected final seed when `tinystories-final.json` is complete.
 
-## 9. Keep your work private or publish it deliberately
+## 9. Begin English → SQL with a task and dataset audit
+
+Project 3 does not begin by downloading a pretrained model. First freeze what the model may see, the restricted program it must produce, and how correctness will be measured:
+
+```sh
+uv run --no-sync python scripts/download_wikisql.py
+uv run --no-sync python ml/sql_task_dataset_audit.py
+```
+
+The downloader retrieves the official WikiSQL 1.1 archive, verifies SHA-256 `755c…0881`, and safely writes only the nine expected split, table, and SQLite files under `data/raw/wikisql-1.1/`. These raw files and their manifest are ignored. The repository code is BSD-3-Clause, but the upstream project does not explicitly resolve the dataset licence; treat redistribution as blocked pending review.
+
+The audit checks all structured examples against their table schemas, measures exact normalized question and table-ID overlap between train, development, and test, and executes a seeded 100-query sample per split. Execution uses read-only SQLite connections, query-only mode, whitelisted reference operators, quoted identifiers, and parameterized values. It never executes free-form model output and performs no model training. It writes:
+
+- `public/data/local/sql-task-dataset-audit.json`; and
+- `work/experiments/sql-task-dataset-audit-001/config.json`.
+
+Keep the test split closed during base-model selection. A successful audit proves the declared checks and evaluator work; it does not measure model accuracy, establish SQL safety beyond the benchmark, or grant dataset redistribution rights.
+
+## 10. Keep your work private or publish it deliberately
 
 My Lab artifacts are ignored. To preserve your journey, create a separate branch or repository policy for selected JSON/configuration files; do not commit raw datasets or every checkpoint by default. Review dataset terms and remove private prompts before sharing.
 

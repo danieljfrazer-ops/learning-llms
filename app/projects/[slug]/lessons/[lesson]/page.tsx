@@ -14,6 +14,7 @@ import { LocalEvidencePlaceholder, LocalOnly, ReferenceOnly, StageState } from '
 import { getProject, projects } from '@/lib/wiki-data';
 import { getShakespeareLesson } from '@/lib/shakespeare-lessons';
 import { getTinyStoriesLesson } from '@/lib/tinystories-lessons';
+import { getSqlLesson } from '@/lib/sql-lessons';
 import { LessonVisual } from '@/app/components/LearningVisual';
 
 const referenceEvidenceSections: Record<string, string[]> = {
@@ -41,7 +42,8 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
   if (!project || !stage) notFound();
   const richLesson = project.slug === 'shakespeare'
     ? getShakespeareLesson(lessonSlug)
-    : project.slug === 'tinystories' ? getTinyStoriesLesson(lessonSlug) : undefined;
+    : project.slug === 'tinystories' ? getTinyStoriesLesson(lessonSlug)
+    : project.slug === 'sql' ? getSqlLesson(lessonSlug) : undefined;
   const previous = project.stages[stageIndex - 1];
   const next = project.stages[stageIndex + 1];
   const onward = project.slug === 'shakespeare' ? { href: '/projects/tinystories', label: 'Next project · TinyStories' } : project.slug === 'tinystories' ? { href: '/projects/sql', label: 'Next project · English → SQL' } : { href: '/continue', label: 'Continue independently' };
