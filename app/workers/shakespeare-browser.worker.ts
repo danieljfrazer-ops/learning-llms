@@ -38,6 +38,7 @@ let manifestPromise: Promise<Manifest> | null = null;
 
 ort.env.wasm.numThreads = 1;
 ort.env.wasm.proxy = false;
+ort.env.wasm.wasmPaths = '/browser/';
 
 function manifest(): Promise<Manifest> {
   manifestPromise ??= fetch('/models/shakespeare/manifest.json', { cache: 'force-cache' }).then(async response => {

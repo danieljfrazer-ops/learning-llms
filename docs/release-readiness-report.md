@@ -1,6 +1,6 @@
 # Public-release readiness report
 
-Status date: 28 August 2026. The GitHub repository is public; the Cloudflare production site still requires the final named-access approval recorded below.
+Status date: 28 August 2026. The GitHub repository is public and the owner has approved public access at the resolved Cloudflare hostname.
 
 ## Completed preparation
 
@@ -10,7 +10,7 @@ Status date: 28 August 2026. The GitHub repository is public; the Cloudflare pro
 - README onboarding covers Apple silicon, Linux MLX profiles, unsupported backends, reduced-compute adaptations, data download, inference, and evidence ownership.
 - The public visitor experience states exactly what is readable, runnable locally, browser-capable, and still gated.
 - Repository-native lesson audits and a least-privilege GitHub Actions workflow make validation runnable by a stranger without a private Codex skill installation.
-- Dependabot, a private vulnerability-reporting policy, ignored secret/local paths, a high-confidence full-history credential audit, Cloudflare response headers, a 25 MiB asset check, and absolute-path checks establish the initial security baseline.
+- Dependabot, a private vulnerability-reporting policy, ignored secret/local paths, a high-confidence full-history credential audit, Cloudflare response headers, a 25 MiB static-asset check, a conservative 3 MiB Worker-module check, and absolute-path checks establish the initial security baseline.
 - The Cloudflare runbook now matches the actual Workers + static-assets build instead of describing a Pages-only deployment.
 - The production build removes any ignored `public/data/local/` copies from `dist`, preventing a maintainer's My Lab evidence or prompts from entering a deploy artifact.
 - Internal course links use durable document navigation because rendered QA found errors in Vinext beta's client prefetch/router path; this trades speculative transitions for reliable deep links and back/forward navigation.
@@ -22,15 +22,16 @@ Status date: 28 August 2026. The GitHub repository is public; the Cloudflare pro
 - The owner selected Apache-2.0 for software/model files, CC BY 4.0 for original educational content, the `danieljfrazer-ops/learning-llms` identity, public issues/pull requests, private commit-email rewriting, and the free `workers.dev` hostname.
 - GitHub is published at <https://github.com/danieljfrazer-ops/learning-llms>; the resolved Cloudflare hostname is <https://learning-llms.daniel-j-frazer.workers.dev>.
 - Cloudflare Workers is confirmed on the Free plan dashboard at 0 / 100,000 requests for the day and $0.00 billable usage before this release.
-- Gitleaks 8.30.1 independently scanned all 31 pre-release commits. Its 21 initial generic-key matches were verified as published `tokenizerSha256` integrity fields; a narrow line-level allowlist documents that false-positive class, after which the full-history scan passed.
+- The first production upload was rejected before deployment because Vinext had included the 13.6 MiB browser WASM file in the Worker module graph. The corrected build emits the browser worker, Emscripten loader, and WASM runtime as static assets; the server modules total about 1.6 MiB uncompressed, and CI now prevents this packaging regression.
+- Gitleaks 8.30.1 independently scanned all 33 pre-release commits. Its 21 initial generic-key matches were verified as published `tokenizerSha256` integrity fields; a narrow line-level allowlist documents that false-positive class, after which the full-history scan passed.
 
 ## Deliberate release blockers
 
 1. **Remaining platform claim:** Linux must remain labelled framework-supported but unverified until a clean-clone test records its timings and disk use; this does not block an Apple-verified release.
-2. **Final operational QA:** rehearse rollback against the exact tagged Cloudflare candidate before public access.
+2. **Final operational QA:** deploy the corrected, green tagged candidate and record its Cloudflare version as the rollback/redeployment target.
 
 `python3 scripts/audit_public_repo.py --release` enforces repository/licence/model-manifest invariants. `npm run audit:browser` independently executes the published ONNX files through WebAssembly and compares them with frozen MLX fixtures.
 
-## Publication boundary
+## Publication authority
 
-No remote, GitHub repository, tag, Cloudflare application, deployment, DNS record, paid plan, or public access setting is created by this preparation. Those actions use one reviewed commit and require a separate final instruction from the owner.
+Daniel Frazer approved public GitHub publication and then explicitly approved public access at <https://learning-llms.daniel-j-frazer.workers.dev>. No paid plan, custom domain, public inference API, learner-data store, or analytics product is authorised or required.
