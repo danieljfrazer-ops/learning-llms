@@ -938,7 +938,7 @@ model.eval()`}</Code>
       {
         id: 'selection', title: 'Select seed 43 while retaining the ensemble result', body: <>
           <p>The predeclared rule chooses the lowest complete validation loss, with the lower seed breaking an exact tie. Seed 43 therefore becomes the practical final checkpoint at <code>work/experiments/tinystories-final-001/seed-043/checkpoint-0700.safetensors</code>, checksum <code>bcba50…5c94c</code>. The playground can load this file for qualitative use.</p>
-          <p>This selection reuses a validation set already involved in dataset, tokenizer, recipe, and architecture decisions. Seed 43 is the best observed development checkpoint, not an unbiased estimate of future performance. The architecture result remains 3.8154 ± 0.0449 across three paths.</p>
+          <p>This selection reuses a validation set already involved in dataset, tokenizer, recipe, and architecture decisions. No untouched TinyStories test split exists in this bounded course sample. Seed 43 is therefore the best observed development checkpoint, not an unbiased estimate of future performance. The architecture result remains 3.8154 ± 0.0449 across three paths.</p>
         </>,
       },
       {

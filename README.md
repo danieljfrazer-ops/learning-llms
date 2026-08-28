@@ -206,6 +206,7 @@ After the three core projects, open the wiki’s **Continue yourself** page or r
 - [Reproduce from a blank clone](docs/reproduce-course.md)
 - [Reference results versus My lab](docs/evidence-modes.md)
 - [Agent-assisted learning workflow](docs/agent-workflow.md)
+- [TinyStories and English → SQL lesson quality red-team](docs/tinystories-sql-lesson-red-team.md)
 - [Independent project extensions](docs/independent-projects.md)
 - [Publishing GitHub and the Cloudflare wiki](docs/publishing-github-and-cloudflare.md)
 - [Future public-release checklist](docs/public-release-checklist.md)

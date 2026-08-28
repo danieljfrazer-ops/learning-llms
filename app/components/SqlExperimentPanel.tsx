@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useEvidenceUrl } from './EvidenceMode';
 
-type MetricRow = { checkpoint?: string; style?: string; sampleSize: number; validSql: number; logicalFormExact: number; executionCorrect: number; peakMemoryBytes?: number };
+type MetricRow = { checkpoint?: string; style?: string; sampleSize: number; validSql: number; logicalFormExact: number; executionCorrect: number; peakMemoryBytes?: number; failureGroups?: Record<string, number> };
 type ModelResult = MetricRow & { candidate: { id: string; license: string; upstreamParametersBillions: number }; eligible: boolean };
 type SqlEvidence = {
   status: string;
@@ -31,6 +31,22 @@ function name(row: MetricRow | ModelResult) {
   return row.style ?? row.checkpoint ?? 'candidate';
 }
 
+function wilsonInterval(successes: number, total: number) {
+  if (total <= 0) return null;
+  const z = 1.96;
+  const proportion = successes / total;
+  const denominator = 1 + (z * z) / total;
+  const centre = (proportion + (z * z) / (2 * total)) / denominator;
+  const margin = z * Math.sqrt((proportion * (1 - proportion) + (z * z) / (4 * total)) / total) / denominator;
+  return [Math.max(0, centre - margin), Math.min(1, centre + margin)].map(value => `${(value * 100).toFixed(1)}%`);
+}
+
+function leadingFailure(row: MetricRow) {
+  const entries = Object.entries(row.failureGroups ?? {});
+  if (!entries.length) return null;
+  return entries.sort((left, right) => right[1] - left[1])[0];
+}
+
 export default function SqlExperimentPanel({ filename, lesson }: { filename: string; lesson: string }) {
   const evidenceUrl = useEvidenceUrl(filename);
   const [loaded, setLoaded] = useState<{ url: string; data: SqlEvidence | null }>({ url: '', data: null });
@@ -53,9 +69,20 @@ export default function SqlExperimentPanel({ filename, lesson }: { filename: str
       <div><small>PRIMARY METRIC</small><strong>execution</strong></div>
     </div>
     {evidence ? <>
-      <table className="lesson-table"><thead><tr><th>Candidate</th><th>Valid SQL</th><th>Exact</th><th>Execution</th><th>Sample</th></tr></thead><tbody>
-        {rows.map(row => <tr key={name(row)}><td>{name(row)}</td><td>{row.validSql}</td><td>{row.logicalFormExact}</td><td>{row.executionCorrect}</td><td>{row.sampleSize}</td></tr>)}
-      </tbody></table>
+      <div className="lesson-table-scroll" role="region" aria-label={`${lesson} metric table`} tabIndex={0}>
+        <table className="lesson-table"><thead><tr><th>Candidate</th><th>Valid SQL</th><th>Exact</th><th>Execution</th><th>Sample</th></tr></thead><tbody>
+          {rows.map(row => {
+            const interval = lesson === 'execution-evaluation' ? wilsonInterval(row.executionCorrect, row.sampleSize) : null;
+            return <tr key={name(row)}><td>{name(row)}</td><td>{row.validSql}</td><td>{row.logicalFormExact}</td><td>{row.executionCorrect}{interval && <small className="metric-uncertainty">{interval[0]}–{interval[1]} · 95% Wilson interval</small>}</td><td>{row.sampleSize}</td></tr>;
+          })}
+        </tbody></table>
+      </div>
+      {lesson === 'execution-evaluation' && <div className="transition-evidence-grid sql-failure-summary">
+        {rows.map(row => {
+          const failure = leadingFailure(row);
+          return <article key={name(row)}><strong>{name(row)}: most frequent failure</strong><p>{failure ? `${failure[0]} · ${failure[1]} of ${row.sampleSize}` : 'No failure groups recorded.'}</p></article>;
+        })}
+      </div>}
       {evidence.zeroEffectCheck && <p className="evaluation-foot">Random adapter matched base outputs: <strong>{String(evidence.zeroEffectCheck.randomAdapterMatchesBaseOutputs)}</strong>. Trained adapter size: {evidence.training ? `${(evidence.training.adapterBytes / 1024).toFixed(1)} KiB` : '—'}.</p>}
       {evidence.comparison && <p className="evaluation-foot">Trained minus base on the frozen test sample: execution {evidence.comparison.executionCorrectDelta >= 0 ? '+' : ''}{evidence.comparison.executionCorrectDelta}; exact {evidence.comparison.exactMatchDelta >= 0 ? '+' : ''}{evidence.comparison.exactMatchDelta}; valid SQL {evidence.comparison.validSqlDelta >= 0 ? '+' : ''}{evidence.comparison.validSqlDelta}.</p>}
       <aside className="lesson-caveat"><strong>Interpret inside the boundary</strong><p>{evidence.limits[0]}</p></aside>

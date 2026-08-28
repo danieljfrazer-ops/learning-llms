@@ -211,6 +211,7 @@ export const glossary = [
   ['Vocabulary-dependent parameters', 'Model weights whose count grows directly with vocabulary size, especially the token-embedding table and next-token output projection.'],
   ['Weight', 'A trainable numerical parameter that transforms information inside a neural network.'],
   ['Warmup', 'A short opening phase in which the learning rate rises gradually toward its main value, reducing the size of the earliest updates.'],
+  ['Wilson interval', 'An approximate uncertainty range for a proportion such as execution accuracy. A 95% Wilson interval is designed to contain the underlying rate in about 95% of repeated comparable samples; it is not a 95% probability that this one interval contains a universal true value.'],
   ['Key vector', 'In attention, the learned representation that a query compares with to decide relevance.'],
 ] as const;
 
