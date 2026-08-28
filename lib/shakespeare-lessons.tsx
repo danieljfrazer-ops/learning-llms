@@ -90,13 +90,10 @@ export const shakespeareLessons: RichLesson[] = [
       {
         id: 'download', title: 'Download the source corpus', body: <>
           <p>We downloaded the Tiny Shakespeare text directly from the <Source href="https://github.com/karpathy/char-rnn/tree/master/data/tinyshakespeare">Karpathy char-rnn dataset repository</Source>. The resulting UTF-8 file contained 40,000 lines and 1,115,394 bytes.</p>
-          <Code>{`curl --fail --location \
-  https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt \
-  --output data/raw/tiny-shakespeare.txt
-
-wc -c -l data/raw/tiny-shakespeare.txt
-# 40000 lines · 1115394 bytes`}</Code>
-          <p>The raw corpus is not committed to Git because it can always be recovered from its recorded source. Dataset provenance remains linked in the lesson.</p>
+          <Code>{`uv run --no-sync python scripts/download_tiny_shakespeare.py
+# Downloaded and verified data/raw/tiny-shakespeare.txt (1,115,394 bytes)`}</Code>
+          <p>The downloader writes a temporary file, verifies SHA-256 <code>86c4e6…565ed</code>, then atomically replaces the ignored raw path. An existing file with that hash is reused. This turns the source URL into a reproducible input rather than trusting whichever bytes a direct download happens to return.</p>
+          <p>The upstream repository describes Tiny Shakespeare as a subset of Shakespeare&apos;s works and carries an <Source href="https://github.com/karpathy/char-rnn/blob/master/LICENSE">MIT licence</Source>, but the dataset directory does not separately explain how that grant applies to the compiled corpus. Keep the raw file uncommitted and review corpus and derived-checkpoint redistribution separately before public release.</p>
         </>,
       },
       {
@@ -484,7 +481,7 @@ output = hidden + self.feed_forward(
       { id: 'purpose', title: 'Freeze the rules before reading the result', body: <>
         <p>An <Term id="evaluation-protocol">evaluation protocol</Term> specifies the data, batches, metrics, prompts and random seeds applied to every candidate. Freezing those rules prevents us from quietly choosing easier examples for a preferred model.</p>
         <p>Training answers “did the optimiser reduce error on examples it sampled?” Evaluation asks “does the saved model make better predictions on held-out text, and does the improvement remain visible under repeated measurement?” No gradients or optimiser updates occur in this lesson.</p>
-        <aside className="lesson-caveat"><strong>Development evaluation, not a final test</strong><p>The existing corpus has a 90% training and 10% validation split but no untouched test set. We have already used validation results to guide architecture choices, so this evidence supports development decisions rather than an unbiased final performance claim. The final-model lesson will define a fresh test strategy before another model is trained.</p></aside>
+        <aside className="lesson-caveat"><strong>Development evaluation, not a final test</strong><p>The existing corpus has a 90% training and 10% validation split but no untouched test set. We have already used validation results to guide architecture choices, so this evidence supports development decisions rather than an unbiased final performance claim. The final lesson will repeat complete training across seeds, but that replication cannot retroactively create an untouched test set.</p></aside>
       </> },
       { id: 'protocol', title: 'Use identical batches and seeds', body: <>
         <p>The script loads each of the seven <Term id="checkpoint">checkpoints</Term> and evaluates it on five repeatable estimates. Each repeat contains 20 batches × 32 windows × 64 positions = 40,960 next-character predictions. The five repeats therefore cover 204,800 sampled predictions per data split and checkpoint.</p>

@@ -48,7 +48,7 @@ Do not combine CUDA 12 and CUDA 13 profiles. On non-Apple systems, verify requir
 uv run --no-sync python scripts/download_tiny_shakespeare.py
 ```
 
-The downloader verifies SHA-256 `86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed` before replacing the destination. The dataset remains ignored under `data/raw/`.
+The downloader verifies SHA-256 `86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed` before replacing the destination. The dataset remains ignored under `data/raw/`. The upstream repository carries an MIT licence, but the dataset directory does not separately explain how that grant applies to the compiled corpus; review corpus and derived-checkpoint redistribution before any public release.
 
 ## 5. Execute lessons in order
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Require one engineering brief for every executable TinyStories and SQL lesson."""
+"""Require one engineering brief for every executable core-course lesson."""
 
 from __future__ import annotations
 
@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 LESSON_FILES = (
+    ROOT / "lib/shakespeare-lessons.tsx",
     ROOT / "lib/tinystories-lessons.tsx",
     ROOT / "lib/sql-lessons.tsx",
 )
