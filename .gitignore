@@ -39,6 +39,7 @@ yarn-error.log*
 .vercel
 next-env.d.ts
 /dist/
+/public/browser/
 /.wrangler/
 /outputs/
 /work/

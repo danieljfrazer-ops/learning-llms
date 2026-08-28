@@ -25,6 +25,7 @@ REQUIRED_FILES = [
     "scripts/system_report.py", "scripts/audit_beginner_guidance.py",
     "scripts/audit_lesson_visuals.py", "scripts/audit_git_history.py",
     "scripts/scrub_private_build.mjs", "scripts/audit_shakespeare_browser.mjs",
+    "scripts/build_shakespeare_browser_worker.mjs", "scripts/audit_cloudflare_bundle.mjs",
     "LICENSE", "LICENSE-CONTENT.md", "NOTICE",
     "app/workers/shakespeare-browser.worker.ts", "public/models/shakespeare/manifest.json",
 ]

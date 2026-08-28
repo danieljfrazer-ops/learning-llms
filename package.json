@@ -6,12 +6,15 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "build:browser": "node scripts/build_shakespeare_browser_worker.mjs",
+    "predev": "npm run build:browser",
     "dev": "vinext dev",
-    "build": "vinext build && node scripts/scrub_private_build.mjs",
+    "prebuild": "npm run build:browser",
+    "build": "vinext build && node scripts/scrub_private_build.mjs && node scripts/audit_cloudflare_bundle.mjs",
     "audit:browser": "node scripts/audit_shakespeare_browser.mjs",
     "preview": "vite preview",
     "start": "vinext start",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern public/browser"
   },
   "dependencies": {
     "next": "16.3.3",
@@ -29,6 +32,7 @@
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.2",
     "@vitejs/plugin-rsc": "0.5.34",
+    "esbuild": "0.28.1",
     "eslint": "9.39.4",
     "eslint-config-next": "16.3.3",
     "react-server-dom-webpack": "19.2.8",

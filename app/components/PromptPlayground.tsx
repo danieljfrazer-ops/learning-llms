@@ -57,7 +57,9 @@ export default function PromptPlayground() {
       return;
     }
 
-    const worker = new Worker(new URL('../workers/shakespeare-browser.worker.ts', import.meta.url), { type: 'module' });
+    // Keep the browser-only ONNX runtime outside the server module graph. The
+    // prebuild step emits this worker and its WASM runtime as static assets.
+    const worker = new Worker('/browser/shakespeare-worker.js', { type: 'module' });
     const requests = pendingRequests.current;
     workerRef.current = worker;
     worker.onmessage = event => {
