@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import subprocess
@@ -23,7 +24,9 @@ REQUIRED_FILES = [
     "scripts/download_tiny_shakespeare.py", "scripts/download_tinystories_sample.py",
     "scripts/system_report.py", "scripts/audit_beginner_guidance.py",
     "scripts/audit_lesson_visuals.py", "scripts/audit_git_history.py",
-    "scripts/scrub_private_build.mjs",
+    "scripts/scrub_private_build.mjs", "scripts/audit_shakespeare_browser.mjs",
+    "LICENSE", "LICENSE-CONTENT.md", "NOTICE",
+    "app/workers/shakespeare-browser.worker.ts", "public/models/shakespeare/manifest.json",
 ]
 
 REQUIRED_REFERENCE_RESULTS = {
@@ -64,6 +67,14 @@ def contains_key(value: Any, forbidden: set[str]) -> bool:
 def tracked_files() -> list[Path]:
     output = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT)
     return [ROOT / item.decode() for item in output.split(b"\0") if item]
+
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def main() -> int:
@@ -134,6 +145,31 @@ def main() -> int:
     package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
     if "scrub_private_build.mjs" not in package.get("scripts", {}).get("build", ""):
         errors.append("production build does not scrub learner-local evidence copies")
+
+    manifest_path = ROOT / "public" / "models" / "shakespeare" / "manifest.json"
+    if manifest_path.is_file():
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            models = {model.get("id"): model for model in manifest.get("models", [])}
+            for model_id in ("random", "minimal", "baseline", "final"):
+                model = models.get(model_id)
+                if not model:
+                    errors.append(f"browser manifest missing required checkpoint stage: {model_id}")
+                    continue
+                model_path = manifest_path.parent / str(model.get("file", ""))
+                if not model_path.is_file():
+                    errors.append(f"browser model file is missing: {model_path.relative_to(ROOT)}")
+                else:
+                    if model_path.stat().st_size > MAX_TRACKED_BYTES:
+                        errors.append(f"browser model exceeds Cloudflare's 25 MiB asset limit: {model_path.relative_to(ROOT)}")
+                    if file_sha256(model_path) != model.get("sha256"):
+                        errors.append(f"browser model checksum differs from manifest: {model_path.relative_to(ROOT)}")
+                if not model.get("parameters") or any(not parameter.get("sourceSha256") for parameter in model.get("parameters", [])):
+                    errors.append(f"browser model lacks layer-by-layer source checksums: {model_id}")
+            if manifest.get("promptsStayOnDevice") is not True:
+                errors.append("browser model manifest does not assert on-device prompt handling")
+        except (OSError, json.JSONDecodeError, TypeError) as problem:
+            errors.append(f"invalid browser model manifest: {problem}")
 
     if args.release:
         if not any((ROOT / name).is_file() for name in ("LICENSE", "LICENSE.md", "LICENSE.txt")):

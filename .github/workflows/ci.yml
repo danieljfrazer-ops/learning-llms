@@ -34,6 +34,7 @@ jobs:
       - run: python3 scripts/audit_lesson_engineering_briefs.py
       - run: python3 scripts/audit_public_repo.py
       - run: python3 scripts/audit_git_history.py
+      - run: npm run audit:browser
       - run: python3 -m compileall -q ml scripts
       - run: npm run lint
       - run: npm run build

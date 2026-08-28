@@ -16,3 +16,6 @@ linux-cuda13 = ["mlx[cuda13]==0.32.0; sys_platform == 'linux'"]
 
 [tool.uv]
 package = false
+
+[dependency-groups]
+export = ["onnx==1.22.0"]

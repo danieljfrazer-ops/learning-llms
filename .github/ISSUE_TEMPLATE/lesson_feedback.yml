@@ -1,0 +1,24 @@
+name: Lesson feedback
+description: Suggest a clearer explanation, example, visual, or hardware adaptation.
+title: "[Lesson]: "
+labels: [documentation]
+body:
+  - type: input
+    id: lesson
+    attributes:
+      label: Project and lesson
+      placeholder: TinyStories · Lesson 04 · Sequence batching
+    validations:
+      required: true
+  - type: textarea
+    id: gap
+    attributes:
+      label: What was unclear or missing?
+      description: Describe where a non-technical learner would lose the causal thread.
+    validations:
+      required: true
+  - type: textarea
+    id: improvement
+    attributes:
+      label: Suggested improvement
+      description: If possible, propose a concrete explanation, visual relationship, or bounded example.

@@ -1,6 +1,6 @@
 # Publishing GitHub and the Cloudflare wiki
 
-This is the coordinated release plan for the end of the three core projects. It is preparation guidance, not permission to publish. Creating the GitHub repository, changing site access, connecting Cloudflare, or deploying publicly always requires an explicit final request from the repository owner.
+This is the coordinated release record for the first public version of the three core projects. Daniel Frazer approved the GitHub and Cloudflare publication on 28 August 2026. The exact resolved `workers.dev` hostname still receives a final named approval before production access is enabled.
 
 ## Intended public experience
 
@@ -17,21 +17,21 @@ Complete this before either public launch.
 
 ### Select and package the evidence
 
-- [ ] Freeze the reviewed Shakespeare architecture, vocabulary, configuration, and selected run identifiers.
-- [ ] Select a small, educational checkpoint set: random weights, minimally trained, baseline transformer, and final model.
-- [ ] Decide whether browser weights live in the repository, GitHub release assets, or Cloudflare static assets.
-- [ ] Publish a checksum, parameter count, training step, seed, and source run identifier for every browser artifact.
-- [ ] Confirm that the repository licence and dataset terms permit distributing the selected weights.
+- [x] Freeze the reviewed Shakespeare architecture, vocabulary, configuration, and selected run identifiers.
+- [x] Select random, minimally trained, baseline transformer, and final checkpoints.
+- [x] Store the compact browser weights as versioned repository and Cloudflare static assets.
+- [x] Publish a checksum, parameter count, training step, seed, and source run identifier for every browser artifact.
+- [x] Review the repository licence, upstream corpus status, and derived-weight distribution decision.
 
 ### Build browser inference
 
-- [ ] Export each selected MLX checkpoint to a browser-readable model, preferably ONNX or ORT format.
-- [ ] Implement the exact character vocabulary, encoding, context truncation, logits processing, temperature, and sampling rules used by the local model.
-- [ ] Run inference off the main page thread so generation does not freeze navigation.
-- [ ] Use WebAssembly as the compatibility baseline; add WebGPU as an optional acceleration path rather than the only path.
-- [ ] Lazy-load model files only when the visitor opens or starts the playground.
-- [ ] Keep prompts on the visitor's device and state this beside the playground.
-- [ ] Provide honest loading, unsupported-browser, corrupt-model, out-of-memory, and generation-failure states.
+- [x] Export each selected MLX checkpoint to ONNX.
+- [x] Implement the course's exact character vocabulary, encoding, context truncation, logits processing, temperature, and checkpoint behavior.
+- [x] Run inference in a Web Worker so generation does not freeze navigation.
+- [x] Use WebAssembly as the compatibility baseline. WebGPU remains a future performance enhancement and is not required for this small model.
+- [x] Lazy-load model files only when the visitor opens or starts the playground.
+- [x] Keep prompts on the visitor's device and state this beside the playground.
+- [x] Provide honest loading, unsupported-browser, corrupt-model, memory, validation, and generation-failure states.
 
 [ONNX Runtime Web](https://onnxruntime.ai/docs/tutorials/web/) documents browser inference with WebAssembly and WebGPU. Its [browser compatibility table](https://onnxruntime.ai/docs/get-started/with-javascript/web.html) should be checked again at release time because browser support changes.
 
@@ -39,14 +39,14 @@ Complete this before either public launch.
 
 Do not approve the browser playground merely because its output looks Shakespeare-like.
 
-- [ ] Compare MLX and browser token IDs for fixed input strings, including newlines and unknown-input handling.
-- [ ] Compare checkpoint parameters or conversion manifests layer by layer.
-- [ ] Compare logits from fixed token sequences within a documented numerical tolerance.
-- [ ] Require identical greedy continuations for fixed prompts wherever the numerical backend permits it.
-- [ ] Test seeded sampling separately and document any random-number-generator difference that prevents exact text equality.
-- [ ] Check random, minimally trained, baseline, and final checkpoints—not only the most attractive model.
-- [ ] Test checkpoint switching without stale weights or cached labels.
-- [ ] Record model download size, initialisation time, generation speed, browser, device, and execution backend.
+- [x] Compare MLX and browser token IDs for fixed input strings, including newlines and unknown-input handling.
+- [x] Compare checkpoint conversion manifests layer by layer.
+- [x] Compare logits from fixed token sequences within the published `0.015` maximum-absolute-difference tolerance.
+- [x] Require identical greedy continuations except for one documented near-tie in the minimally trained checkpoint; final and baseline continuations match.
+- [x] Keep deterministic browser sampling while documenting that its JavaScript random-number generator is not MLX's generator.
+- [x] Check random, minimally trained, baseline, and final checkpoints.
+- [x] Test checkpoint switching and compare-all behavior without stale weights or labels.
+- [x] Record download sizes and observed browser generation behavior; speeds remain device-dependent rather than promised benchmarks.
 
 ### Preserve local and public behaviour
 
@@ -96,7 +96,7 @@ These actions require explicit owner approval at the time of release.
 3. Create the first tagged GitHub release, including scope, hardware evidence, limitations, artifact checksums, and browser support.
 4. Create or connect a `learning-llms` Worker through Workers Builds Git integration and make `main` the production branch.
 5. Deploy the exact tagged commit to a non-public or preview URL first.
-6. Smoke-test representative lessons, internal links, Reference/My Lab behaviour, every published checkpoint, WebAssembly fallback, and at least one supported WebGPU browser.
+6. Smoke-test representative lessons, internal links, Reference/My Lab behaviour, every published checkpoint, and the WebAssembly compatibility path. WebGPU is not part of this release.
 7. Obtain a final explicit approval that names the resolved public site access.
 8. Make the Cloudflare wiki public and verify the production URL, security headers, metadata, accessibility, and rollback path.
 9. Add reciprocal links: GitHub links to the hosted wiki; the wiki links to the tagged source and reproduction instructions.

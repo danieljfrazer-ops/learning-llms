@@ -1,0 +1,11 @@
+LearningLLMs
+Copyright 2026 Daniel Frazer
+
+Software and exported LearningLLMs Shakespeare model files are licensed under
+Apache License 2.0. Original lesson prose, documentation, and course-native
+educational diagrams are licensed under CC BY 4.0; see LICENSE-CONTENT.md.
+
+The Tiny Shakespeare corpus is downloaded separately from Andrej Karpathy's
+char-rnn repository and is not redistributed in this repository. ONNX Runtime
+Web is an MIT-licensed third-party runtime dependency and is not part of the
+LearningLLMs original work.

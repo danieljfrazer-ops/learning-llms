@@ -1,0 +1,36 @@
+name: Bug report
+description: Report a reproducible problem in the wiki, setup, or experiment code.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Please remove credentials, private prompts, datasets, and local checkpoint contents before posting.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Include the lesson, command, expected behaviour, and observed behaviour.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Paste the non-sensitive output of `python3 scripts/system_report.py` and relevant package versions.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: List the smallest sequence of commands or browser actions that reproduces the problem.
+    validations:
+      required: true
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Public-data check
+      options:
+        - label: I removed secrets, personal paths, private prompts, raw datasets, and checkpoint contents.
+          required: true

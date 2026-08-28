@@ -131,13 +131,14 @@ const lessonVisuals: Record<string, Omit<LearningVisualProps, 'compact'>> = {
     ],
   },
   'prompt-playground': {
-    title: 'The interface and the model are separate processes',
-    description: 'The browser sends settings to a local service; only the Python process loads weights and performs tensor operations.',
+    kind: 'compare',
+    title: 'One interface chooses between two private inference paths',
+    description: 'A local clone calls the learner’s loopback MLX service; the public wiki runs reviewed ONNX weights inside a browser worker.',
     steps: [
       { label: 'Browser form', detail: 'Prompt · model · temperature · seed', tone: 'input' },
-      { label: 'Local JSON request', detail: 'A defined API boundary', tone: 'process' },
-      { label: 'MLX inference service', detail: 'Load checkpoint and generate', tone: 'process' },
-      { label: 'Completion', detail: 'Text plus identifying metadata', tone: 'evidence' },
+      { label: 'Local clone', detail: 'JSON → 127.0.0.1 → learner MLX weights', tone: 'process' },
+      { label: 'Public wiki', detail: 'Web Worker → WebAssembly → reviewed ONNX weights', tone: 'process' },
+      { label: 'Private completion', detail: 'No training; no public prompt API', tone: 'evidence' },
     ],
   },
   'training-improvements': {

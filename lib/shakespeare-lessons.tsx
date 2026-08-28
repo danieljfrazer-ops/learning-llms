@@ -93,7 +93,7 @@ export const shakespeareLessons: RichLesson[] = [
           <Code>{`uv run --no-sync python scripts/download_tiny_shakespeare.py
 # Downloaded and verified data/raw/tiny-shakespeare.txt (1,115,394 bytes)`}</Code>
           <p>The downloader writes a temporary file, verifies SHA-256 <code>86c4e6…565ed</code>, then atomically replaces the ignored raw path. An existing file with that hash is reused. This turns the source URL into a reproducible input rather than trusting whichever bytes a direct download happens to return.</p>
-          <p>The upstream repository describes Tiny Shakespeare as a subset of Shakespeare&apos;s works and states an <Source href="https://github.com/karpathy/char-rnn#license">MIT licence</Source> in its README, but the dataset directory does not separately explain how that grant applies to the compiled corpus. Keep the raw file uncommitted and review corpus and derived-checkpoint redistribution separately before public release.</p>
+          <p>The upstream repository describes Tiny Shakespeare as a subset of Shakespeare&apos;s works and states an <Source href="https://github.com/karpathy/char-rnn#license">MIT licence</Source> in its README. The raw corpus remains an uncommitted download; the public release distributes only original LearningLLMs model files derived from that corpus, under Apache-2.0 with source URL, corpus checksum and run provenance recorded in the browser manifest.</p>
         </>,
       },
       {
@@ -528,20 +528,19 @@ output = hidden + self.feed_forward(
   {
     slug: 'prompt-playground',
     title: 'Prompt saved checkpoints from the wiki',
-    summary: 'Connect the browser interface to a loopback-only Python inference service, load any saved checkpoint, encode learner-written text and generate a continuation one character at a time.',
-    outcome: 'The wiki can complete an arbitrary valid Shakespeare prompt with random, minimally trained, baseline-final or improved-recipe weights and compare them under identical settings.',
-    evidence: 'Completed · local API on 127.0.0.1:8001 · baseline and warmup-cosine runs · Apple GPU generation',
+    summary: 'Use either learner-owned MLX checkpoints through a loopback-only service or reviewed public ONNX checkpoints inside an on-device WebAssembly worker.',
+    outcome: 'The wiki can privately complete a valid Shakespeare prompt with genuine random, minimally trained, baseline or final course weights and compare them under identical settings.',
+    evidence: 'Completed · local MLX API · four public ONNX checkpoints · 12 MLX/WebAssembly parity comparisons · prompts stay on-device',
     sections: [
       { id: 'two-processes', title: 'Separate the interface from model inference', body: <>
-        <p>The wiki runs in a JavaScript development server, while MLX and the checkpoints live in Python. A small <Term id="inference-service">inference service</Term> connects them: the browser sends a JSON request through an <Term id="api">API</Term>, Python invokes the model, and JSON returns the continuation.</p>
-        <Code>{`Browser UI :3000
-    │ POST /generate { prompt, checkpoint, temperature, ... }
-    ▼
-Python inference service :8001
-    │ encode → load weights → autoregressive sampling
-    ▼
-MLX model on Apple GPU`}</Code>
-        <p>This boundary keeps the educational model code readable and allows checkpoints to remain local. The service binds only to <code>127.0.0.1</code>, the loopback address of this Mac; it is not a hosted public model endpoint.</p>
+        <p>The same form has two inference paths. A local clone sends JSON through an <Term id="api">API</Term> to the learner&apos;s Python/MLX <Term id="inference-service">inference service</Term>. The public wiki instead loads reviewed ONNX files into a Web Worker and runs them with WebAssembly inside the visitor&apos;s browser.</p>
+        <Code>{`Local clone                         Public wiki
+Browser form                        Browser form
+  ↓ JSON to 127.0.0.1:8001            ↓ message to Web Worker
+Python + learner MLX checkpoint     WebAssembly + reviewed ONNX checkpoint
+  ↓                                   ↓
+Completion stays on the laptop      Completion stays in the browser`}</Code>
+        <p>Neither path sends prompts to a hosted model or changes weights. The local service binds only to <code>127.0.0.1</code>; the hosted path has no public inference endpoint, account, prompt log or database.</p>
       </> },
       { id: 'start', title: 'Start the two local processes', body: <>
         <Code>{`# Terminal 1 — wiki (already running in this lab)
@@ -549,7 +548,7 @@ npm run dev
 
 # Terminal 2 — checkpoint inference
 uv run --no-sync python ml/shakespeare_inference_server.py`}</Code>
-        <p>The browser checks <code>GET http://127.0.0.1:8001/health</code> when the page loads. A green “Ready” badge confirms that Python found the baseline and improved-recipe checkpoint files and MLX reports the Apple GPU. If Python stops, the lesson remains readable and the playground shows the exact restart command.</p>
+        <p>On localhost, the browser checks <code>GET http://127.0.0.1:8001/health</code>. A green “Ready” badge confirms that Python found learner checkpoints and MLX reports its device. On the public hostname, the browser instead reads <code>/models/shakespeare/manifest.json</code>, starts a worker and lazy-loads only the selected static model. If either engine fails, the lesson and reviewed samples remain readable.</p>
         <p>The server is built with Python&apos;s standard <code>ThreadingHTTPServer</code>. Python explicitly warns that <Source href="https://docs.python.org/3/library/http.server.html">http.server is not recommended for production</Source>; it is appropriate here only because this is a local teaching service with bounded inputs.</p>
       </> },
       { id: 'load', title: 'Reconstruct and cache a selected checkpoint', body: <>
@@ -562,8 +561,8 @@ uv run --no-sync python ml/shakespeare_inference_server.py`}</Code>
 )
 model.load_weights("checkpoint-3000.safetensors")
 mx.eval(model.parameters())`}</Code>
-        <p>A checkpoint contains learned tensors, not the Python architecture. The service reconstructs the same class and dimensions recorded by the training configuration before loading weights. Models are loaded lazily on first selection and cached in memory, so later requests avoid reading the same 440 KB file again.</p>
-        <p>Selecting baseline step 0 invokes genuine random initial weights saved before training. Baseline step 1 shows the minimally trained state, while “Improved recipe · step 3,000” loads the later warmup-and-cosine result. “Compare every checkpoint” runs the seven baseline stages plus the improved final model with all other controls unchanged.</p>
+        <p>A checkpoint contains learned tensors, not the architecture that uses them. The local service reconstructs the recorded MLX class before loading Safetensors. For the public path, the maintainer export freezes that same graph and its weights into ONNX; the manifest records source-run IDs, shapes, per-layer checksums, model checksums and configuration.</p>
+        <p>The public selector exposes four deliberate stages: genuine random weights at step 0, minimally trained weights at step 1, the 112,065-parameter baseline at step 3,000, and the selected 420,673-parameter final seed-43 model. “Compare every checkpoint” holds the prompt and sampling controls fixed.</p>
       </> },
       { id: 'encode-prompt', title: 'Encode the prompt and respect the 64-character context', body: <>
         <p>The <Term id="prompt">prompt</Term> is encoded with the same 65-character vocabulary used during training. A character outside that vocabulary produces an explicit error rather than being silently replaced. This simple tokenizer therefore accepts Shakespeare&apos;s letters, spaces and known punctuation but not arbitrary emoji or unseen Unicode characters.</p>
@@ -578,7 +577,7 @@ logits = model(mx.array([context]))[0, -1]`}</Code>
     next_id = mx.random.categorical(logits)
     generated.append(next_id)
     context = generated[-64:]`}</Code>
-        <p>This is <Term id="autoregressive">autoregressive</Term> inference. Each sampled character becomes input for the next model call. <Term id="temperature">Temperature</Term> rescales logits: lower values favour the model&apos;s highest-scoring options; higher values increase variety and errors. The seed makes categorical sampling repeatable for the same model, prompt and settings.</p>
+        <p>This is <Term id="autoregressive">autoregressive</Term> inference. Each sampled character becomes input for the next model call. <Term id="temperature">Temperature</Term> rescales logits: lower values favour the model&apos;s highest-scoring options; higher values increase variety and errors. The seed is repeatable within one engine; MLX and the browser use different random-number generators, so sampled text is not promised to match across engines.</p>
         <p>Output length controls work, not context: asking for 400 new characters causes 400 forward passes, while every pass still sees at most 64 characters.</p>
       </> },
       { id: 'invoke', title: 'See the exact request behind the button', body: <>
@@ -593,10 +592,11 @@ logits = model(mx.array([context]))[0, -1]`}</Code>
     "seed": 42
   }'`}</Code>
         <p>The measured response took 0.086 seconds and continued: <code> blood thing whose same; and stay speak.\n\nABTRUTUS:…</code>. Repeating the request with the same values produces the same sampled continuation; changing the seed explores another valid path through the probability distribution.</p>
+        <p>On the public wiki there is no HTTP generation request. The form posts an in-memory message to <code>shakespeare-browser.worker.ts</code>; ONNX Runtime Web performs the tensor operations with WebAssembly and returns an in-memory result. The published parity fixture checks 12 prompt/checkpoint pairs against MLX with a 0.015 absolute logit tolerance and records one near-tied minimally trained greedy choice.</p>
       </> },
       { id: 'controls', title: 'Use the playground as an experiment, not a slot machine', body: <>
         <ol><li>Enter one prompt and keep it unchanged.</li><li>Set temperature 0.8, seed 42 and a modest output length.</li><li>Compare every checkpoint to isolate the effect of training progress.</li><li>Then hold the final checkpoint fixed and change one control at a time.</li><li>Record failures as well as unusually good samples.</li></ol>
-        <p>The service validates checkpoint names, temperature 0.1–2.0, output length 1–500 and prompt length up to 2,000 characters. Requests are serialised around MLX generation to avoid concurrent mutation of its shared random generator.</p>
+        <p>Both engines validate checkpoint names, temperature 0.1–2.0, output length 1–500, prompt length up to 2,000 characters and the exact 65-character vocabulary. Local requests are serialised around MLX generation; the hosted model runs off the main page thread so generation does not freeze navigation.</p>
       </> },
       { id: 'limits', title: 'Understand what prompting does not change', body: <>
         <p>A prompt conditions existing weights; it does not teach new facts or update the model. This character model has no instruction training, so “Write a sonnet about Mars” is merely another character prefix rather than a command it understands.</p>

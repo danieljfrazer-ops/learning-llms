@@ -23,6 +23,7 @@ export default function Home() {
           <Link className="nav-link" href="/continue"><span>04+</span> Continue yourself</Link>
           <p className="nav-label">REFERENCE</p>
           <Link className="nav-link" href="/glossary"><span>A–Z</span> Glossary</Link>
+          <a className="nav-link" href="https://github.com/danieljfrazer-ops/learning-llms" target="_blank" rel="noreferrer"><span>↗</span> GitHub source</a>
           <a className="nav-link" href="#toolkit"><span>⌘</span> Toolkit</a>
         </nav>
         <EvidenceMachineCard />
@@ -58,7 +59,7 @@ export default function Home() {
           <div className="project-grid">
             <article className="project-card"><div className="project-card-top"><span className="project-number">WEB</span><span className="status status-active">READ</span></div><h3>Complete reference course</h3><p>Twenty-nine core lessons, Beginner Mode, diagrams, glossary, measured dashboards, limitations, and sources—without blank results masquerading as evidence.</p></article>
             <article className="project-card"><div className="project-card-top"><span className="project-number">LAB</span><span className="status status-active">RUN</span></div><h3>Clone and reproduce</h3><p>Hardware-aware setup, verified downloads, readable experiments, ignored local evidence, and loopback-only Shakespeare and TinyStories playgrounds.</p></article>
-            <article className="project-card"><div className="project-card-top"><span className="project-number">AI</span><span className="status status-planned">GATED</span></div><h3>Honest browser models</h3><p>Public Shakespeare prompting will ship only after the genuine checkpoints pass MLX/browser parity. TinyStories and SQL show their current local-only boundaries explicitly.</p></article>
+            <article className="project-card"><div className="project-card-top"><span className="project-number">AI</span><span className="status status-active">ON-DEVICE</span></div><h3>Prompt genuine course models</h3><p>Four Shakespeare checkpoints run privately in a WebAssembly worker after passing MLX/browser parity. TinyStories and SQL state their current local-only boundaries explicitly.</p></article>
           </div>
         </section>
 

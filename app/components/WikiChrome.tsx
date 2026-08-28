@@ -12,6 +12,7 @@ export default function WikiChrome({ active, children }: { active: string; child
         <p className="nav-label">PROJECTS</p>{link('/projects/shakespeare', 'Shakespeare', '01', 'shakespeare')}{link('/projects/tinystories', 'TinyStories', '02', 'tinystories')}{link('/projects/sql', 'English → SQL', '03', 'sql')}
         <p className="nav-label">INDEPENDENT</p>{link('/continue', 'Continue yourself', '04+', 'continue')}
         <p className="nav-label">REFERENCE</p>{link('/glossary', 'Glossary', 'A–Z', 'glossary')}
+        <p className="nav-label">SOURCE</p><a className="nav-link" href="https://github.com/danieljfrazer-ops/learning-llms"><span>↗</span>GitHub repository</a>
       </nav>
       <EvidenceMachineCard />
     </aside>

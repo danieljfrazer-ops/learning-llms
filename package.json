@@ -8,12 +8,14 @@
   "scripts": {
     "dev": "vinext dev",
     "build": "vinext build && node scripts/scrub_private_build.mjs",
+    "audit:browser": "node scripts/audit_shakespeare_browser.mjs",
     "preview": "vite preview",
     "start": "vinext start",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
   },
   "dependencies": {
     "next": "16.3.3",
+    "onnxruntime-web": "1.29.0",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },

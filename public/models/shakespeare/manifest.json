@@ -1,0 +1,1613 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-08-28T10:18:02.682132+00:00",
+  "course": "LearningLLMs",
+  "modelFamily": "Tiny Shakespeare decoder-only transformers",
+  "format": "ONNX",
+  "opset": 18,
+  "browserBackend": "ONNX Runtime Web WebAssembly",
+  "runtimeVersion": "1.29.0",
+  "promptsStayOnDevice": true,
+  "dataset": {
+    "name": "Tiny Shakespeare",
+    "source": "https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt",
+    "sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+    "bytes": 1115394
+  },
+  "vocabulary": [
+    "\n",
+    " ",
+    "!",
+    "$",
+    "&",
+    "'",
+    ",",
+    "-",
+    ".",
+    "3",
+    ":",
+    ";",
+    "?",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z"
+  ],
+  "unknownCharacterPolicy": "reject",
+  "parityFixture": {
+    "file": "parity-fixture.json",
+    "sha256": "a6695fd54b202650e33f7900ede94a0398a9c97df3d89605b13a6496599e2f45",
+    "logitAbsoluteTolerance": 0.015
+  },
+  "models": [
+    {
+      "id": "random",
+      "label": "Random weights · step 0",
+      "file": "random.onnx",
+      "bytes": 457424,
+      "sha256": "d8666b5a874b48f17215a7fe3c04eacc5fc7ba67311a48a21d993425231ec8bf",
+      "sourceCheckpoint": "experiments/shakespeare-transformer-001/checkpoint-0000.safetensors",
+      "sourceCheckpointSha256": "fb247b93fea2054a570250bc89c8b7e3be08969692162d7aded9e6f1a0b658a1",
+      "sourceRunId": "shakespeare-transformer-001",
+      "step": 0,
+      "seed": 42,
+      "contextSize": 64,
+      "modelSize": 64,
+      "attentionHeads": 4,
+      "transformerBlocks": 2,
+      "parameterCount": 112065,
+      "parameters": [
+        {
+          "sourceName": "token_embedding.weight",
+          "sourceShape": [
+            65,
+            64
+          ],
+          "sourceSha256": "95c30a91069590c7031cf1371349afddef3444337c2ca5aee4a83aeef7a6eb93",
+          "exportedName": "token_embedding.weight",
+          "exportedShape": [
+            65,
+            64
+          ],
+          "exportedSha256": "95c30a91069590c7031cf1371349afddef3444337c2ca5aee4a83aeef7a6eb93",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "position_embedding.weight",
+          "sourceShape": [
+            64,
+            64
+          ],
+          "sourceSha256": "9b02994d7c0d4d59f69be389a3979751fa2bc986b7e875624f310adefbae2955",
+          "exportedName": "position_embedding.weight",
+          "exportedShape": [
+            64,
+            64
+          ],
+          "exportedSha256": "9b02994d7c0d4d59f69be389a3979751fa2bc986b7e875624f310adefbae2955",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+          "exportedName": "blocks.layers.0.attention_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+          "exportedName": "blocks.layers.0.attention_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention.query_key_value.weight",
+          "sourceShape": [
+            192,
+            64
+          ],
+          "sourceSha256": "94760860c7a2ca45a736038b3c075c1f0b524f2be313a80bae6789c2cccabcf2",
+          "exportedName": "blocks.layers.0.attention.query_key_value.weight.transpose",
+          "exportedShape": [
+            64,
+            192
+          ],
+          "exportedSha256": "51748f8cad8bdff78edb06159c24bae5ebdaff08354fbd0521fbf7f1434c247c",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention.projection.weight",
+          "sourceShape": [
+            64,
+            64
+          ],
+          "sourceSha256": "cf3615c6c200ecacc53dc87643149ca2bdeb847b65b0cdd83793b0d02bb2fca0",
+          "exportedName": "blocks.layers.0.attention.projection.weight.transpose",
+          "exportedShape": [
+            64,
+            64
+          ],
+          "exportedSha256": "06582a6ca733756154e1e40f4cb7194967a075e510db3e8c46cc592c8526f805",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+          "exportedName": "blocks.layers.0.feed_forward_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+          "exportedName": "blocks.layers.0.feed_forward_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.expand.weight",
+          "sourceShape": [
+            256,
+            64
+          ],
+          "sourceSha256": "9f770a9fe13427b01262c4a72efb29aea406e99d282ab13d58712f00a4ce40d8",
+          "exportedName": "blocks.layers.0.feed_forward.expand.weight.transpose",
+          "exportedShape": [
+            64,
+            256
+          ],
+          "exportedSha256": "c19e3112201640fec47e1afa7b29f7a32658d07ab4792ea19df44fbee7690181",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.expand.bias",
+          "sourceShape": [
+            256
+          ],
+          "sourceSha256": "0af666d7f644045600ada8b56714ecffc7385b5a6491a138f0f02e1a14da8848",
+          "exportedName": "blocks.layers.0.feed_forward.expand.bias",
+          "exportedShape": [
+            256
+          ],
+          "exportedSha256": "0af666d7f644045600ada8b56714ecffc7385b5a6491a138f0f02e1a14da8848",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.contract.weight",
+          "sourceShape": [
+            64,
+            256
+          ],
+          "sourceSha256": "e572b3347c47390e10577113f243ace0d853d881357d6fbdb055744ed9638d0d",
+          "exportedName": "blocks.layers.0.feed_forward.contract.weight.transpose",
+          "exportedShape": [
+            256,
+            64
+          ],
+          "exportedSha256": "8b1bbc80a8e751f5224460fa0107c9adf0f948e9384574cdab2e80407e911e81",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.contract.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "1e43f42defb7d32d4457f7c7c2309939b005c5b5a85d918a3ce9a2e66520c050",
+          "exportedName": "blocks.layers.0.feed_forward.contract.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "1e43f42defb7d32d4457f7c7c2309939b005c5b5a85d918a3ce9a2e66520c050",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+          "exportedName": "blocks.layers.1.attention_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+          "exportedName": "blocks.layers.1.attention_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention.query_key_value.weight",
+          "sourceShape": [
+            192,
+            64
+          ],
+          "sourceSha256": "52b04a4f47fe5a7895582febd5e37bfd788aa8143814e4181c578e94b6b4758c",
+          "exportedName": "blocks.layers.1.attention.query_key_value.weight.transpose",
+          "exportedShape": [
+            64,
+            192
+          ],
+          "exportedSha256": "05f350be5522052316cfb2f3b7e7759ef6305ab76667909fba5fa698197aded9",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention.projection.weight",
+          "sourceShape": [
+            64,
+            64
+          ],
+          "sourceSha256": "43b682866fe7c131661daf1c7181750e0c66db89fb8aba39d60b531785992996",
+          "exportedName": "blocks.layers.1.attention.projection.weight.transpose",
+          "exportedShape": [
+            64,
+            64
+          ],
+          "exportedSha256": "59c144d45105cae1f08cdc80c7c34e556e54fd930d7004b6f4ea41e5214a9723",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+          "exportedName": "blocks.layers.1.feed_forward_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+          "exportedName": "blocks.layers.1.feed_forward_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.expand.weight",
+          "sourceShape": [
+            256,
+            64
+          ],
+          "sourceSha256": "5fc9758554a17427686cdb24f7fee1a9c4aa138d8e850f3a946d2ff44bcfd74c",
+          "exportedName": "blocks.layers.1.feed_forward.expand.weight.transpose",
+          "exportedShape": [
+            64,
+            256
+          ],
+          "exportedSha256": "62e4d2295aa4b6b7bfa8ef7e50c9485e1ba31fa5e752e5c29f58f7044d3c7f5e",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.expand.bias",
+          "sourceShape": [
+            256
+          ],
+          "sourceSha256": "d2fdfdc1a69bbf8fd0d54aeeaf64dae2cb89a1cd5f87ec6a2e2847c16c3dd75e",
+          "exportedName": "blocks.layers.1.feed_forward.expand.bias",
+          "exportedShape": [
+            256
+          ],
+          "exportedSha256": "d2fdfdc1a69bbf8fd0d54aeeaf64dae2cb89a1cd5f87ec6a2e2847c16c3dd75e",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.contract.weight",
+          "sourceShape": [
+            64,
+            256
+          ],
+          "sourceSha256": "80d9063ff14f803004742c5adec486af90d03c7c2522215d22dcdecceb982c80",
+          "exportedName": "blocks.layers.1.feed_forward.contract.weight.transpose",
+          "exportedShape": [
+            256,
+            64
+          ],
+          "exportedSha256": "de2b7070fdcae8d65f7c51161e6f3028962df6add6fd20dc64eaa2e89d0eafd4",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.contract.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "e79f847783d04c19e69786c152452ce0474d08be7758077c732e9a1e7d6e6b39",
+          "exportedName": "blocks.layers.1.feed_forward.contract.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "e79f847783d04c19e69786c152452ce0474d08be7758077c732e9a1e7d6e6b39",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "final_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+          "exportedName": "final_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "final_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+          "exportedName": "final_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "output.weight",
+          "sourceShape": [
+            65,
+            64
+          ],
+          "sourceSha256": "4a9a5dfb00d7ce5238c7240a66e58ff0f80df044e3877964cab267e86b25533f",
+          "exportedName": "output.weight.transpose",
+          "exportedShape": [
+            64,
+            65
+          ],
+          "exportedSha256": "49b9f582acddeb06eaa522f5db923d0b103554b5624727e972907beba908d78a",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "output.bias",
+          "sourceShape": [
+            65
+          ],
+          "sourceSha256": "edc89b0d2af2ce9962e4c44331f3f7b7c177ce86aefc30621a4d6efc8858517d",
+          "exportedName": "output.bias",
+          "exportedShape": [
+            65
+          ],
+          "exportedSha256": "edc89b0d2af2ce9962e4c44331f3f7b7c177ce86aefc30621a4d6efc8858517d",
+          "transform": "identity"
+        }
+      ]
+    },
+    {
+      "id": "minimal",
+      "label": "Minimally trained · step 1",
+      "file": "minimal.onnx",
+      "bytes": 457425,
+      "sha256": "87cd7d77542e068f22cb77f8c9cd0d58de9845cf4cdcaf4212e2bac88175058f",
+      "sourceCheckpoint": "experiments/shakespeare-transformer-001/checkpoint-0001.safetensors",
+      "sourceCheckpointSha256": "67c8156dbdb0fd6f499f64b91265925922a1aadba24d1ddfc215f6b446b17091",
+      "sourceRunId": "shakespeare-transformer-001",
+      "step": 1,
+      "seed": 42,
+      "contextSize": 64,
+      "modelSize": 64,
+      "attentionHeads": 4,
+      "transformerBlocks": 2,
+      "parameterCount": 112065,
+      "parameters": [
+        {
+          "sourceName": "token_embedding.weight",
+          "sourceShape": [
+            65,
+            64
+          ],
+          "sourceSha256": "d5c3420e3fc16290441447963a4dfea3c4dbda518512fad1400001a84d221051",
+          "exportedName": "token_embedding.weight",
+          "exportedShape": [
+            65,
+            64
+          ],
+          "exportedSha256": "d5c3420e3fc16290441447963a4dfea3c4dbda518512fad1400001a84d221051",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "position_embedding.weight",
+          "sourceShape": [
+            64,
+            64
+          ],
+          "sourceSha256": "b1e9cf3fcfdb490f72187b9707d861000f181390a8d25e6ea6d725fa87878633",
+          "exportedName": "position_embedding.weight",
+          "exportedShape": [
+            64,
+            64
+          ],
+          "exportedSha256": "b1e9cf3fcfdb490f72187b9707d861000f181390a8d25e6ea6d725fa87878633",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "d9412b8ebcf5a7ef73c10ad306b1e102a4bdcccdf774d948872fd66d936f1615",
+          "exportedName": "blocks.layers.0.attention_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "d9412b8ebcf5a7ef73c10ad306b1e102a4bdcccdf774d948872fd66d936f1615",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "6eacdd76389d931624e3377024770046ab6a697ef48ee290a7c5499592b9671b",
+          "exportedName": "blocks.layers.0.attention_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "6eacdd76389d931624e3377024770046ab6a697ef48ee290a7c5499592b9671b",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention.query_key_value.weight",
+          "sourceShape": [
+            192,
+            64
+          ],
+          "sourceSha256": "eb2114fb8e12cb41e737b551ca667d09e6a5c7f047c0292604ac1d5588f3bf83",
+          "exportedName": "blocks.layers.0.attention.query_key_value.weight.transpose",
+          "exportedShape": [
+            64,
+            192
+          ],
+          "exportedSha256": "4ef03fdd1001fe3de98d2f03b5675d7b38ee83c3b699cbd83ac2deb50928bb00",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention.projection.weight",
+          "sourceShape": [
+            64,
+            64
+          ],
+          "sourceSha256": "16cc6dea7847867279ecc92bed424104ad9b9b6f016afda239270ae07d7c7f7d",
+          "exportedName": "blocks.layers.0.attention.projection.weight.transpose",
+          "exportedShape": [
+            64,
+            64
+          ],
+          "exportedSha256": "5dc281e9f906e7ab60fc56de3a78ec30f4d63a0855928eed8174870b9a1164b8",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "3a147899fa9f6ae8ef69bdc9e0b1e73ed4dee81631f9e279994e4743e1732a7f",
+          "exportedName": "blocks.layers.0.feed_forward_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "3a147899fa9f6ae8ef69bdc9e0b1e73ed4dee81631f9e279994e4743e1732a7f",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "b3c7e5cb6fb2889cbd6ac54aa1232812d6b92a42bcbdeb5a8920ed00aa6badea",
+          "exportedName": "blocks.layers.0.feed_forward_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "b3c7e5cb6fb2889cbd6ac54aa1232812d6b92a42bcbdeb5a8920ed00aa6badea",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.expand.weight",
+          "sourceShape": [
+            256,
+            64
+          ],
+          "sourceSha256": "b52eefced2ce7039361d2d9649fa9bd3ae6071eefdb252f7525e24e79b14cacc",
+          "exportedName": "blocks.layers.0.feed_forward.expand.weight.transpose",
+          "exportedShape": [
+            64,
+            256
+          ],
+          "exportedSha256": "dd347346d6f64fa8a7b537cea0705edcc7f73373fe6e6aa175c2221460b6c1b2",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.expand.bias",
+          "sourceShape": [
+            256
+          ],
+          "sourceSha256": "655e20cdb7b30dd8f9b475433a44662239577b0bd6a4225721df0fd8a733ede4",
+          "exportedName": "blocks.layers.0.feed_forward.expand.bias",
+          "exportedShape": [
+            256
+          ],
+          "exportedSha256": "655e20cdb7b30dd8f9b475433a44662239577b0bd6a4225721df0fd8a733ede4",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.contract.weight",
+          "sourceShape": [
+            64,
+            256
+          ],
+          "sourceSha256": "ae6b12138f83af6e96a8ea68e6eba0b593896c2a86854bd4c83c313295ee32a1",
+          "exportedName": "blocks.layers.0.feed_forward.contract.weight.transpose",
+          "exportedShape": [
+            256,
+            64
+          ],
+          "exportedSha256": "33d951a8aa63f3a07be7d799185f8ece34299d06750dd1a21483f2fa68dc1736",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.contract.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "b25a517807fbeac0b0aa312381ada44ea9ef57e0ae0f6f0394fe0941661a055c",
+          "exportedName": "blocks.layers.0.feed_forward.contract.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "b25a517807fbeac0b0aa312381ada44ea9ef57e0ae0f6f0394fe0941661a055c",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "5d621f5792fa0ee3111ed223be7620d0f4b631804ef775503419e21c07ca4a26",
+          "exportedName": "blocks.layers.1.attention_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "5d621f5792fa0ee3111ed223be7620d0f4b631804ef775503419e21c07ca4a26",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "c6f1d39b019bed40f65c569ee60aba6ff31111a776240d214c0e12dbfb249cf6",
+          "exportedName": "blocks.layers.1.attention_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "c6f1d39b019bed40f65c569ee60aba6ff31111a776240d214c0e12dbfb249cf6",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention.query_key_value.weight",
+          "sourceShape": [
+            192,
+            64
+          ],
+          "sourceSha256": "fc52ecb14f54ce8c75086512bcde8e3c0d2ab64477b4c905a2aab692c4abe2a1",
+          "exportedName": "blocks.layers.1.attention.query_key_value.weight.transpose",
+          "exportedShape": [
+            64,
+            192
+          ],
+          "exportedSha256": "8e1b0e0c2deb56b184535c9cd31a22e9fb09529e4480ec1dfbd9d4d41d4cd3d4",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention.projection.weight",
+          "sourceShape": [
+            64,
+            64
+          ],
+          "sourceSha256": "20780bd417b2b025ddb0545143069244da5830514b0420919f579422ebce6faf",
+          "exportedName": "blocks.layers.1.attention.projection.weight.transpose",
+          "exportedShape": [
+            64,
+            64
+          ],
+          "exportedSha256": "95cf3af8492fe3a0d9924c4fcb7f358d469545d60e9cfbd0e8fcdb21e1459a23",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "0c9f16d90157ef5fc18c0af950ceb6044627012cad4131977b8b1a4b4562afbb",
+          "exportedName": "blocks.layers.1.feed_forward_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "0c9f16d90157ef5fc18c0af950ceb6044627012cad4131977b8b1a4b4562afbb",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "1ca21af6ef5893d29492b7c81ba825593d49e5398481c8e0458898bc6865d082",
+          "exportedName": "blocks.layers.1.feed_forward_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "1ca21af6ef5893d29492b7c81ba825593d49e5398481c8e0458898bc6865d082",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.expand.weight",
+          "sourceShape": [
+            256,
+            64
+          ],
+          "sourceSha256": "6c765ea2851599614da028d31aa6c3eb9b0c61070e2b0bf336d7919eff13da49",
+          "exportedName": "blocks.layers.1.feed_forward.expand.weight.transpose",
+          "exportedShape": [
+            64,
+            256
+          ],
+          "exportedSha256": "2ebfde17f714d82713cd8a389dc6055a78120e416e7192d9679883e4a305ec16",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.expand.bias",
+          "sourceShape": [
+            256
+          ],
+          "sourceSha256": "9ab322849c4c90397c8ace12800f889ad8976d86b3ab4cdf56aedbb0f7712c3a",
+          "exportedName": "blocks.layers.1.feed_forward.expand.bias",
+          "exportedShape": [
+            256
+          ],
+          "exportedSha256": "9ab322849c4c90397c8ace12800f889ad8976d86b3ab4cdf56aedbb0f7712c3a",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.contract.weight",
+          "sourceShape": [
+            64,
+            256
+          ],
+          "sourceSha256": "9aff117ddc1dd7993142a4d3e3eaeba5856deb7436cd23ec2ff86e7ee257d878",
+          "exportedName": "blocks.layers.1.feed_forward.contract.weight.transpose",
+          "exportedShape": [
+            256,
+            64
+          ],
+          "exportedSha256": "170fcc81f9096d93fd0074a30ed4f680e494e410e53eb9714ca8495a1037939e",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.contract.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "1fe5dc1d6bc0d613db151ef9a9dd8425349e0f0412904a7bb47334289825c0cc",
+          "exportedName": "blocks.layers.1.feed_forward.contract.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "1fe5dc1d6bc0d613db151ef9a9dd8425349e0f0412904a7bb47334289825c0cc",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "final_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "eb23a9de6aaea437daef9531f8e8007f386881360ed2f334c68617d79d227bea",
+          "exportedName": "final_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "eb23a9de6aaea437daef9531f8e8007f386881360ed2f334c68617d79d227bea",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "final_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "94df5198fb2182e2daa1f6d685042b36140f6ef3724f99687db60337f29c2faf",
+          "exportedName": "final_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "94df5198fb2182e2daa1f6d685042b36140f6ef3724f99687db60337f29c2faf",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "output.weight",
+          "sourceShape": [
+            65,
+            64
+          ],
+          "sourceSha256": "ed0c289e7e331ea135de5301c0a9ac358e8c98adb6f2ed05b0b42297ede70b74",
+          "exportedName": "output.weight.transpose",
+          "exportedShape": [
+            64,
+            65
+          ],
+          "exportedSha256": "e33ff2b180b67c0c20646dfe6b51d7627bde226d9efd67ba310074fa24740396",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "output.bias",
+          "sourceShape": [
+            65
+          ],
+          "sourceSha256": "6a149c64d3aa935a68aec7159ba454320100efd17f916d0e7bc11e1973d0ca56",
+          "exportedName": "output.bias",
+          "exportedShape": [
+            65
+          ],
+          "exportedSha256": "6a149c64d3aa935a68aec7159ba454320100efd17f916d0e7bc11e1973d0ca56",
+          "transform": "identity"
+        }
+      ]
+    },
+    {
+      "id": "baseline",
+      "label": "Baseline 112K transformer · step 3,000",
+      "file": "baseline.onnx",
+      "bytes": 457426,
+      "sha256": "1987320c26c871e029728fe43c536ae90286cf31bae3bdc86dd7ad02da198e8a",
+      "sourceCheckpoint": "experiments/shakespeare-transformer-001/checkpoint-3000.safetensors",
+      "sourceCheckpointSha256": "8f34b089c243e75c9364caf85bd9d6465ab51cc023c789675600069da4e946f0",
+      "sourceRunId": "shakespeare-transformer-001",
+      "step": 3000,
+      "seed": 42,
+      "contextSize": 64,
+      "modelSize": 64,
+      "attentionHeads": 4,
+      "transformerBlocks": 2,
+      "parameterCount": 112065,
+      "parameters": [
+        {
+          "sourceName": "token_embedding.weight",
+          "sourceShape": [
+            65,
+            64
+          ],
+          "sourceSha256": "625248173436d392fde04d1d91017448568de6f0aff0bb28debc812e1f11d718",
+          "exportedName": "token_embedding.weight",
+          "exportedShape": [
+            65,
+            64
+          ],
+          "exportedSha256": "625248173436d392fde04d1d91017448568de6f0aff0bb28debc812e1f11d718",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "position_embedding.weight",
+          "sourceShape": [
+            64,
+            64
+          ],
+          "sourceSha256": "600d0a4fde97bd7443c5e7a0a16120098a81e2a1d59a746bdfb609121c82a0ee",
+          "exportedName": "position_embedding.weight",
+          "exportedShape": [
+            64,
+            64
+          ],
+          "exportedSha256": "600d0a4fde97bd7443c5e7a0a16120098a81e2a1d59a746bdfb609121c82a0ee",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "671dc55426cdd746b5c95582750235f0a12c55e1c1250b41fc1aa2ba3036f164",
+          "exportedName": "blocks.layers.0.attention_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "671dc55426cdd746b5c95582750235f0a12c55e1c1250b41fc1aa2ba3036f164",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "909ea8fb3912c10183e99bc0b0aec16d65905c5ad935d7279a259780fb8b39c0",
+          "exportedName": "blocks.layers.0.attention_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "909ea8fb3912c10183e99bc0b0aec16d65905c5ad935d7279a259780fb8b39c0",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention.query_key_value.weight",
+          "sourceShape": [
+            192,
+            64
+          ],
+          "sourceSha256": "f4c2fd392d8e344710e2d14eae3966f0ad6f6646696ac12dce8491718b6edc65",
+          "exportedName": "blocks.layers.0.attention.query_key_value.weight.transpose",
+          "exportedShape": [
+            64,
+            192
+          ],
+          "exportedSha256": "de1b844806fdc08b6b4bbe07c92ea8e1b649c0d6b17b511f917eb3847ce8e53c",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention.projection.weight",
+          "sourceShape": [
+            64,
+            64
+          ],
+          "sourceSha256": "81f59f9243c98ed8b34954adc56a3d943f8c025627e5d72ba03a4047c8b056e8",
+          "exportedName": "blocks.layers.0.attention.projection.weight.transpose",
+          "exportedShape": [
+            64,
+            64
+          ],
+          "exportedSha256": "b54ee68a586ac1d78acb528eb520f38e589f73ee50a5f9bdaf167fd557944766",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "ad4406af836e4aec82d2f11708eab362774dc7295a9a327807710c5ba7f4cfbf",
+          "exportedName": "blocks.layers.0.feed_forward_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "ad4406af836e4aec82d2f11708eab362774dc7295a9a327807710c5ba7f4cfbf",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "b160ffe614d7793ecae14354aaeee9c6289873390e01b1252488486b91cbb4a8",
+          "exportedName": "blocks.layers.0.feed_forward_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "b160ffe614d7793ecae14354aaeee9c6289873390e01b1252488486b91cbb4a8",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.expand.weight",
+          "sourceShape": [
+            256,
+            64
+          ],
+          "sourceSha256": "daf839a338bb47a842a2c108b4ed87ed9a9c56f94b70fc816d2f3c6544fd00fd",
+          "exportedName": "blocks.layers.0.feed_forward.expand.weight.transpose",
+          "exportedShape": [
+            64,
+            256
+          ],
+          "exportedSha256": "92220fb7a3d419ead1d3797bef85d2842f24e2e6f67afedaa3172e9de8f3580e",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.expand.bias",
+          "sourceShape": [
+            256
+          ],
+          "sourceSha256": "afba3011a537576857776d991121f83f0bae5a294af54f799d56e901be0117e7",
+          "exportedName": "blocks.layers.0.feed_forward.expand.bias",
+          "exportedShape": [
+            256
+          ],
+          "exportedSha256": "afba3011a537576857776d991121f83f0bae5a294af54f799d56e901be0117e7",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.contract.weight",
+          "sourceShape": [
+            64,
+            256
+          ],
+          "sourceSha256": "1c5852f3b6495324759b1f61e7035d4b9487d41116ef9d5375f6856366bf0f87",
+          "exportedName": "blocks.layers.0.feed_forward.contract.weight.transpose",
+          "exportedShape": [
+            256,
+            64
+          ],
+          "exportedSha256": "33ed4d059cba96dffc7f835f30e1ca25b7494027b0d4b0a4a9b21b458686a8df",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.contract.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "3ee991f8ff925cd89784a7c54738f96d50d183d0c046fe12ffca0eb69e09b5ec",
+          "exportedName": "blocks.layers.0.feed_forward.contract.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "3ee991f8ff925cd89784a7c54738f96d50d183d0c046fe12ffca0eb69e09b5ec",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "4f68c2729efd26f0da68a7a36f98ee14f722d34f0fe3d3bb43488892a6ee3b77",
+          "exportedName": "blocks.layers.1.attention_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "4f68c2729efd26f0da68a7a36f98ee14f722d34f0fe3d3bb43488892a6ee3b77",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "e642831dd8f122c7434a83918e92a48a51e128a25b7ad372056db6b0103b4bc5",
+          "exportedName": "blocks.layers.1.attention_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "e642831dd8f122c7434a83918e92a48a51e128a25b7ad372056db6b0103b4bc5",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention.query_key_value.weight",
+          "sourceShape": [
+            192,
+            64
+          ],
+          "sourceSha256": "c43bfe9f9ff633911819c69c54b484ae37a901cbfe7ecf95ea9b986edbf4eecd",
+          "exportedName": "blocks.layers.1.attention.query_key_value.weight.transpose",
+          "exportedShape": [
+            64,
+            192
+          ],
+          "exportedSha256": "19cd6692ebb1c7775ef5585070abea6dd4ca54b5c45b09b38bd4ea5e51a45281",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention.projection.weight",
+          "sourceShape": [
+            64,
+            64
+          ],
+          "sourceSha256": "a67a2e451a92710922bf62fc93ef97e44204081d53ba5d4f2f9c99862b9db999",
+          "exportedName": "blocks.layers.1.attention.projection.weight.transpose",
+          "exportedShape": [
+            64,
+            64
+          ],
+          "exportedSha256": "0e1b66cf1c0b79f82e6657b7fe4394e7432d86757eb1d69d7b4edf58e77bdea1",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "8e4a9614a1bf60f938621cd6f7e79ad1e7d03c5802842a1687c3edd5d361a8df",
+          "exportedName": "blocks.layers.1.feed_forward_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "8e4a9614a1bf60f938621cd6f7e79ad1e7d03c5802842a1687c3edd5d361a8df",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "8c86a039fbc4f46149e9f938a340118d74ff87581d5827579af9439f11979328",
+          "exportedName": "blocks.layers.1.feed_forward_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "8c86a039fbc4f46149e9f938a340118d74ff87581d5827579af9439f11979328",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.expand.weight",
+          "sourceShape": [
+            256,
+            64
+          ],
+          "sourceSha256": "0164a6bb8b22c0df296e824a593bfc3f2f581d356509d6039c29ff06ef891ccb",
+          "exportedName": "blocks.layers.1.feed_forward.expand.weight.transpose",
+          "exportedShape": [
+            64,
+            256
+          ],
+          "exportedSha256": "ad49893a2243a97fde591d9584e15b8894898b64f3c51632871730744752142b",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.expand.bias",
+          "sourceShape": [
+            256
+          ],
+          "sourceSha256": "4f453d5007894aae913b703a1ce0630147c4183e0bb1a5a9b430ad37d435713c",
+          "exportedName": "blocks.layers.1.feed_forward.expand.bias",
+          "exportedShape": [
+            256
+          ],
+          "exportedSha256": "4f453d5007894aae913b703a1ce0630147c4183e0bb1a5a9b430ad37d435713c",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.contract.weight",
+          "sourceShape": [
+            64,
+            256
+          ],
+          "sourceSha256": "06e411cab5e5f154eacc5a87e48b2d4cd4d37334c547f728c67fc73488a1e12c",
+          "exportedName": "blocks.layers.1.feed_forward.contract.weight.transpose",
+          "exportedShape": [
+            256,
+            64
+          ],
+          "exportedSha256": "438a627c3e8b26a842ae4b7d21c5a11620e814d814b269edacaf047556039dbb",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.contract.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "163f730a3a35066029367ed1b06b734b28329bdea232ca5036b63c0d07d78f82",
+          "exportedName": "blocks.layers.1.feed_forward.contract.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "163f730a3a35066029367ed1b06b734b28329bdea232ca5036b63c0d07d78f82",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "final_norm.weight",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "e63772ef26bae7bf612f604782eee7d9c1a8243c17a63f608e49e45e125b350c",
+          "exportedName": "final_norm.weight",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "e63772ef26bae7bf612f604782eee7d9c1a8243c17a63f608e49e45e125b350c",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "final_norm.bias",
+          "sourceShape": [
+            64
+          ],
+          "sourceSha256": "06c9c7870910c6715f6293295bc24759f0fde7ec061749be12b029143a22fd4c",
+          "exportedName": "final_norm.bias",
+          "exportedShape": [
+            64
+          ],
+          "exportedSha256": "06c9c7870910c6715f6293295bc24759f0fde7ec061749be12b029143a22fd4c",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "output.weight",
+          "sourceShape": [
+            65,
+            64
+          ],
+          "sourceSha256": "d1b38d88b083ec18527417fcb367db45bf7de68afea5d4963bedb2227d90fc53",
+          "exportedName": "output.weight.transpose",
+          "exportedShape": [
+            64,
+            65
+          ],
+          "exportedSha256": "3f195e7b0980adea0cb04bd8ae0fe4fac8a26a1598b414d64324647c36ba7447",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "output.bias",
+          "sourceShape": [
+            65
+          ],
+          "sourceSha256": "d4b7eda0d203273456762d885149171614cf846bf128eccc36f1378d43d3a092",
+          "exportedName": "output.bias",
+          "exportedShape": [
+            65
+          ],
+          "exportedSha256": "d4b7eda0d203273456762d885149171614cf846bf128eccc36f1378d43d3a092",
+          "transform": "identity"
+        }
+      ]
+    },
+    {
+      "id": "final",
+      "label": "Final 420K transformer · seed 43 · step 3,000",
+      "file": "final.onnx",
+      "bytes": 1691880,
+      "sha256": "37f11f17a2f9ca1f54e40b24bbd12445685f21946899bd20ddcf5012c5aa3523",
+      "sourceCheckpoint": "experiments/shakespeare-final-seed-043/checkpoint-3000.safetensors",
+      "sourceCheckpointSha256": "157738bbccb4c20ebbbf4ba267f733e3197ab38294b0d9aac9d8df1773810f2a",
+      "sourceRunId": "shakespeare-final-seed-043",
+      "step": 3000,
+      "seed": 43,
+      "contextSize": 64,
+      "modelSize": 128,
+      "attentionHeads": 4,
+      "transformerBlocks": 2,
+      "parameterCount": 420673,
+      "parameters": [
+        {
+          "sourceName": "token_embedding.weight",
+          "sourceShape": [
+            65,
+            128
+          ],
+          "sourceSha256": "46ccc29e95ad36726aa387e0845cfa78503aa0f4af4ecd349a45974545952632",
+          "exportedName": "token_embedding.weight",
+          "exportedShape": [
+            65,
+            128
+          ],
+          "exportedSha256": "46ccc29e95ad36726aa387e0845cfa78503aa0f4af4ecd349a45974545952632",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "position_embedding.weight",
+          "sourceShape": [
+            64,
+            128
+          ],
+          "sourceSha256": "ec74be6141dcf5ceb38a8b71c7f32cf0102a36d8f0fb9a2b78c08e3c3af586f2",
+          "exportedName": "position_embedding.weight",
+          "exportedShape": [
+            64,
+            128
+          ],
+          "exportedSha256": "ec74be6141dcf5ceb38a8b71c7f32cf0102a36d8f0fb9a2b78c08e3c3af586f2",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention_norm.weight",
+          "sourceShape": [
+            128
+          ],
+          "sourceSha256": "62d65ffce63cb9e88d7882bbbb2eb00bdb6031e317eea4444bf66a338a2c9c4f",
+          "exportedName": "blocks.layers.0.attention_norm.weight",
+          "exportedShape": [
+            128
+          ],
+          "exportedSha256": "62d65ffce63cb9e88d7882bbbb2eb00bdb6031e317eea4444bf66a338a2c9c4f",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention_norm.bias",
+          "sourceShape": [
+            128
+          ],
+          "sourceSha256": "593a862d1dfb41baf66a1e9cc91f174511ea7998ada925608749155478bade2d",
+          "exportedName": "blocks.layers.0.attention_norm.bias",
+          "exportedShape": [
+            128
+          ],
+          "exportedSha256": "593a862d1dfb41baf66a1e9cc91f174511ea7998ada925608749155478bade2d",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention.query_key_value.weight",
+          "sourceShape": [
+            384,
+            128
+          ],
+          "sourceSha256": "bd554a2c405bb0206212619d57696f260870a9acd9e8fc165fb177f3345232e2",
+          "exportedName": "blocks.layers.0.attention.query_key_value.weight.transpose",
+          "exportedShape": [
+            128,
+            384
+          ],
+          "exportedSha256": "bcc49d680dba87cd73d788aa86bb570240c40beb3b2c25fe3b66fa515c0abfc6",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.attention.projection.weight",
+          "sourceShape": [
+            128,
+            128
+          ],
+          "sourceSha256": "cadfa151af4fc740c512d6bbd28ac0412da1fed4f20ffdd19e8949f86cfd33b6",
+          "exportedName": "blocks.layers.0.attention.projection.weight.transpose",
+          "exportedShape": [
+            128,
+            128
+          ],
+          "exportedSha256": "6e69416483109e14383e7bfeab5c9c1c1dae8d85ddee56fd4a0026eb05c6d9ef",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward_norm.weight",
+          "sourceShape": [
+            128
+          ],
+          "sourceSha256": "77fe19172bb1da0f591991a2f96544dcfefd40d188d635d7db05cbb2983e4a19",
+          "exportedName": "blocks.layers.0.feed_forward_norm.weight",
+          "exportedShape": [
+            128
+          ],
+          "exportedSha256": "77fe19172bb1da0f591991a2f96544dcfefd40d188d635d7db05cbb2983e4a19",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward_norm.bias",
+          "sourceShape": [
+            128
+          ],
+          "sourceSha256": "7cf04d1dfeda8ef74960f21b1a794e7004bce739c59d2c63f904d523edb3a6dd",
+          "exportedName": "blocks.layers.0.feed_forward_norm.bias",
+          "exportedShape": [
+            128
+          ],
+          "exportedSha256": "7cf04d1dfeda8ef74960f21b1a794e7004bce739c59d2c63f904d523edb3a6dd",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.expand.weight",
+          "sourceShape": [
+            512,
+            128
+          ],
+          "sourceSha256": "e13866ed79622d8529c2729f86d54fdb48c3724911411a34e19ab0c44a7ccbc9",
+          "exportedName": "blocks.layers.0.feed_forward.expand.weight.transpose",
+          "exportedShape": [
+            128,
+            512
+          ],
+          "exportedSha256": "bb433b2e5b230d6dc3f994d8d2bb2b405186b00782844c1ab06c35e2a6050549",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.expand.bias",
+          "sourceShape": [
+            512
+          ],
+          "sourceSha256": "6dd8e407853aaef436dabdc6efd4dc608c94d6e023f83ad494ee9d235112cbc2",
+          "exportedName": "blocks.layers.0.feed_forward.expand.bias",
+          "exportedShape": [
+            512
+          ],
+          "exportedSha256": "6dd8e407853aaef436dabdc6efd4dc608c94d6e023f83ad494ee9d235112cbc2",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.contract.weight",
+          "sourceShape": [
+            128,
+            512
+          ],
+          "sourceSha256": "ce3e337c3f8344da1902c34d27ee6614d115022c0e5004af6e4ec95ec2da0e3c",
+          "exportedName": "blocks.layers.0.feed_forward.contract.weight.transpose",
+          "exportedShape": [
+            512,
+            128
+          ],
+          "exportedSha256": "5a2e32c99e394ccad628d9679adb8c5fadf22db3913971e036e7cb28be2a81ed",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.0.feed_forward.contract.bias",
+          "sourceShape": [
+            128
+          ],
+          "sourceSha256": "a3fa0dd183f247dde38379613dc97c38e59a52e0f4b91750e74e38810c2cd8a2",
+          "exportedName": "blocks.layers.0.feed_forward.contract.bias",
+          "exportedShape": [
+            128
+          ],
+          "exportedSha256": "a3fa0dd183f247dde38379613dc97c38e59a52e0f4b91750e74e38810c2cd8a2",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention_norm.weight",
+          "sourceShape": [
+            128
+          ],
+          "sourceSha256": "0b192b1025d89175236edb0c17e04790fdc7b06af19464ce3e15c73702993cdd",
+          "exportedName": "blocks.layers.1.attention_norm.weight",
+          "exportedShape": [
+            128
+          ],
+          "exportedSha256": "0b192b1025d89175236edb0c17e04790fdc7b06af19464ce3e15c73702993cdd",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention_norm.bias",
+          "sourceShape": [
+            128
+          ],
+          "sourceSha256": "c1f302b15a745995d0283922a3e7d82e29137f976e0b764c8dfa7e0a0e48d787",
+          "exportedName": "blocks.layers.1.attention_norm.bias",
+          "exportedShape": [
+            128
+          ],
+          "exportedSha256": "c1f302b15a745995d0283922a3e7d82e29137f976e0b764c8dfa7e0a0e48d787",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention.query_key_value.weight",
+          "sourceShape": [
+            384,
+            128
+          ],
+          "sourceSha256": "91069f29f9e0caa757b3668b090863f2acf679675fda772f08716dfd5e7081bd",
+          "exportedName": "blocks.layers.1.attention.query_key_value.weight.transpose",
+          "exportedShape": [
+            128,
+            384
+          ],
+          "exportedSha256": "ffee8a80ce9ce8552637a31d484e766a7247b65a164188f6ee8a86f1a0e06546",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.attention.projection.weight",
+          "sourceShape": [
+            128,
+            128
+          ],
+          "sourceSha256": "f6bac08962503d688c78de99282a1516708de1f2aae3e240e300e5d14a8cbba0",
+          "exportedName": "blocks.layers.1.attention.projection.weight.transpose",
+          "exportedShape": [
+            128,
+            128
+          ],
+          "exportedSha256": "c58231b3e24d3846d8e3d4dc0e009c29a0d7aae50335fe8aeb9697899955a29f",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward_norm.weight",
+          "sourceShape": [
+            128
+          ],
+          "sourceSha256": "261f9311fa3297b0ab36b8b9d3d89b5fe2384c3bd60ae648e68dca2963432032",
+          "exportedName": "blocks.layers.1.feed_forward_norm.weight",
+          "exportedShape": [
+            128
+          ],
+          "exportedSha256": "261f9311fa3297b0ab36b8b9d3d89b5fe2384c3bd60ae648e68dca2963432032",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward_norm.bias",
+          "sourceShape": [
+            128
+          ],
+          "sourceSha256": "66f8122b7bf39a696619e8f4921e4b6d87a5c944f6fa1cd7cc7134040310f68e",
+          "exportedName": "blocks.layers.1.feed_forward_norm.bias",
+          "exportedShape": [
+            128
+          ],
+          "exportedSha256": "66f8122b7bf39a696619e8f4921e4b6d87a5c944f6fa1cd7cc7134040310f68e",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.expand.weight",
+          "sourceShape": [
+            512,
+            128
+          ],
+          "sourceSha256": "a8d81c25cbeb0cb08299ca3a401eebc48cbebc5d966d121831f9fc3b560eb485",
+          "exportedName": "blocks.layers.1.feed_forward.expand.weight.transpose",
+          "exportedShape": [
+            128,
+            512
+          ],
+          "exportedSha256": "f4e6c4397402075887fc1876ee8b7f992b61047d7cca6d7ad9d12c98726b84ea",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.expand.bias",
+          "sourceShape": [
+            512
+          ],
+          "sourceSha256": "d113723e045df3a3f6a2788fcf57f4a1730f8268b5b4647716dafca72ec5f2fa",
+          "exportedName": "blocks.layers.1.feed_forward.expand.bias",
+          "exportedShape": [
+            512
+          ],
+          "exportedSha256": "d113723e045df3a3f6a2788fcf57f4a1730f8268b5b4647716dafca72ec5f2fa",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.contract.weight",
+          "sourceShape": [
+            128,
+            512
+          ],
+          "sourceSha256": "63ec1acb1d0c4fbdc2b2882d76101ef05edd5f3ab41ae5ff9f5eabeeed20c346",
+          "exportedName": "blocks.layers.1.feed_forward.contract.weight.transpose",
+          "exportedShape": [
+            512,
+            128
+          ],
+          "exportedSha256": "2c345c007e6131dc1970bae9a0d5b1da9d8a79c91b8fe07ee3d47196e85c8222",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "blocks.layers.1.feed_forward.contract.bias",
+          "sourceShape": [
+            128
+          ],
+          "sourceSha256": "2115f76aa67e52f7534f807f63862c54d04125c0b186c42c601013fd59edc46f",
+          "exportedName": "blocks.layers.1.feed_forward.contract.bias",
+          "exportedShape": [
+            128
+          ],
+          "exportedSha256": "2115f76aa67e52f7534f807f63862c54d04125c0b186c42c601013fd59edc46f",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "final_norm.weight",
+          "sourceShape": [
+            128
+          ],
+          "sourceSha256": "36751ec074258184c2edc681973b5ea73328f4ac1551b3e4750d315868f55378",
+          "exportedName": "final_norm.weight",
+          "exportedShape": [
+            128
+          ],
+          "exportedSha256": "36751ec074258184c2edc681973b5ea73328f4ac1551b3e4750d315868f55378",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "final_norm.bias",
+          "sourceShape": [
+            128
+          ],
+          "sourceSha256": "401c2974963f622af5f9671e801a08fe3a6840a6c799dd075dfde7e1a55f6752",
+          "exportedName": "final_norm.bias",
+          "exportedShape": [
+            128
+          ],
+          "exportedSha256": "401c2974963f622af5f9671e801a08fe3a6840a6c799dd075dfde7e1a55f6752",
+          "transform": "identity"
+        },
+        {
+          "sourceName": "output.weight",
+          "sourceShape": [
+            65,
+            128
+          ],
+          "sourceSha256": "ed296e6580bf02eec78862f8a17e5521eb094c3f0efb34acc09561a6c3d93adf",
+          "exportedName": "output.weight.transpose",
+          "exportedShape": [
+            128,
+            65
+          ],
+          "exportedSha256": "e840e62fec6dd92554ba7ded4660d0e718eaf93ea4e25470ca8173ec519b3847",
+          "transform": "transpose(1,0)"
+        },
+        {
+          "sourceName": "output.bias",
+          "sourceShape": [
+            65
+          ],
+          "sourceSha256": "5299d9961d933b5289ff39eb94ca6a7a28f848ec00944f8137a2855e214cbb3c",
+          "exportedName": "output.bias",
+          "exportedShape": [
+            65
+          ],
+          "exportedSha256": "5299d9961d933b5289ff39eb94ca6a7a28f848ec00944f8137a2855e214cbb3c",
+          "transform": "identity"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "WebAssembly inference uses the visitor's CPU and may be slower on low-power devices.",
+    "Greedy generation is parity-tested; seeded sampling is not text-identical because MLX and browser random-number generators differ.",
+    "The model has a 64-character context and rejects characters outside its frozen 65-character vocabulary."
+  ]
+}

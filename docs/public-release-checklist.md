@@ -6,46 +6,46 @@ For the current completed work and remaining blockers, see the [public-release r
 
 ## Legal and provenance
 
-- [ ] Choose and add an explicit repository licence.
-- [ ] Confirm that dependencies, copied snippets, datasets, samples, and artwork are compatible with that licence.
-- [ ] Keep downloaded datasets out of Git and link to original sources and terms.
-- [ ] Review whether generated Shakespeare samples create any additional attribution requirement.
+- [x] Add Apache-2.0 for code and CC BY 4.0 for original lesson content, with a clear `NOTICE` and data-specific exceptions.
+- [x] Review dependencies, dataset provenance, derived weights, samples, and artwork; record the conclusions and unresolved jurisdiction caveat in [licensing and data](licensing-and-data.md).
+- [x] Keep downloaded datasets out of Git and link to original sources and terms.
+- [x] Review generated Shakespeare samples and document that they are illustrative model output, not redistributed corpus text.
 
 ## Repository hygiene
 
-- [ ] Run a secret scan across full Git history, not only the working tree.
-- [ ] Audit file sizes and remove accidental checkpoints, caches, datasets, environments, and personal paths.
-- [ ] Decide whether selected checkpoints belong in release assets or Git LFS; publish checksums if so.
-- [ ] Replace preparation-status wording in README with the final repository URL and release status.
-- [ ] Add issue and pull-request templates only if the project will accept community contributions.
+- [x] Run Gitleaks across full Git history, not only the working tree.
+- [x] Audit file sizes and exclude accidental checkpoints, caches, datasets, environments, learner evidence, and machine-specific paths.
+- [x] Keep the four compact browser checkpoints as ordinary versioned static assets and publish their checksums.
+- [x] Name the final GitHub repository in README; add the public-site URL after Cloudflare resolves the hostname.
+- [x] Add issue, lesson-feedback, security-reporting, and pull-request templates.
 
 ## Reproduction
 
-- [ ] Test a clean clone on the documented Apple profile.
+- [x] Test a clean clone on the documented Apple profile.
 - [ ] Test at least one Linux profile before describing it as verified.
-- [ ] Run the system report, dataset downloader, every supported script, inference service, lint, and production build.
-- [ ] Confirm My Lab begins empty and never modifies Reference results.
-- [ ] Confirm reference dashboards work without downloading checkpoints.
-- [ ] Record expected disk use and approximate time ranges by hardware class.
+- [x] Run the system report, safe fixtures, local inference smoke test, lint, audits, and production build. Long training runs remain opt-in learner exercises.
+- [x] Confirm My Lab begins empty and never modifies Reference results.
+- [x] Confirm reference dashboards work without downloading training checkpoints.
+- [x] Record expected disk use and approximate time ranges by hardware class.
 
 ## Teaching quality
 
-- [ ] Red-team every lesson and planned project for unexplained prerequisites.
-- [ ] Run the Beginner Mode audit and the human subtraction/causal/analogy tests.
-- [ ] Verify all external links, dataset descriptions, and hardware claims against primary sources.
-- [ ] Confirm all displayed metrics and samples trace to committed reference JSON and configuration.
-- [ ] Complete accessibility, keyboard, responsive, and reduced-motion checks.
+- [x] Red-team Shakespeare, TinyStories, and English-to-SQL lessons for a non-technical learner.
+- [x] Run the Beginner Mode audit and the human subtraction/causal/analogy tests.
+- [x] Verify external links, dataset descriptions, and hardware claims against primary sources.
+- [x] Confirm all displayed metrics and samples trace to committed reference JSON and configuration.
+- [x] Complete semantic, focus-visible, keyboard, mobile-responsive, and reduced-motion checks on the release candidate.
 
 ## Browser playground release gate
 
 Complete the detailed [GitHub and Cloudflare publication plan](publishing-github-and-cloudflare.md) before either public launch.
 
-- [ ] Export selected Shakespeare checkpoints for browser execution.
-- [ ] Provide WebAssembly compatibility and optional WebGPU acceleration without a public inference API.
-- [ ] Prove tokenizer, parameter, logits, greedy-generation, and checkpoint-selection parity against MLX.
-- [ ] Publish model manifests, checksums, run identifiers, numerical tolerances, download sizes, and browser limitations.
-- [ ] Confirm public prompts remain on the visitor's device.
-- [ ] Confirm an unsupported browser receives a useful explanation and published reference samples rather than a broken playground.
+- [x] Export selected Shakespeare checkpoints for browser execution.
+- [x] Provide WebAssembly execution without a public inference API. WebGPU is deliberately deferred: it is an optional enhancement, not a release requirement or compatibility baseline.
+- [x] Prove tokenizer, parameter, logits, greedy-generation, and checkpoint-selection parity against MLX.
+- [x] Publish model manifests, checksums, run identifiers, numerical tolerances, download sizes, and browser limitations.
+- [x] Confirm public prompts remain on the visitor's device.
+- [x] Confirm an unsupported or failed browser receives a useful explanation while published reference evidence remains readable.
 
 ## Publication
 
