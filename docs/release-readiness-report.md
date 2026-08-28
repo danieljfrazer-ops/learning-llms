@@ -1,6 +1,6 @@
 # Public-release readiness report
 
-Status date: 28 August 2026. This report describes the prepared working tree; it is not permission to publish.
+Status date: 28 August 2026. The GitHub repository is public; the Cloudflare production site still requires the final named-access approval recorded below.
 
 ## Completed preparation
 
@@ -20,6 +20,8 @@ Status date: 28 August 2026. This report describes the prepared working tree; it
 - Four reviewed Shakespeare checkpoints were exported to checksum-pinned ONNX files. A Web Worker runs them with ONNX Runtime Web/WebAssembly without a public inference API; 12 MLX/browser comparisons passed with a 0.015 logit tolerance and one documented near-tied minimally trained greedy choice.
 - Public-like rendered QA generated from the selected final checkpoint in 0.217 seconds, compared all four checkpoints, rejected an out-of-vocabulary emoji clearly, emitted no browser warnings/errors, and reflowed at 390 px without horizontal scrolling.
 - The owner selected Apache-2.0 for software/model files, CC BY 4.0 for original educational content, the `danieljfrazer-ops/learning-llms` identity, public issues/pull requests, private commit-email rewriting, and the free `workers.dev` hostname.
+- GitHub is published at <https://github.com/danieljfrazer-ops/learning-llms>; the resolved Cloudflare hostname is <https://learning-llms.daniel-j-frazer.workers.dev>.
+- Cloudflare Workers is confirmed on the Free plan dashboard at 0 / 100,000 requests for the day and $0.00 billable usage before this release.
 - Gitleaks 8.30.1 independently scanned all 31 pre-release commits. Its 21 initial generic-key matches were verified as published `tokenizerSha256` integrity fields; a narrow line-level allowlist documents that false-positive class, after which the full-history scan passed.
 
 ## Deliberate release blockers

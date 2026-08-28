@@ -9,7 +9,7 @@ LearningLLMs is both:
 
 The course starts with a 4,225-weight character model rather than a downloaded black box. It then adds training, context, self-attention, a complete transformer, controlled evaluation, local prompting, optimisation experiments, scaling, and multi-seed confirmation. Later projects move to subword pretraining and parameter-efficient fine-tuning.
 
-> Repository status: all three core projects, their reviewed reference dashboards, and the on-device Shakespeare browser playground are complete. The Apple-silicon clean-clone path and MLX/WebAssembly parity are verified; Linux remains explicitly unverified. No GitHub remote or public Cloudflare deployment has been created yet.
+> Public release candidate: browse the source at [github.com/danieljfrazer-ops/learning-llms](https://github.com/danieljfrazer-ops/learning-llms). The course, reviewed reference dashboards, and on-device Shakespeare browser playground are complete. The Apple-silicon clean-clone path and MLX/WebAssembly parity are verified; Linux remains explicitly unverified. The public course site is prepared for [learning-llms.daniel-j-frazer.workers.dev](https://learning-llms.daniel-j-frazer.workers.dev) and remains unavailable until its final named-access approval and production smoke test.
 
 ## What you will learn
 
