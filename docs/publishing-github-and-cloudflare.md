@@ -7,7 +7,7 @@ This is the coordinated release plan for the end of the three core projects. It 
 The same release should provide two complementary ways to learn:
 
 1. **Public GitHub repository** — people can clone the complete course, reproduce the experiments, and populate My Lab with their own evidence.
-2. **Public Cloudflare wiki** — people can read the completed lessons and reference results without installing anything, then run selected Shakespeare checkpoints inside their browser.
+2. **Public Cloudflare wiki** — people can read all 29 completed core lessons and reviewed reference results without installing anything, then run selected Shakespeare checkpoints inside their browser after the parity gate passes.
 
 The public playground must use the model trained by this course. It must not quietly substitute an unrelated hosted language model.
 
@@ -74,6 +74,19 @@ After all three core projects and browser inference are complete:
 
 Cloudflare currently documents static-asset requests as free and unlimited, while dynamic Functions or Workers consume plan allowances. Recheck the live [static-assets billing documentation](https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/) and [platform limits](https://developers.cloudflare.com/workers/platform/limits/) immediately before release rather than assuming today's free tier will remain unchanged.
 
+### Match the Cloudflare product to this build
+
+This repository uses the Cloudflare Vite plugin. `npm run build` produces a Worker entry point plus a static asset directory and generated `dist/server/wrangler.json`; it is not a Pages-only static export. Use **Workers Builds** Git integration and name the Cloudflare Worker `learning-llms` to match the generated configuration. Run `npm run preview` to exercise the production artifact locally before any upload.
+
+The free-plan budget at the August 2026 review is:
+
+- static asset requests: free and unlimited;
+- Worker requests: 100,000 per day on Workers Free, with requests rejected after the limit rather than silently creating paid usage;
+- individual static assets: at most 25 MiB; and
+- no database, object storage, analytics, public inference API, or paid Worker feature required by the initial design.
+
+A `workers.dev` hostname has no domain-registration cost. A custom portfolio domain is optional and its registration/renewal is outside Cloudflare Workers' free hosting allowance. Before release, verify that the account is still on Workers Free and has not opted into the paid plan.
+
 ## Coordinated publication sequence
 
 These actions require explicit owner approval at the time of release.
@@ -81,14 +94,14 @@ These actions require explicit owner approval at the time of release.
 1. Create the public GitHub repository and push only the reviewed release candidate.
 2. Enable branch protection and the required lint, build, audit, and browser-parity checks.
 3. Create the first tagged GitHub release, including scope, hardware evidence, limitations, artifact checksums, and browser support.
-4. Connect the repository to Cloudflare using the chosen Git integration and make `main` the production branch.
+4. Create or connect a `learning-llms` Worker through Workers Builds Git integration and make `main` the production branch.
 5. Deploy the exact tagged commit to a non-public or preview URL first.
 6. Smoke-test representative lessons, internal links, Reference/My Lab behaviour, every published checkpoint, WebAssembly fallback, and at least one supported WebGPU browser.
 7. Obtain a final explicit approval that names the resolved public site access.
 8. Make the Cloudflare wiki public and verify the production URL, security headers, metadata, accessibility, and rollback path.
 9. Add reciprocal links: GitHub links to the hosted wiki; the wiki links to the tagged source and reproduction instructions.
 
-Cloudflare's [Git integration guide](https://developers.cloudflare.com/pages/get-started/git-integration/) explains automatic production and preview deployments. Choose Git integration deliberately: Cloudflare currently warns that a Pages project created through Git integration cannot later be converted to Direct Upload, or vice versa, without creating a different project.
+Cloudflare's [Workers Builds Git integration guide](https://developers.cloudflare.com/workers/ci-cd/builds/git-integration/) explains automatic production and preview deployments. Keep production credentials in Cloudflare's integration rather than adding an account token to the public repository or a contributor-triggerable workflow.
 
 ## Post-release monitoring
 

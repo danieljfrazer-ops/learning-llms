@@ -1,0 +1,40 @@
+name: Course integrity
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: course-integrity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+          cache: npm
+      - run: npm ci
+      - run: python3 scripts/audit_beginner_guidance.py
+      - run: python3 scripts/audit_lesson_visuals.py
+      - run: python3 scripts/audit_comparison_evidence.py
+      - run: python3 scripts/audit_lesson_engineering_briefs.py
+      - run: python3 scripts/audit_public_repo.py
+      - run: python3 scripts/audit_git_history.py
+      - run: python3 -m compileall -q ml scripts
+      - run: npm run lint
+      - run: npm run build
+      - run: git diff --check

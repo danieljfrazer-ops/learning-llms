@@ -1,0 +1,5451 @@
+{
+  "status": "Complete",
+  "experimentId": "tinystories-first-pretraining-001",
+  "updatedAt": "2026-08-22T15:42:34.756461+00:00",
+  "purpose": "First controlled optimiser updates from the exact Lesson 5 checkpoint-zero model",
+  "configuration": {
+    "runId": "tinystories-first-pretraining-001",
+    "startedFromRunId": "tinystories-random-baseline-001",
+    "startedFromCheckpoint": "work/experiments/tinystories-random-baseline-001/checkpoint-0000.safetensors",
+    "startedFromCheckpointSha256": "a8b0ff50d4d53e21c8a4bfb8f0b59e97bc05aee67a81b7c110c99510efe53c1d",
+    "datasetId": "tinystories-development-v1",
+    "dataHashes": {
+      "train": "7cc2bc86bf1a11ef1c74531db4fcde2a02da8c1153915f3ffda215ec477026c1",
+      "validation": "5be6ca53915cbad0e42955c619a927cca67237f28d94c16bf858b3f31bee382b"
+    },
+    "tokenizerSha256": "cf8392263a229b36d3206ae8234496d0d197e9d4aa8f10d0e01c83d210de7c6e",
+    "vocabularySize": 2048,
+    "contextSize": 128,
+    "batchSize": 32,
+    "modelSize": 256,
+    "attentionHeads": 8,
+    "transformerBlocks": 6,
+    "parameterCount": 5816320,
+    "seed": 42,
+    "optimiser": "AdamW",
+    "learningRate": 0.0003,
+    "weightDecay": 0.01,
+    "gradientClipping": null,
+    "plannedOptimiserUpdates": 500,
+    "captureSteps": [
+      0,
+      1,
+      10,
+      50,
+      100,
+      250,
+      500
+    ],
+    "batchOrder": "Seeded shuffle without replacement; include the short final batch; reshuffle after each complete pass",
+    "trainingWindows": 2292,
+    "trainingValidTargetsPerCompletePass": 229867,
+    "validationWindows": 442,
+    "validationProtocol": "Every frozen validation window exactly once, ordered by source row and chunk; padding excluded by Lesson 4 loss mask",
+    "generation": {
+      "prompts": [
+        "Once upon a time, there was",
+        "Lily found a little blue box",
+        "The small dragon wanted to"
+      ],
+      "seedRule": "model seed + 1000 + prompt index",
+      "maximumTokens": 64,
+      "temperature": 0.9
+    }
+  },
+  "progress": {
+    "completedUpdates": 500,
+    "plannedUpdates": 500,
+    "validTargetsSeen": 1597760
+  },
+  "trace": [
+    {
+      "step": 1,
+      "trainBatchLoss": 7.759572505950928,
+      "gradientL2Norm": 3.9567861557006836,
+      "validTargets": 3183,
+      "seconds": 0.1309308749914635
+    },
+    {
+      "step": 2,
+      "trainBatchLoss": 7.146864414215088,
+      "gradientL2Norm": 2.593198537826538,
+      "validTargets": 3304,
+      "seconds": 0.11365670801023953
+    },
+    {
+      "step": 3,
+      "trainBatchLoss": 6.831479072570801,
+      "gradientL2Norm": 1.244077205657959,
+      "validTargets": 3366,
+      "seconds": 0.10935166702256538
+    },
+    {
+      "step": 4,
+      "trainBatchLoss": 6.59042501449585,
+      "gradientL2Norm": 1.1808624267578125,
+      "validTargets": 3044,
+      "seconds": 0.11304095899686217
+    },
+    {
+      "step": 5,
+      "trainBatchLoss": 6.383763313293457,
+      "gradientL2Norm": 0.9039303660392761,
+      "validTargets": 3094,
+      "seconds": 0.11288483298267238
+    },
+    {
+      "step": 6,
+      "trainBatchLoss": 6.289556503295898,
+      "gradientL2Norm": 0.6317822337150574,
+      "validTargets": 3147,
+      "seconds": 0.10909220902249217
+    },
+    {
+      "step": 7,
+      "trainBatchLoss": 6.158452987670898,
+      "gradientL2Norm": 0.5944944024085999,
+      "validTargets": 3273,
+      "seconds": 0.11276558300596662
+    },
+    {
+      "step": 8,
+      "trainBatchLoss": 6.048355579376221,
+      "gradientL2Norm": 0.6823713183403015,
+      "validTargets": 3014,
+      "seconds": 0.11333833399112336
+    },
+    {
+      "step": 9,
+      "trainBatchLoss": 6.037893772125244,
+      "gradientL2Norm": 0.46556785702705383,
+      "validTargets": 3187,
+      "seconds": 0.11325549997854978
+    },
+    {
+      "step": 10,
+      "trainBatchLoss": 6.045193195343018,
+      "gradientL2Norm": 0.5379307270050049,
+      "validTargets": 3456,
+      "seconds": 0.10970558400731534
+    },
+    {
+      "step": 11,
+      "trainBatchLoss": 6.025926113128662,
+      "gradientL2Norm": 0.5298203825950623,
+      "validTargets": 2981,
+      "seconds": 0.11219508299836889
+    },
+    {
+      "step": 12,
+      "trainBatchLoss": 6.020883560180664,
+      "gradientL2Norm": 0.5429240465164185,
+      "validTargets": 3318,
+      "seconds": 0.11372420800034888
+    },
+    {
+      "step": 13,
+      "trainBatchLoss": 6.172751426696777,
+      "gradientL2Norm": 0.7337671518325806,
+      "validTargets": 3250,
+      "seconds": 0.11343587501323782
+    },
+    {
+      "step": 14,
+      "trainBatchLoss": 6.072819709777832,
+      "gradientL2Norm": 0.5979489684104919,
+      "validTargets": 3202,
+      "seconds": 0.10910375000094064
+    },
+    {
+      "step": 15,
+      "trainBatchLoss": 6.0605058670043945,
+      "gradientL2Norm": 0.736040472984314,
+      "validTargets": 3442,
+      "seconds": 0.11330754199298099
+    },
+    {
+      "step": 16,
+      "trainBatchLoss": 5.9054856300354,
+      "gradientL2Norm": 0.5140056610107422,
+      "validTargets": 3021,
+      "seconds": 0.11278799999854527
+    },
+    {
+      "step": 17,
+      "trainBatchLoss": 6.029186725616455,
+      "gradientL2Norm": 0.5748403668403625,
+      "validTargets": 3599,
+      "seconds": 0.11364520899951458
+    },
+    {
+      "step": 18,
+      "trainBatchLoss": 5.895370006561279,
+      "gradientL2Norm": 0.5175339579582214,
+      "validTargets": 3032,
+      "seconds": 0.10884850000729784
+    },
+    {
+      "step": 19,
+      "trainBatchLoss": 5.892294883728027,
+      "gradientL2Norm": 0.533873438835144,
+      "validTargets": 3249,
+      "seconds": 0.1123581669817213
+    },
+    {
+      "step": 20,
+      "trainBatchLoss": 5.845314979553223,
+      "gradientL2Norm": 0.551134467124939,
+      "validTargets": 3270,
+      "seconds": 0.11332558299181983
+    },
+    {
+      "step": 21,
+      "trainBatchLoss": 5.804434776306152,
+      "gradientL2Norm": 0.5559502243995667,
+      "validTargets": 3262,
+      "seconds": 0.11037045801640488
+    },
+    {
+      "step": 22,
+      "trainBatchLoss": 5.6451897621154785,
+      "gradientL2Norm": 0.513450026512146,
+      "validTargets": 3085,
+      "seconds": 0.11539154199999757
+    },
+    {
+      "step": 23,
+      "trainBatchLoss": 5.77034330368042,
+      "gradientL2Norm": 0.5220878720283508,
+      "validTargets": 3041,
+      "seconds": 0.11436208398663439
+    },
+    {
+      "step": 24,
+      "trainBatchLoss": 5.678441524505615,
+      "gradientL2Norm": 0.6038768887519836,
+      "validTargets": 2994,
+      "seconds": 0.11493641600827686
+    },
+    {
+      "step": 25,
+      "trainBatchLoss": 5.74086332321167,
+      "gradientL2Norm": 0.6042613387107849,
+      "validTargets": 3257,
+      "seconds": 0.11583633397822268
+    },
+    {
+      "step": 26,
+      "trainBatchLoss": 5.601153373718262,
+      "gradientL2Norm": 0.49398136138916016,
+      "validTargets": 3208,
+      "seconds": 0.1153145830030553
+    },
+    {
+      "step": 27,
+      "trainBatchLoss": 5.574816703796387,
+      "gradientL2Norm": 0.6407344341278076,
+      "validTargets": 2976,
+      "seconds": 0.11524904202087782
+    },
+    {
+      "step": 28,
+      "trainBatchLoss": 5.638191223144531,
+      "gradientL2Norm": 1.1064373254776,
+      "validTargets": 3045,
+      "seconds": 0.11438795897993259
+    },
+    {
+      "step": 29,
+      "trainBatchLoss": 5.591444492340088,
+      "gradientL2Norm": 0.5150467157363892,
+      "validTargets": 3119,
+      "seconds": 0.1167442080040928
+    },
+    {
+      "step": 30,
+      "trainBatchLoss": 5.518881797790527,
+      "gradientL2Norm": 1.0295771360397339,
+      "validTargets": 3343,
+      "seconds": 0.12291933299275115
+    },
+    {
+      "step": 31,
+      "trainBatchLoss": 5.51310396194458,
+      "gradientL2Norm": 0.5844793319702148,
+      "validTargets": 3493,
+      "seconds": 0.12007899998570792
+    },
+    {
+      "step": 32,
+      "trainBatchLoss": 5.552807807922363,
+      "gradientL2Norm": 0.6835970282554626,
+      "validTargets": 3288,
+      "seconds": 0.12130791702657007
+    },
+    {
+      "step": 33,
+      "trainBatchLoss": 5.59347677230835,
+      "gradientL2Norm": 0.5227894186973572,
+      "validTargets": 3139,
+      "seconds": 0.11810554101248272
+    },
+    {
+      "step": 34,
+      "trainBatchLoss": 5.477261066436768,
+      "gradientL2Norm": 0.8497638702392578,
+      "validTargets": 3176,
+      "seconds": 0.11719041698961519
+    },
+    {
+      "step": 35,
+      "trainBatchLoss": 5.385864734649658,
+      "gradientL2Norm": 0.5812474489212036,
+      "validTargets": 2980,
+      "seconds": 0.12005508301081136
+    },
+    {
+      "step": 36,
+      "trainBatchLoss": 5.525984764099121,
+      "gradientL2Norm": 0.5677041411399841,
+      "validTargets": 3456,
+      "seconds": 0.11826149999978952
+    },
+    {
+      "step": 37,
+      "trainBatchLoss": 5.499725341796875,
+      "gradientL2Norm": 0.6212618350982666,
+      "validTargets": 3302,
+      "seconds": 0.11870533399633132
+    },
+    {
+      "step": 38,
+      "trainBatchLoss": 5.354590892791748,
+      "gradientL2Norm": 0.458896279335022,
+      "validTargets": 2947,
+      "seconds": 0.11725566702079959
+    },
+    {
+      "step": 39,
+      "trainBatchLoss": 5.238467693328857,
+      "gradientL2Norm": 0.6466119885444641,
+      "validTargets": 3240,
+      "seconds": 0.12131124999723397
+    },
+    {
+      "step": 40,
+      "trainBatchLoss": 5.392523288726807,
+      "gradientL2Norm": 0.5191718339920044,
+      "validTargets": 3183,
+      "seconds": 0.11812937501235865
+    },
+    {
+      "step": 41,
+      "trainBatchLoss": 5.275601387023926,
+      "gradientL2Norm": 0.6074530482292175,
+      "validTargets": 3450,
+      "seconds": 0.1172256669960916
+    },
+    {
+      "step": 42,
+      "trainBatchLoss": 5.3376641273498535,
+      "gradientL2Norm": 0.6361365914344788,
+      "validTargets": 3201,
+      "seconds": 0.1209989589988254
+    },
+    {
+      "step": 43,
+      "trainBatchLoss": 5.276189804077148,
+      "gradientL2Norm": 0.535549521446228,
+      "validTargets": 2733,
+      "seconds": 0.11908241698984057
+    },
+    {
+      "step": 44,
+      "trainBatchLoss": 5.223785877227783,
+      "gradientL2Norm": 0.7856842279434204,
+      "validTargets": 3534,
+      "seconds": 0.11761270801071078
+    },
+    {
+      "step": 45,
+      "trainBatchLoss": 5.229875087738037,
+      "gradientL2Norm": 0.550418496131897,
+      "validTargets": 3187,
+      "seconds": 0.11749137501465157
+    },
+    {
+      "step": 46,
+      "trainBatchLoss": 5.217806816101074,
+      "gradientL2Norm": 0.6184800863265991,
+      "validTargets": 2956,
+      "seconds": 0.12059637499623932
+    },
+    {
+      "step": 47,
+      "trainBatchLoss": 5.264019012451172,
+      "gradientL2Norm": 0.5931368470191956,
+      "validTargets": 3206,
+      "seconds": 0.11871308297850192
+    },
+    {
+      "step": 48,
+      "trainBatchLoss": 5.229310512542725,
+      "gradientL2Norm": 0.5937574505805969,
+      "validTargets": 3544,
+      "seconds": 0.1172095840156544
+    },
+    {
+      "step": 49,
+      "trainBatchLoss": 5.191772937774658,
+      "gradientL2Norm": 0.6792622804641724,
+      "validTargets": 3245,
+      "seconds": 0.12104466700111516
+    },
+    {
+      "step": 50,
+      "trainBatchLoss": 5.067770004272461,
+      "gradientL2Norm": 0.7391266226768494,
+      "validTargets": 2910,
+      "seconds": 0.1186427500215359
+    },
+    {
+      "step": 51,
+      "trainBatchLoss": 5.0318803787231445,
+      "gradientL2Norm": 0.5360459685325623,
+      "validTargets": 3174,
+      "seconds": 0.11549966601887718
+    },
+    {
+      "step": 52,
+      "trainBatchLoss": 4.98788595199585,
+      "gradientL2Norm": 0.6309762597084045,
+      "validTargets": 3635,
+      "seconds": 0.1143031669780612
+    },
+    {
+      "step": 53,
+      "trainBatchLoss": 5.0844221115112305,
+      "gradientL2Norm": 0.5718753933906555,
+      "validTargets": 2957,
+      "seconds": 0.11036716698436067
+    },
+    {
+      "step": 54,
+      "trainBatchLoss": 5.055296421051025,
+      "gradientL2Norm": 0.6252015829086304,
+      "validTargets": 3048,
+      "seconds": 0.11411579098785296
+    },
+    {
+      "step": 55,
+      "trainBatchLoss": 4.905734062194824,
+      "gradientL2Norm": 0.5812479853630066,
+      "validTargets": 3337,
+      "seconds": 0.11405629198998213
+    },
+    {
+      "step": 56,
+      "trainBatchLoss": 4.927924156188965,
+      "gradientL2Norm": 0.4665912985801697,
+      "validTargets": 3585,
+      "seconds": 0.11349570899619721
+    },
+    {
+      "step": 57,
+      "trainBatchLoss": 5.076797962188721,
+      "gradientL2Norm": 0.5559070110321045,
+      "validTargets": 3311,
+      "seconds": 0.1141023339878302
+    },
+    {
+      "step": 58,
+      "trainBatchLoss": 4.88052225112915,
+      "gradientL2Norm": 0.5661161541938782,
+      "validTargets": 3007,
+      "seconds": 0.11022641599993221
+    },
+    {
+      "step": 59,
+      "trainBatchLoss": 5.010979652404785,
+      "gradientL2Norm": 0.5464234352111816,
+      "validTargets": 3213,
+      "seconds": 0.11467179100145586
+    },
+    {
+      "step": 60,
+      "trainBatchLoss": 4.8311028480529785,
+      "gradientL2Norm": 0.5531842112541199,
+      "validTargets": 3133,
+      "seconds": 0.11311591698904522
+    },
+    {
+      "step": 61,
+      "trainBatchLoss": 5.021772861480713,
+      "gradientL2Norm": 0.548533022403717,
+      "validTargets": 3419,
+      "seconds": 0.11429008300183341
+    },
+    {
+      "step": 62,
+      "trainBatchLoss": 4.875596523284912,
+      "gradientL2Norm": 0.5121479630470276,
+      "validTargets": 3241,
+      "seconds": 0.11380445898976177
+    },
+    {
+      "step": 63,
+      "trainBatchLoss": 4.918179035186768,
+      "gradientL2Norm": 0.5412707924842834,
+      "validTargets": 3233,
+      "seconds": 0.1115214999881573
+    },
+    {
+      "step": 64,
+      "trainBatchLoss": 4.768009185791016,
+      "gradientL2Norm": 0.5405958890914917,
+      "validTargets": 3122,
+      "seconds": 0.11275404199841432
+    },
+    {
+      "step": 65,
+      "trainBatchLoss": 4.96311616897583,
+      "gradientL2Norm": 0.6518900990486145,
+      "validTargets": 3032,
+      "seconds": 0.11287041698233224
+    },
+    {
+      "step": 66,
+      "trainBatchLoss": 4.839598178863525,
+      "gradientL2Norm": 0.5104960203170776,
+      "validTargets": 2967,
+      "seconds": 0.11280295799952
+    },
+    {
+      "step": 67,
+      "trainBatchLoss": 4.810209274291992,
+      "gradientL2Norm": 0.4819674491882324,
+      "validTargets": 3386,
+      "seconds": 0.10907887501525693
+    },
+    {
+      "step": 68,
+      "trainBatchLoss": 4.7308783531188965,
+      "gradientL2Norm": 0.46317675709724426,
+      "validTargets": 3529,
+      "seconds": 0.1143259159871377
+    },
+    {
+      "step": 69,
+      "trainBatchLoss": 4.802918910980225,
+      "gradientL2Norm": 0.5167407989501953,
+      "validTargets": 3098,
+      "seconds": 0.11207375000230968
+    },
+    {
+      "step": 70,
+      "trainBatchLoss": 4.780584335327148,
+      "gradientL2Norm": 0.5526976585388184,
+      "validTargets": 3460,
+      "seconds": 0.11299887500354089
+    },
+    {
+      "step": 71,
+      "trainBatchLoss": 4.738959312438965,
+      "gradientL2Norm": 0.5326288938522339,
+      "validTargets": 3058,
+      "seconds": 0.10847470801672898
+    },
+    {
+      "step": 72,
+      "trainBatchLoss": 4.542190074920654,
+      "gradientL2Norm": 0.6597626805305481,
+      "validTargets": 1990,
+      "seconds": 0.15006841701688245
+    },
+    {
+      "step": 73,
+      "trainBatchLoss": 4.6711649894714355,
+      "gradientL2Norm": 0.5809783935546875,
+      "validTargets": 2901,
+      "seconds": 0.1132802499923855
+    },
+    {
+      "step": 74,
+      "trainBatchLoss": 4.6032538414001465,
+      "gradientL2Norm": 0.5055302381515503,
+      "validTargets": 3350,
+      "seconds": 0.11382133301231079
+    },
+    {
+      "step": 75,
+      "trainBatchLoss": 4.786462306976318,
+      "gradientL2Norm": 0.5780671834945679,
+      "validTargets": 2929,
+      "seconds": 0.10936783399665728
+    },
+    {
+      "step": 76,
+      "trainBatchLoss": 4.5797529220581055,
+      "gradientL2Norm": 0.5167356729507446,
+      "validTargets": 3441,
+      "seconds": 0.1135314169805497
+    },
+    {
+      "step": 77,
+      "trainBatchLoss": 4.591015815734863,
+      "gradientL2Norm": 0.54877769947052,
+      "validTargets": 3317,
+      "seconds": 0.11300087498966604
+    },
+    {
+      "step": 78,
+      "trainBatchLoss": 4.4994964599609375,
+      "gradientL2Norm": 0.5385324954986572,
+      "validTargets": 3477,
+      "seconds": 0.11297837499296293
+    },
+    {
+      "step": 79,
+      "trainBatchLoss": 4.538151741027832,
+      "gradientL2Norm": 0.5305490493774414,
+      "validTargets": 3290,
+      "seconds": 0.10865470897988416
+    },
+    {
+      "step": 80,
+      "trainBatchLoss": 4.534164905548096,
+      "gradientL2Norm": 0.5734776258468628,
+      "validTargets": 2993,
+      "seconds": 0.1121542920009233
+    },
+    {
+      "step": 81,
+      "trainBatchLoss": 4.587686061859131,
+      "gradientL2Norm": 0.5261985659599304,
+      "validTargets": 3412,
+      "seconds": 0.11443645798135549
+    },
+    {
+      "step": 82,
+      "trainBatchLoss": 4.487971782684326,
+      "gradientL2Norm": 0.579143226146698,
+      "validTargets": 3532,
+      "seconds": 0.11376733399811201
+    },
+    {
+      "step": 83,
+      "trainBatchLoss": 4.44911527633667,
+      "gradientL2Norm": 0.5289931893348694,
+      "validTargets": 3331,
+      "seconds": 0.10986304198740982
+    },
+    {
+      "step": 84,
+      "trainBatchLoss": 4.587696075439453,
+      "gradientL2Norm": 0.5326139330863953,
+      "validTargets": 2843,
+      "seconds": 0.11330712502240203
+    },
+    {
+      "step": 85,
+      "trainBatchLoss": 4.495357513427734,
+      "gradientL2Norm": 0.6292932629585266,
+      "validTargets": 3141,
+      "seconds": 0.114694708987372
+    },
+    {
+      "step": 86,
+      "trainBatchLoss": 4.582022666931152,
+      "gradientL2Norm": 0.5025212168693542,
+      "validTargets": 3215,
+      "seconds": 0.11477424998884089
+    },
+    {
+      "step": 87,
+      "trainBatchLoss": 4.348920822143555,
+      "gradientL2Norm": 0.6323260068893433,
+      "validTargets": 3605,
+      "seconds": 0.11253712500911206
+    },
+    {
+      "step": 88,
+      "trainBatchLoss": 4.447486877441406,
+      "gradientL2Norm": 0.5061224699020386,
+      "validTargets": 3295,
+      "seconds": 0.10918420800589956
+    },
+    {
+      "step": 89,
+      "trainBatchLoss": 4.4392242431640625,
+      "gradientL2Norm": 0.5762485265731812,
+      "validTargets": 3724,
+      "seconds": 0.1136432499915827
+    },
+    {
+      "step": 90,
+      "trainBatchLoss": 4.3753581047058105,
+      "gradientL2Norm": 0.5771741271018982,
+      "validTargets": 3178,
+      "seconds": 0.11419975000899285
+    },
+    {
+      "step": 91,
+      "trainBatchLoss": 4.4590582847595215,
+      "gradientL2Norm": 0.5586204528808594,
+      "validTargets": 3102,
+      "seconds": 0.11319516701041721
+    },
+    {
+      "step": 92,
+      "trainBatchLoss": 4.516458511352539,
+      "gradientL2Norm": 0.5556823015213013,
+      "validTargets": 3239,
+      "seconds": 0.10957570798927918
+    },
+    {
+      "step": 93,
+      "trainBatchLoss": 4.475289821624756,
+      "gradientL2Norm": 0.5871616005897522,
+      "validTargets": 2751,
+      "seconds": 0.11276374998851679
+    },
+    {
+      "step": 94,
+      "trainBatchLoss": 4.489663124084473,
+      "gradientL2Norm": 0.5444841980934143,
+      "validTargets": 3577,
+      "seconds": 0.11429154200595804
+    },
+    {
+      "step": 95,
+      "trainBatchLoss": 4.303306579589844,
+      "gradientL2Norm": 0.5086961984634399,
+      "validTargets": 3062,
+      "seconds": 0.11338329198770225
+    },
+    {
+      "step": 96,
+      "trainBatchLoss": 4.520868301391602,
+      "gradientL2Norm": 0.5578160285949707,
+      "validTargets": 2959,
+      "seconds": 0.10916362499119714
+    },
+    {
+      "step": 97,
+      "trainBatchLoss": 4.284136772155762,
+      "gradientL2Norm": 0.5953964591026306,
+      "validTargets": 3086,
+      "seconds": 0.1135797500028275
+    },
+    {
+      "step": 98,
+      "trainBatchLoss": 4.378430366516113,
+      "gradientL2Norm": 0.4975813925266266,
+      "validTargets": 3842,
+      "seconds": 0.11422220899839886
+    },
+    {
+      "step": 99,
+      "trainBatchLoss": 4.242035388946533,
+      "gradientL2Norm": 0.5146749019622803,
+      "validTargets": 3231,
+      "seconds": 0.11368954202043824
+    },
+    {
+      "step": 100,
+      "trainBatchLoss": 4.360116004943848,
+      "gradientL2Norm": 0.6869395971298218,
+      "validTargets": 2837,
+      "seconds": 0.11017470798105933
+    },
+    {
+      "step": 101,
+      "trainBatchLoss": 4.45040225982666,
+      "gradientL2Norm": 0.5331262350082397,
+      "validTargets": 3002,
+      "seconds": 0.11303295797551982
+    },
+    {
+      "step": 102,
+      "trainBatchLoss": 4.309957027435303,
+      "gradientL2Norm": 0.5816119909286499,
+      "validTargets": 3282,
+      "seconds": 0.11463691698736511
+    },
+    {
+      "step": 103,
+      "trainBatchLoss": 4.338785171508789,
+      "gradientL2Norm": 0.5796813368797302,
+      "validTargets": 3291,
+      "seconds": 0.11637287499615923
+    },
+    {
+      "step": 104,
+      "trainBatchLoss": 4.385544300079346,
+      "gradientL2Norm": 0.5421978831291199,
+      "validTargets": 3408,
+      "seconds": 0.11891195899806917
+    },
+    {
+      "step": 105,
+      "trainBatchLoss": 4.422201156616211,
+      "gradientL2Norm": 0.6095770001411438,
+      "validTargets": 3125,
+      "seconds": 0.12093145799008198
+    },
+    {
+      "step": 106,
+      "trainBatchLoss": 4.411685943603516,
+      "gradientL2Norm": 0.5647175908088684,
+      "validTargets": 2983,
+      "seconds": 0.11395370902027935
+    },
+    {
+      "step": 107,
+      "trainBatchLoss": 4.327486515045166,
+      "gradientL2Norm": 0.5848228931427002,
+      "validTargets": 3329,
+      "seconds": 0.11652775001130067
+    },
+    {
+      "step": 108,
+      "trainBatchLoss": 4.400111198425293,
+      "gradientL2Norm": 0.575603723526001,
+      "validTargets": 3509,
+      "seconds": 0.11640362499747425
+    },
+    {
+      "step": 109,
+      "trainBatchLoss": 4.419658184051514,
+      "gradientL2Norm": 0.6711766123771667,
+      "validTargets": 2943,
+      "seconds": 0.11790254199877381
+    },
+    {
+      "step": 110,
+      "trainBatchLoss": 4.428862571716309,
+      "gradientL2Norm": 0.6524750590324402,
+      "validTargets": 3270,
+      "seconds": 0.1161520829773508
+    },
+    {
+      "step": 111,
+      "trainBatchLoss": 4.328754901885986,
+      "gradientL2Norm": 0.5834001302719116,
+      "validTargets": 3132,
+      "seconds": 0.1214527919946704
+    },
+    {
+      "step": 112,
+      "trainBatchLoss": 4.3952460289001465,
+      "gradientL2Norm": 0.577019453048706,
+      "validTargets": 3479,
+      "seconds": 0.12025970799732022
+    },
+    {
+      "step": 113,
+      "trainBatchLoss": 4.4610066413879395,
+      "gradientL2Norm": 0.6452705264091492,
+      "validTargets": 2762,
+      "seconds": 0.12003620801260695
+    },
+    {
+      "step": 114,
+      "trainBatchLoss": 4.335245609283447,
+      "gradientL2Norm": 0.7266316413879395,
+      "validTargets": 3290,
+      "seconds": 0.11876570800086483
+    },
+    {
+      "step": 115,
+      "trainBatchLoss": 4.409491062164307,
+      "gradientL2Norm": 0.5968943238258362,
+      "validTargets": 2990,
+      "seconds": 0.11999220898724161
+    },
+    {
+      "step": 116,
+      "trainBatchLoss": 4.3259172439575195,
+      "gradientL2Norm": 0.7671325206756592,
+      "validTargets": 3625,
+      "seconds": 0.11969620801392011
+    },
+    {
+      "step": 117,
+      "trainBatchLoss": 4.331217288970947,
+      "gradientL2Norm": 0.7260426878929138,
+      "validTargets": 2766,
+      "seconds": 0.1175564999866765
+    },
+    {
+      "step": 118,
+      "trainBatchLoss": 4.273693561553955,
+      "gradientL2Norm": 0.7100423574447632,
+      "validTargets": 2984,
+      "seconds": 0.11741449998226017
+    },
+    {
+      "step": 119,
+      "trainBatchLoss": 4.3524250984191895,
+      "gradientL2Norm": 0.8514955043792725,
+      "validTargets": 3269,
+      "seconds": 0.12300550000509247
+    },
+    {
+      "step": 120,
+      "trainBatchLoss": 4.234591960906982,
+      "gradientL2Norm": 0.6673085689544678,
+      "validTargets": 3266,
+      "seconds": 0.11903837500722148
+    },
+    {
+      "step": 121,
+      "trainBatchLoss": 4.202634811401367,
+      "gradientL2Norm": 0.6689447164535522,
+      "validTargets": 3008,
+      "seconds": 0.12036574998637661
+    },
+    {
+      "step": 122,
+      "trainBatchLoss": 4.28046989440918,
+      "gradientL2Norm": 0.6610491275787354,
+      "validTargets": 3151,
+      "seconds": 0.11787291700602509
+    },
+    {
+      "step": 123,
+      "trainBatchLoss": 4.438539505004883,
+      "gradientL2Norm": 0.6639499068260193,
+      "validTargets": 3042,
+      "seconds": 0.119477750005899
+    },
+    {
+      "step": 124,
+      "trainBatchLoss": 4.3102641105651855,
+      "gradientL2Norm": 0.6222894787788391,
+      "validTargets": 3059,
+      "seconds": 0.12055804199189879
+    },
+    {
+      "step": 125,
+      "trainBatchLoss": 4.248012065887451,
+      "gradientL2Norm": 0.6426167488098145,
+      "validTargets": 2809,
+      "seconds": 0.11963166599161923
+    },
+    {
+      "step": 126,
+      "trainBatchLoss": 4.206278324127197,
+      "gradientL2Norm": 0.5956621766090393,
+      "validTargets": 3037,
+      "seconds": 0.11696045799180865
+    },
+    {
+      "step": 127,
+      "trainBatchLoss": 4.2973527908325195,
+      "gradientL2Norm": 0.632024884223938,
+      "validTargets": 2684,
+      "seconds": 0.12160495898569934
+    },
+    {
+      "step": 128,
+      "trainBatchLoss": 4.282251358032227,
+      "gradientL2Norm": 0.5607101917266846,
+      "validTargets": 3512,
+      "seconds": 0.11873137499787845
+    },
+    {
+      "step": 129,
+      "trainBatchLoss": 4.318265438079834,
+      "gradientL2Norm": 0.6132563948631287,
+      "validTargets": 3081,
+      "seconds": 0.11627066598157398
+    },
+    {
+      "step": 130,
+      "trainBatchLoss": 4.332102298736572,
+      "gradientL2Norm": 0.5766544938087463,
+      "validTargets": 3352,
+      "seconds": 0.11732679198030382
+    },
+    {
+      "step": 131,
+      "trainBatchLoss": 4.334283351898193,
+      "gradientL2Norm": 0.5228515863418579,
+      "validTargets": 3357,
+      "seconds": 0.11636999997426756
+    },
+    {
+      "step": 132,
+      "trainBatchLoss": 4.159481048583984,
+      "gradientL2Norm": 0.5770692229270935,
+      "validTargets": 3068,
+      "seconds": 0.12163158299517818
+    },
+    {
+      "step": 133,
+      "trainBatchLoss": 4.23770809173584,
+      "gradientL2Norm": 0.6038516163825989,
+      "validTargets": 3305,
+      "seconds": 0.12070337499608286
+    },
+    {
+      "step": 134,
+      "trainBatchLoss": 4.186848163604736,
+      "gradientL2Norm": 0.5490131974220276,
+      "validTargets": 3560,
+      "seconds": 0.11993895799969323
+    },
+    {
+      "step": 135,
+      "trainBatchLoss": 4.0733962059021,
+      "gradientL2Norm": 0.5823401212692261,
+      "validTargets": 3244,
+      "seconds": 0.11666704199160449
+    },
+    {
+      "step": 136,
+      "trainBatchLoss": 4.257646083831787,
+      "gradientL2Norm": 0.5192734599113464,
+      "validTargets": 3289,
+      "seconds": 0.11844379201647826
+    },
+    {
+      "step": 137,
+      "trainBatchLoss": 4.188347339630127,
+      "gradientL2Norm": 0.5796663761138916,
+      "validTargets": 3125,
+      "seconds": 0.11690554200322367
+    },
+    {
+      "step": 138,
+      "trainBatchLoss": 4.174865245819092,
+      "gradientL2Norm": 0.5585795640945435,
+      "validTargets": 3446,
+      "seconds": 0.11640133301261812
+    },
+    {
+      "step": 139,
+      "trainBatchLoss": 4.0811381340026855,
+      "gradientL2Norm": 0.582254946231842,
+      "validTargets": 3286,
+      "seconds": 0.11596737499348819
+    },
+    {
+      "step": 140,
+      "trainBatchLoss": 4.2348856925964355,
+      "gradientL2Norm": 0.591875433921814,
+      "validTargets": 3214,
+      "seconds": 0.11703812499763444
+    },
+    {
+      "step": 141,
+      "trainBatchLoss": 4.246387958526611,
+      "gradientL2Norm": 0.5337993502616882,
+      "validTargets": 3531,
+      "seconds": 0.12039537500822917
+    },
+    {
+      "step": 142,
+      "trainBatchLoss": 4.087072849273682,
+      "gradientL2Norm": 0.5831224918365479,
+      "validTargets": 3115,
+      "seconds": 0.11958420800510794
+    },
+    {
+      "step": 143,
+      "trainBatchLoss": 4.1850433349609375,
+      "gradientL2Norm": 0.5593866109848022,
+      "validTargets": 3154,
+      "seconds": 0.11800037501961924
+    },
+    {
+      "step": 144,
+      "trainBatchLoss": 4.339095115661621,
+      "gradientL2Norm": 0.6400756239891052,
+      "validTargets": 2073,
+      "seconds": 0.0738007909967564
+    },
+    {
+      "step": 145,
+      "trainBatchLoss": 4.063786506652832,
+      "gradientL2Norm": 0.6149329543113708,
+      "validTargets": 3351,
+      "seconds": 0.11610287500661798
+    },
+    {
+      "step": 146,
+      "trainBatchLoss": 3.980483055114746,
+      "gradientL2Norm": 0.605423092842102,
+      "validTargets": 3303,
+      "seconds": 0.11617225001100451
+    },
+    {
+      "step": 147,
+      "trainBatchLoss": 4.110053539276123,
+      "gradientL2Norm": 0.6122611165046692,
+      "validTargets": 3008,
+      "seconds": 0.11704641598043963
+    },
+    {
+      "step": 148,
+      "trainBatchLoss": 4.093178749084473,
+      "gradientL2Norm": 0.6631900072097778,
+      "validTargets": 3116,
+      "seconds": 0.12080399997648783
+    },
+    {
+      "step": 149,
+      "trainBatchLoss": 3.998000383377075,
+      "gradientL2Norm": 0.5929508209228516,
+      "validTargets": 3022,
+      "seconds": 0.1198813329974655
+    },
+    {
+      "step": 150,
+      "trainBatchLoss": 4.1078619956970215,
+      "gradientL2Norm": 0.6593229174613953,
+      "validTargets": 2897,
+      "seconds": 0.12263074997463264
+    },
+    {
+      "step": 151,
+      "trainBatchLoss": 4.1173415184021,
+      "gradientL2Norm": 0.5668742060661316,
+      "validTargets": 3402,
+      "seconds": 0.11895775000448339
+    },
+    {
+      "step": 152,
+      "trainBatchLoss": 4.057751655578613,
+      "gradientL2Norm": 0.5547947287559509,
+      "validTargets": 3344,
+      "seconds": 0.11651704099494964
+    },
+    {
+      "step": 153,
+      "trainBatchLoss": 3.9675612449645996,
+      "gradientL2Norm": 0.5666946768760681,
+      "validTargets": 3370,
+      "seconds": 0.12136620900128037
+    },
+    {
+      "step": 154,
+      "trainBatchLoss": 4.027551651000977,
+      "gradientL2Norm": 0.5822856426239014,
+      "validTargets": 3507,
+      "seconds": 0.11955345800379291
+    },
+    {
+      "step": 155,
+      "trainBatchLoss": 3.9775285720825195,
+      "gradientL2Norm": 0.553741991519928,
+      "validTargets": 3174,
+      "seconds": 0.11765204201219603
+    },
+    {
+      "step": 156,
+      "trainBatchLoss": 3.928786277770996,
+      "gradientL2Norm": 0.5496690273284912,
+      "validTargets": 3294,
+      "seconds": 0.11655058298492804
+    },
+    {
+      "step": 157,
+      "trainBatchLoss": 4.077550411224365,
+      "gradientL2Norm": 0.5655657649040222,
+      "validTargets": 3046,
+      "seconds": 0.12048533398774453
+    },
+    {
+      "step": 158,
+      "trainBatchLoss": 4.104045391082764,
+      "gradientL2Norm": 0.5887817144393921,
+      "validTargets": 2893,
+      "seconds": 0.11898662499152124
+    },
+    {
+      "step": 159,
+      "trainBatchLoss": 4.002956390380859,
+      "gradientL2Norm": 0.6585533022880554,
+      "validTargets": 2915,
+      "seconds": 0.12144554199767299
+    },
+    {
+      "step": 160,
+      "trainBatchLoss": 3.9701507091522217,
+      "gradientL2Norm": 0.6004005670547485,
+      "validTargets": 3244,
+      "seconds": 0.12010745899169706
+    },
+    {
+      "step": 161,
+      "trainBatchLoss": 4.008599281311035,
+      "gradientL2Norm": 0.5399889349937439,
+      "validTargets": 3312,
+      "seconds": 0.12173712500953116
+    },
+    {
+      "step": 162,
+      "trainBatchLoss": 4.1958794593811035,
+      "gradientL2Norm": 0.6290075778961182,
+      "validTargets": 3456,
+      "seconds": 0.11984987498726696
+    },
+    {
+      "step": 163,
+      "trainBatchLoss": 4.027906894683838,
+      "gradientL2Norm": 0.618351936340332,
+      "validTargets": 3077,
+      "seconds": 0.12073379100183956
+    },
+    {
+      "step": 164,
+      "trainBatchLoss": 4.172760963439941,
+      "gradientL2Norm": 0.5994360446929932,
+      "validTargets": 3237,
+      "seconds": 0.11985979200107977
+    },
+    {
+      "step": 165,
+      "trainBatchLoss": 4.024181842803955,
+      "gradientL2Norm": 0.6064236760139465,
+      "validTargets": 3059,
+      "seconds": 0.12166495897690766
+    },
+    {
+      "step": 166,
+      "trainBatchLoss": 3.9647769927978516,
+      "gradientL2Norm": 0.646752119064331,
+      "validTargets": 3334,
+      "seconds": 0.11865345897967927
+    },
+    {
+      "step": 167,
+      "trainBatchLoss": 4.172672271728516,
+      "gradientL2Norm": 0.7129282355308533,
+      "validTargets": 2769,
+      "seconds": 0.11731683401740156
+    },
+    {
+      "step": 168,
+      "trainBatchLoss": 4.095003604888916,
+      "gradientL2Norm": 0.6106597781181335,
+      "validTargets": 3344,
+      "seconds": 0.11530820801272057
+    },
+    {
+      "step": 169,
+      "trainBatchLoss": 4.062411308288574,
+      "gradientL2Norm": 0.7124953866004944,
+      "validTargets": 3094,
+      "seconds": 0.12184287499985658
+    },
+    {
+      "step": 170,
+      "trainBatchLoss": 4.049128532409668,
+      "gradientL2Norm": 0.5896835327148438,
+      "validTargets": 3575,
+      "seconds": 0.11944416598998941
+    },
+    {
+      "step": 171,
+      "trainBatchLoss": 4.148283958435059,
+      "gradientL2Norm": 0.7822864651679993,
+      "validTargets": 3267,
+      "seconds": 0.1171312500082422
+    },
+    {
+      "step": 172,
+      "trainBatchLoss": 3.9304592609405518,
+      "gradientL2Norm": 0.63421630859375,
+      "validTargets": 3465,
+      "seconds": 0.11601087500457652
+    },
+    {
+      "step": 173,
+      "trainBatchLoss": 4.140496253967285,
+      "gradientL2Norm": 0.6598609089851379,
+      "validTargets": 3286,
+      "seconds": 0.11771008401410654
+    },
+    {
+      "step": 174,
+      "trainBatchLoss": 3.913959264755249,
+      "gradientL2Norm": 0.7547221779823303,
+      "validTargets": 3010,
+      "seconds": 0.12056320800911635
+    },
+    {
+      "step": 175,
+      "trainBatchLoss": 4.073358058929443,
+      "gradientL2Norm": 0.597108781337738,
+      "validTargets": 3375,
+      "seconds": 0.11891087499679998
+    },
+    {
+      "step": 176,
+      "trainBatchLoss": 3.9666004180908203,
+      "gradientL2Norm": 0.6926335692405701,
+      "validTargets": 3438,
+      "seconds": 0.11698399999295361
+    },
+    {
+      "step": 177,
+      "trainBatchLoss": 4.074045658111572,
+      "gradientL2Norm": 0.7095876336097717,
+      "validTargets": 3328,
+      "seconds": 0.12064145799377002
+    },
+    {
+      "step": 178,
+      "trainBatchLoss": 4.008759498596191,
+      "gradientL2Norm": 0.6738054156303406,
+      "validTargets": 3000,
+      "seconds": 0.11854275001678616
+    },
+    {
+      "step": 179,
+      "trainBatchLoss": 3.9475107192993164,
+      "gradientL2Norm": 0.7217863202095032,
+      "validTargets": 2988,
+      "seconds": 0.12366595800267532
+    },
+    {
+      "step": 180,
+      "trainBatchLoss": 3.9928669929504395,
+      "gradientL2Norm": 0.7256609797477722,
+      "validTargets": 2712,
+      "seconds": 0.11769341700710356
+    },
+    {
+      "step": 181,
+      "trainBatchLoss": 4.0690598487854,
+      "gradientL2Norm": 0.7411782741546631,
+      "validTargets": 3128,
+      "seconds": 0.1181418749911245
+    },
+    {
+      "step": 182,
+      "trainBatchLoss": 4.041654109954834,
+      "gradientL2Norm": 0.6419029235839844,
+      "validTargets": 3431,
+      "seconds": 0.12047575000906363
+    },
+    {
+      "step": 183,
+      "trainBatchLoss": 3.880715847015381,
+      "gradientL2Norm": 0.6407596468925476,
+      "validTargets": 3111,
+      "seconds": 0.12040495799737982
+    },
+    {
+      "step": 184,
+      "trainBatchLoss": 3.9518606662750244,
+      "gradientL2Norm": 0.6414679884910583,
+      "validTargets": 3374,
+      "seconds": 0.11635208397638053
+    },
+    {
+      "step": 185,
+      "trainBatchLoss": 4.0842156410217285,
+      "gradientL2Norm": 0.71665358543396,
+      "validTargets": 2904,
+      "seconds": 0.11664170800941065
+    },
+    {
+      "step": 186,
+      "trainBatchLoss": 4.013771057128906,
+      "gradientL2Norm": 0.620225191116333,
+      "validTargets": 3313,
+      "seconds": 0.137616291991435
+    },
+    {
+      "step": 187,
+      "trainBatchLoss": 3.9394114017486572,
+      "gradientL2Norm": 0.6073662638664246,
+      "validTargets": 3576,
+      "seconds": 0.11911712499568239
+    },
+    {
+      "step": 188,
+      "trainBatchLoss": 4.037090301513672,
+      "gradientL2Norm": 0.6226710081100464,
+      "validTargets": 3245,
+      "seconds": 0.11628504199325107
+    },
+    {
+      "step": 189,
+      "trainBatchLoss": 3.96718168258667,
+      "gradientL2Norm": 0.7201395630836487,
+      "validTargets": 2807,
+      "seconds": 0.11689933299203403
+    },
+    {
+      "step": 190,
+      "trainBatchLoss": 4.066850185394287,
+      "gradientL2Norm": 0.6939040422439575,
+      "validTargets": 2841,
+      "seconds": 0.11662950000027195
+    },
+    {
+      "step": 191,
+      "trainBatchLoss": 4.079753398895264,
+      "gradientL2Norm": 0.6773008108139038,
+      "validTargets": 3302,
+      "seconds": 0.12120608301484026
+    },
+    {
+      "step": 192,
+      "trainBatchLoss": 3.82513165473938,
+      "gradientL2Norm": 0.5876891613006592,
+      "validTargets": 3702,
+      "seconds": 0.11979791699559428
+    },
+    {
+      "step": 193,
+      "trainBatchLoss": 3.9888319969177246,
+      "gradientL2Norm": 0.7151671648025513,
+      "validTargets": 3106,
+      "seconds": 0.11789520797901787
+    },
+    {
+      "step": 194,
+      "trainBatchLoss": 4.010054588317871,
+      "gradientL2Norm": 0.6329686045646667,
+      "validTargets": 3404,
+      "seconds": 0.12053962500067428
+    },
+    {
+      "step": 195,
+      "trainBatchLoss": 3.990727186203003,
+      "gradientL2Norm": 0.773266613483429,
+      "validTargets": 3380,
+      "seconds": 0.11894637500518002
+    },
+    {
+      "step": 196,
+      "trainBatchLoss": 4.020296573638916,
+      "gradientL2Norm": 0.7417896389961243,
+      "validTargets": 2850,
+      "seconds": 0.11660916701657698
+    },
+    {
+      "step": 197,
+      "trainBatchLoss": 3.904256582260132,
+      "gradientL2Norm": 0.5876120328903198,
+      "validTargets": 3246,
+      "seconds": 0.11623637500451878
+    },
+    {
+      "step": 198,
+      "trainBatchLoss": 3.7910897731781006,
+      "gradientL2Norm": 0.6661316752433777,
+      "validTargets": 3560,
+      "seconds": 0.11652537502232008
+    },
+    {
+      "step": 199,
+      "trainBatchLoss": 4.028604984283447,
+      "gradientL2Norm": 0.7807828783988953,
+      "validTargets": 3040,
+      "seconds": 0.12118304101750255
+    },
+    {
+      "step": 200,
+      "trainBatchLoss": 3.9234352111816406,
+      "gradientL2Norm": 0.5951608419418335,
+      "validTargets": 3259,
+      "seconds": 0.11942195799201727
+    },
+    {
+      "step": 201,
+      "trainBatchLoss": 3.8187434673309326,
+      "gradientL2Norm": 0.7405251860618591,
+      "validTargets": 3316,
+      "seconds": 0.11734320901450701
+    },
+    {
+      "step": 202,
+      "trainBatchLoss": 4.000256061553955,
+      "gradientL2Norm": 0.6666015982627869,
+      "validTargets": 3069,
+      "seconds": 0.11706566700013354
+    },
+    {
+      "step": 203,
+      "trainBatchLoss": 3.9839460849761963,
+      "gradientL2Norm": 0.5875349640846252,
+      "validTargets": 3205,
+      "seconds": 0.12123129199608229
+    },
+    {
+      "step": 204,
+      "trainBatchLoss": 3.882519245147705,
+      "gradientL2Norm": 0.6342586874961853,
+      "validTargets": 3386,
+      "seconds": 0.11902462498983368
+    },
+    {
+      "step": 205,
+      "trainBatchLoss": 3.8751494884490967,
+      "gradientL2Norm": 0.6270129680633545,
+      "validTargets": 3299,
+      "seconds": 0.11587837498518638
+    },
+    {
+      "step": 206,
+      "trainBatchLoss": 4.050022602081299,
+      "gradientL2Norm": 0.6398665308952332,
+      "validTargets": 3143,
+      "seconds": 0.11672474999795668
+    },
+    {
+      "step": 207,
+      "trainBatchLoss": 3.9379520416259766,
+      "gradientL2Norm": 0.6283574104309082,
+      "validTargets": 3226,
+      "seconds": 0.12259912499575876
+    },
+    {
+      "step": 208,
+      "trainBatchLoss": 3.9732894897460938,
+      "gradientL2Norm": 0.6369338035583496,
+      "validTargets": 3154,
+      "seconds": 0.11869766699965112
+    },
+    {
+      "step": 209,
+      "trainBatchLoss": 3.8782858848571777,
+      "gradientL2Norm": 0.6634724140167236,
+      "validTargets": 3260,
+      "seconds": 0.11651662498479709
+    },
+    {
+      "step": 210,
+      "trainBatchLoss": 3.8802623748779297,
+      "gradientL2Norm": 0.6609158515930176,
+      "validTargets": 3061,
+      "seconds": 0.11690574997919612
+    },
+    {
+      "step": 211,
+      "trainBatchLoss": 3.8686492443084717,
+      "gradientL2Norm": 0.6252654194831848,
+      "validTargets": 3390,
+      "seconds": 0.12120479199802503
+    },
+    {
+      "step": 212,
+      "trainBatchLoss": 3.943283796310425,
+      "gradientL2Norm": 0.6209890842437744,
+      "validTargets": 3012,
+      "seconds": 0.11892066700966097
+    },
+    {
+      "step": 213,
+      "trainBatchLoss": 3.771134376525879,
+      "gradientL2Norm": 0.6310169100761414,
+      "validTargets": 3585,
+      "seconds": 0.11637899998459034
+    },
+    {
+      "step": 214,
+      "trainBatchLoss": 3.8508527278900146,
+      "gradientL2Norm": 0.5496677756309509,
+      "validTargets": 3386,
+      "seconds": 0.11632049997569993
+    },
+    {
+      "step": 215,
+      "trainBatchLoss": 3.9751498699188232,
+      "gradientL2Norm": 0.6383876204490662,
+      "validTargets": 3238,
+      "seconds": 0.11633466600324027
+    },
+    {
+      "step": 216,
+      "trainBatchLoss": 3.7720463275909424,
+      "gradientL2Norm": 0.9754523634910583,
+      "validTargets": 1546,
+      "seconds": 0.07575220798025839
+    },
+    {
+      "step": 217,
+      "trainBatchLoss": 3.7307186126708984,
+      "gradientL2Norm": 0.6775650382041931,
+      "validTargets": 3303,
+      "seconds": 0.11584737501107156
+    },
+    {
+      "step": 218,
+      "trainBatchLoss": 3.6554574966430664,
+      "gradientL2Norm": 0.6600874066352844,
+      "validTargets": 3130,
+      "seconds": 0.12172804202418774
+    },
+    {
+      "step": 219,
+      "trainBatchLoss": 3.713820219039917,
+      "gradientL2Norm": 0.6638412475585938,
+      "validTargets": 3447,
+      "seconds": 0.11780545799410902
+    },
+    {
+      "step": 220,
+      "trainBatchLoss": 4.008756160736084,
+      "gradientL2Norm": 0.6842074394226074,
+      "validTargets": 2728,
+      "seconds": 0.11715916698449291
+    },
+    {
+      "step": 221,
+      "trainBatchLoss": 3.8037872314453125,
+      "gradientL2Norm": 0.750261127948761,
+      "validTargets": 2803,
+      "seconds": 0.12237133301096037
+    },
+    {
+      "step": 222,
+      "trainBatchLoss": 3.6991193294525146,
+      "gradientL2Norm": 0.6389603614807129,
+      "validTargets": 3516,
+      "seconds": 0.11986991701996885
+    },
+    {
+      "step": 223,
+      "trainBatchLoss": 3.887583017349243,
+      "gradientL2Norm": 0.7404497861862183,
+      "validTargets": 3055,
+      "seconds": 0.11690979197737761
+    },
+    {
+      "step": 224,
+      "trainBatchLoss": 3.7978663444519043,
+      "gradientL2Norm": 0.6247273683547974,
+      "validTargets": 3036,
+      "seconds": 0.12082487501902506
+    },
+    {
+      "step": 225,
+      "trainBatchLoss": 3.726487874984741,
+      "gradientL2Norm": 0.6885792016983032,
+      "validTargets": 3089,
+      "seconds": 0.11847533300169744
+    },
+    {
+      "step": 226,
+      "trainBatchLoss": 3.7472593784332275,
+      "gradientL2Norm": 0.6537755131721497,
+      "validTargets": 2871,
+      "seconds": 0.11696904199197888
+    },
+    {
+      "step": 227,
+      "trainBatchLoss": 3.7286479473114014,
+      "gradientL2Norm": 0.6711493730545044,
+      "validTargets": 3470,
+      "seconds": 0.11967849999200553
+    },
+    {
+      "step": 228,
+      "trainBatchLoss": 3.8705947399139404,
+      "gradientL2Norm": 0.6731036305427551,
+      "validTargets": 3343,
+      "seconds": 0.11979287498979829
+    },
+    {
+      "step": 229,
+      "trainBatchLoss": 3.735409736633301,
+      "gradientL2Norm": 0.6947994232177734,
+      "validTargets": 3121,
+      "seconds": 0.12334016599925235
+    },
+    {
+      "step": 230,
+      "trainBatchLoss": 3.8534035682678223,
+      "gradientL2Norm": 0.6724683046340942,
+      "validTargets": 2937,
+      "seconds": 0.11707233401830308
+    },
+    {
+      "step": 231,
+      "trainBatchLoss": 3.7393434047698975,
+      "gradientL2Norm": 0.6374584436416626,
+      "validTargets": 3571,
+      "seconds": 0.11896208397229202
+    },
+    {
+      "step": 232,
+      "trainBatchLoss": 3.7052011489868164,
+      "gradientL2Norm": 0.668133556842804,
+      "validTargets": 3256,
+      "seconds": 0.11731420800788328
+    },
+    {
+      "step": 233,
+      "trainBatchLoss": 3.778757333755493,
+      "gradientL2Norm": 0.7785097360610962,
+      "validTargets": 2881,
+      "seconds": 0.12028879200806841
+    },
+    {
+      "step": 234,
+      "trainBatchLoss": 3.8398425579071045,
+      "gradientL2Norm": 0.8037791848182678,
+      "validTargets": 3177,
+      "seconds": 0.11954399998649023
+    },
+    {
+      "step": 235,
+      "trainBatchLoss": 3.717958450317383,
+      "gradientL2Norm": 0.7344354391098022,
+      "validTargets": 2801,
+      "seconds": 0.1220754170208238
+    },
+    {
+      "step": 236,
+      "trainBatchLoss": 3.803410291671753,
+      "gradientL2Norm": 0.7568563222885132,
+      "validTargets": 3060,
+      "seconds": 0.11915629098075442
+    },
+    {
+      "step": 237,
+      "trainBatchLoss": 3.8308119773864746,
+      "gradientL2Norm": 0.6829326152801514,
+      "validTargets": 3315,
+      "seconds": 0.11648812500061467
+    },
+    {
+      "step": 238,
+      "trainBatchLoss": 3.7590508460998535,
+      "gradientL2Norm": 0.7091466784477234,
+      "validTargets": 3346,
+      "seconds": 0.11844033299712464
+    },
+    {
+      "step": 239,
+      "trainBatchLoss": 3.838167428970337,
+      "gradientL2Norm": 0.7151381373405457,
+      "validTargets": 3006,
+      "seconds": 0.11981391598237678
+    },
+    {
+      "step": 240,
+      "trainBatchLoss": 3.7918150424957275,
+      "gradientL2Norm": 0.748849093914032,
+      "validTargets": 3396,
+      "seconds": 0.11953045899281278
+    },
+    {
+      "step": 241,
+      "trainBatchLoss": 3.8356504440307617,
+      "gradientL2Norm": 0.7940745949745178,
+      "validTargets": 3003,
+      "seconds": 0.12167491699801758
+    },
+    {
+      "step": 242,
+      "trainBatchLoss": 3.6731085777282715,
+      "gradientL2Norm": 0.7603728771209717,
+      "validTargets": 3155,
+      "seconds": 0.11903337499825284
+    },
+    {
+      "step": 243,
+      "trainBatchLoss": 3.7860453128814697,
+      "gradientL2Norm": 0.6501469612121582,
+      "validTargets": 3428,
+      "seconds": 0.11571383397676982
+    },
+    {
+      "step": 244,
+      "trainBatchLoss": 3.787760019302368,
+      "gradientL2Norm": 0.7259752750396729,
+      "validTargets": 2847,
+      "seconds": 0.11650045801070519
+    },
+    {
+      "step": 245,
+      "trainBatchLoss": 3.73587965965271,
+      "gradientL2Norm": 0.6523193120956421,
+      "validTargets": 3244,
+      "seconds": 0.11711870800354518
+    },
+    {
+      "step": 246,
+      "trainBatchLoss": 3.9143996238708496,
+      "gradientL2Norm": 0.6696126461029053,
+      "validTargets": 3453,
+      "seconds": 0.12125962501158938
+    },
+    {
+      "step": 247,
+      "trainBatchLoss": 3.69870924949646,
+      "gradientL2Norm": 0.6426818370819092,
+      "validTargets": 3309,
+      "seconds": 0.1192361669964157
+    },
+    {
+      "step": 248,
+      "trainBatchLoss": 3.7716357707977295,
+      "gradientL2Norm": 0.655726969242096,
+      "validTargets": 3102,
+      "seconds": 0.12293104099808261
+    },
+    {
+      "step": 249,
+      "trainBatchLoss": 3.743394136428833,
+      "gradientL2Norm": 0.7131045460700989,
+      "validTargets": 3010,
+      "seconds": 0.11864849997800775
+    },
+    {
+      "step": 250,
+      "trainBatchLoss": 3.7364017963409424,
+      "gradientL2Norm": 0.7243261933326721,
+      "validTargets": 3262,
+      "seconds": 0.12077808298636228
+    },
+    {
+      "step": 251,
+      "trainBatchLoss": 3.654628276824951,
+      "gradientL2Norm": 0.6549583673477173,
+      "validTargets": 3301,
+      "seconds": 0.11517170901061036
+    },
+    {
+      "step": 252,
+      "trainBatchLoss": 3.784228801727295,
+      "gradientL2Norm": 0.7092410922050476,
+      "validTargets": 3300,
+      "seconds": 0.11388874999829568
+    },
+    {
+      "step": 253,
+      "trainBatchLoss": 3.817584276199341,
+      "gradientL2Norm": 0.7574160099029541,
+      "validTargets": 3356,
+      "seconds": 0.11643908399855718
+    },
+    {
+      "step": 254,
+      "trainBatchLoss": 3.794485092163086,
+      "gradientL2Norm": 0.6935399174690247,
+      "validTargets": 3549,
+      "seconds": 0.11670933399000205
+    },
+    {
+      "step": 255,
+      "trainBatchLoss": 3.755575180053711,
+      "gradientL2Norm": 0.7279067039489746,
+      "validTargets": 3155,
+      "seconds": 0.12107783299870789
+    },
+    {
+      "step": 256,
+      "trainBatchLoss": 3.7992215156555176,
+      "gradientL2Norm": 0.7944319248199463,
+      "validTargets": 3306,
+      "seconds": 0.11830137501237914
+    },
+    {
+      "step": 257,
+      "trainBatchLoss": 3.719428062438965,
+      "gradientL2Norm": 0.773820161819458,
+      "validTargets": 3609,
+      "seconds": 0.1243492089852225
+    },
+    {
+      "step": 258,
+      "trainBatchLoss": 3.71075439453125,
+      "gradientL2Norm": 0.6741430163383484,
+      "validTargets": 3476,
+      "seconds": 0.11884295800700784
+    },
+    {
+      "step": 259,
+      "trainBatchLoss": 3.65762996673584,
+      "gradientL2Norm": 0.9387423992156982,
+      "validTargets": 3421,
+      "seconds": 0.12057008399278857
+    },
+    {
+      "step": 260,
+      "trainBatchLoss": 3.7011091709136963,
+      "gradientL2Norm": 0.7043643593788147,
+      "validTargets": 3252,
+      "seconds": 0.11918399998103268
+    },
+    {
+      "step": 261,
+      "trainBatchLoss": 3.630641460418701,
+      "gradientL2Norm": 0.8078711032867432,
+      "validTargets": 2913,
+      "seconds": 0.1238048330124002
+    },
+    {
+      "step": 262,
+      "trainBatchLoss": 3.656513214111328,
+      "gradientL2Norm": 0.7682580351829529,
+      "validTargets": 3316,
+      "seconds": 0.11788274999707937
+    },
+    {
+      "step": 263,
+      "trainBatchLoss": 3.692805051803589,
+      "gradientL2Norm": 0.9091574549674988,
+      "validTargets": 2988,
+      "seconds": 0.11662479100050405
+    },
+    {
+      "step": 264,
+      "trainBatchLoss": 3.6312835216522217,
+      "gradientL2Norm": 0.7545204162597656,
+      "validTargets": 3490,
+      "seconds": 0.11669929200434126
+    },
+    {
+      "step": 265,
+      "trainBatchLoss": 3.5750601291656494,
+      "gradientL2Norm": 0.818254828453064,
+      "validTargets": 3210,
+      "seconds": 0.11641054198844358
+    },
+    {
+      "step": 266,
+      "trainBatchLoss": 3.8199315071105957,
+      "gradientL2Norm": 0.7005237340927124,
+      "validTargets": 2932,
+      "seconds": 0.12156974998652004
+    },
+    {
+      "step": 267,
+      "trainBatchLoss": 3.7173755168914795,
+      "gradientL2Norm": 0.7594103813171387,
+      "validTargets": 2761,
+      "seconds": 0.1189967909886036
+    },
+    {
+      "step": 268,
+      "trainBatchLoss": 3.7701845169067383,
+      "gradientL2Norm": 0.8143820762634277,
+      "validTargets": 2792,
+      "seconds": 0.11663070801296271
+    },
+    {
+      "step": 269,
+      "trainBatchLoss": 3.7083346843719482,
+      "gradientL2Norm": 0.818403959274292,
+      "validTargets": 3352,
+      "seconds": 0.11735508299898356
+    },
+    {
+      "step": 270,
+      "trainBatchLoss": 3.6809020042419434,
+      "gradientL2Norm": 0.6529406309127808,
+      "validTargets": 3192,
+      "seconds": 0.11701899999752641
+    },
+    {
+      "step": 271,
+      "trainBatchLoss": 3.774691104888916,
+      "gradientL2Norm": 0.7406541109085083,
+      "validTargets": 3318,
+      "seconds": 0.1206632920075208
+    },
+    {
+      "step": 272,
+      "trainBatchLoss": 3.631608247756958,
+      "gradientL2Norm": 0.6738897562026978,
+      "validTargets": 3273,
+      "seconds": 0.11874170898227021
+    },
+    {
+      "step": 273,
+      "trainBatchLoss": 3.7512879371643066,
+      "gradientL2Norm": 0.799879789352417,
+      "validTargets": 2901,
+      "seconds": 0.11749462501029484
+    },
+    {
+      "step": 274,
+      "trainBatchLoss": 3.6796061992645264,
+      "gradientL2Norm": 0.7904523015022278,
+      "validTargets": 3435,
+      "seconds": 0.12011629200424068
+    },
+    {
+      "step": 275,
+      "trainBatchLoss": 3.642078161239624,
+      "gradientL2Norm": 0.6522324085235596,
+      "validTargets": 3415,
+      "seconds": 0.12015379199874587
+    },
+    {
+      "step": 276,
+      "trainBatchLoss": 3.6705093383789062,
+      "gradientL2Norm": 0.7880316972732544,
+      "validTargets": 3338,
+      "seconds": 0.12151433300459757
+    },
+    {
+      "step": 277,
+      "trainBatchLoss": 3.6515238285064697,
+      "gradientL2Norm": 0.7957916259765625,
+      "validTargets": 3159,
+      "seconds": 0.11881083401385695
+    },
+    {
+      "step": 278,
+      "trainBatchLoss": 3.7552871704101562,
+      "gradientL2Norm": 0.7267515063285828,
+      "validTargets": 3134,
+      "seconds": 0.11698029100080021
+    },
+    {
+      "step": 279,
+      "trainBatchLoss": 3.7350873947143555,
+      "gradientL2Norm": 0.7003257274627686,
+      "validTargets": 3482,
+      "seconds": 0.11722762498538941
+    },
+    {
+      "step": 280,
+      "trainBatchLoss": 3.7361953258514404,
+      "gradientL2Norm": 0.7374753355979919,
+      "validTargets": 3074,
+      "seconds": 0.11703662501531653
+    },
+    {
+      "step": 281,
+      "trainBatchLoss": 3.7291247844696045,
+      "gradientL2Norm": 0.7265692353248596,
+      "validTargets": 3370,
+      "seconds": 0.12083299999358132
+    },
+    {
+      "step": 282,
+      "trainBatchLoss": 3.8258979320526123,
+      "gradientL2Norm": 0.7343589663505554,
+      "validTargets": 3168,
+      "seconds": 0.11918837501434609
+    },
+    {
+      "step": 283,
+      "trainBatchLoss": 3.6698248386383057,
+      "gradientL2Norm": 0.7348571419715881,
+      "validTargets": 3183,
+      "seconds": 0.12340583300101571
+    },
+    {
+      "step": 284,
+      "trainBatchLoss": 3.682142734527588,
+      "gradientL2Norm": 0.7335239052772522,
+      "validTargets": 3551,
+      "seconds": 0.11842979199718684
+    },
+    {
+      "step": 285,
+      "trainBatchLoss": 3.7172460556030273,
+      "gradientL2Norm": 0.6972746253013611,
+      "validTargets": 3089,
+      "seconds": 0.11572783297742717
+    },
+    {
+      "step": 286,
+      "trainBatchLoss": 3.5898842811584473,
+      "gradientL2Norm": 0.7229300737380981,
+      "validTargets": 3197,
+      "seconds": 0.11620866699377075
+    },
+    {
+      "step": 287,
+      "trainBatchLoss": 3.6421961784362793,
+      "gradientL2Norm": 0.7095904350280762,
+      "validTargets": 3478,
+      "seconds": 0.12036937501397915
+    },
+    {
+      "step": 288,
+      "trainBatchLoss": 3.8376333713531494,
+      "gradientL2Norm": 0.8670942187309265,
+      "validTargets": 2160,
+      "seconds": 0.07764750000205822
+    },
+    {
+      "step": 289,
+      "trainBatchLoss": 3.45169734954834,
+      "gradientL2Norm": 0.752815306186676,
+      "validTargets": 3265,
+      "seconds": 0.11757845801184885
+    },
+    {
+      "step": 290,
+      "trainBatchLoss": 3.572661876678467,
+      "gradientL2Norm": 0.793555498123169,
+      "validTargets": 3263,
+      "seconds": 0.11651870800415054
+    },
+    {
+      "step": 291,
+      "trainBatchLoss": 3.5877110958099365,
+      "gradientL2Norm": 0.7371434569358826,
+      "validTargets": 3132,
+      "seconds": 0.12158629202167504
+    },
+    {
+      "step": 292,
+      "trainBatchLoss": 3.5745327472686768,
+      "gradientL2Norm": 0.6259525418281555,
+      "validTargets": 3678,
+      "seconds": 0.12022866599727422
+    },
+    {
+      "step": 293,
+      "trainBatchLoss": 3.502101421356201,
+      "gradientL2Norm": 0.7076864242553711,
+      "validTargets": 3532,
+      "seconds": 0.12172841699793935
+    },
+    {
+      "step": 294,
+      "trainBatchLoss": 3.5260050296783447,
+      "gradientL2Norm": 0.7036994695663452,
+      "validTargets": 3165,
+      "seconds": 0.11812958301743492
+    },
+    {
+      "step": 295,
+      "trainBatchLoss": 3.498861074447632,
+      "gradientL2Norm": 0.78383868932724,
+      "validTargets": 3529,
+      "seconds": 0.11627029100782238
+    },
+    {
+      "step": 296,
+      "trainBatchLoss": 3.558917284011841,
+      "gradientL2Norm": 0.7628056406974792,
+      "validTargets": 3403,
+      "seconds": 0.11751345798256807
+    },
+    {
+      "step": 297,
+      "trainBatchLoss": 3.3665332794189453,
+      "gradientL2Norm": 0.7352023124694824,
+      "validTargets": 3358,
+      "seconds": 0.12208191701211035
+    },
+    {
+      "step": 298,
+      "trainBatchLoss": 3.476928949356079,
+      "gradientL2Norm": 0.7472034692764282,
+      "validTargets": 2907,
+      "seconds": 0.11937058399780653
+    },
+    {
+      "step": 299,
+      "trainBatchLoss": 3.547675132751465,
+      "gradientL2Norm": 0.7055591344833374,
+      "validTargets": 3144,
+      "seconds": 0.11641399998916313
+    },
+    {
+      "step": 300,
+      "trainBatchLoss": 3.3986246585845947,
+      "gradientL2Norm": 0.8182889223098755,
+      "validTargets": 2772,
+      "seconds": 0.12127062500803731
+    },
+    {
+      "step": 301,
+      "trainBatchLoss": 3.499375104904175,
+      "gradientL2Norm": 0.7642377018928528,
+      "validTargets": 2996,
+      "seconds": 0.11824170901672915
+    },
+    {
+      "step": 302,
+      "trainBatchLoss": 3.5586698055267334,
+      "gradientL2Norm": 0.8302979469299316,
+      "validTargets": 3413,
+      "seconds": 0.11663608299568295
+    },
+    {
+      "step": 303,
+      "trainBatchLoss": 3.5578927993774414,
+      "gradientL2Norm": 0.8014200925827026,
+      "validTargets": 3140,
+      "seconds": 0.11646366599597968
+    },
+    {
+      "step": 304,
+      "trainBatchLoss": 3.585536003112793,
+      "gradientL2Norm": 0.8802899718284607,
+      "validTargets": 2892,
+      "seconds": 0.1167219580092933
+    },
+    {
+      "step": 305,
+      "trainBatchLoss": 3.5362865924835205,
+      "gradientL2Norm": 0.7377952933311462,
+      "validTargets": 2932,
+      "seconds": 0.12107225001091138
+    },
+    {
+      "step": 306,
+      "trainBatchLoss": 3.5319809913635254,
+      "gradientL2Norm": 0.8244680762290955,
+      "validTargets": 3098,
+      "seconds": 0.1184932499891147
+    },
+    {
+      "step": 307,
+      "trainBatchLoss": 3.5597736835479736,
+      "gradientL2Norm": 0.8214921355247498,
+      "validTargets": 3246,
+      "seconds": 0.11896474999957718
+    },
+    {
+      "step": 308,
+      "trainBatchLoss": 3.4242868423461914,
+      "gradientL2Norm": 0.7063392400741577,
+      "validTargets": 3295,
+      "seconds": 0.12107733299490064
+    },
+    {
+      "step": 309,
+      "trainBatchLoss": 3.5336754322052,
+      "gradientL2Norm": 0.8151696920394897,
+      "validTargets": 3445,
+      "seconds": 0.12010433300747536
+    },
+    {
+      "step": 310,
+      "trainBatchLoss": 3.5660743713378906,
+      "gradientL2Norm": 0.8003303408622742,
+      "validTargets": 2789,
+      "seconds": 0.11998191598104313
+    },
+    {
+      "step": 311,
+      "trainBatchLoss": 3.466348886489868,
+      "gradientL2Norm": 0.7739856243133545,
+      "validTargets": 3492,
+      "seconds": 0.11922425002558157
+    },
+    {
+      "step": 312,
+      "trainBatchLoss": 3.402324914932251,
+      "gradientL2Norm": 0.7166683673858643,
+      "validTargets": 3095,
+      "seconds": 0.12189537499216385
+    },
+    {
+      "step": 313,
+      "trainBatchLoss": 3.5543012619018555,
+      "gradientL2Norm": 0.7437686920166016,
+      "validTargets": 3019,
+      "seconds": 0.11999566698796116
+    },
+    {
+      "step": 314,
+      "trainBatchLoss": 3.5883562564849854,
+      "gradientL2Norm": 0.724453330039978,
+      "validTargets": 3204,
+      "seconds": 0.11615266700391658
+    },
+    {
+      "step": 315,
+      "trainBatchLoss": 3.5743443965911865,
+      "gradientL2Norm": 0.8073071837425232,
+      "validTargets": 2884,
+      "seconds": 0.11608520802110434
+    },
+    {
+      "step": 316,
+      "trainBatchLoss": 3.44828200340271,
+      "gradientL2Norm": 0.8094377517700195,
+      "validTargets": 3253,
+      "seconds": 0.11638112500077114
+    },
+    {
+      "step": 317,
+      "trainBatchLoss": 3.499244451522827,
+      "gradientL2Norm": 0.8581120371818542,
+      "validTargets": 3136,
+      "seconds": 0.11661316701793112
+    },
+    {
+      "step": 318,
+      "trainBatchLoss": 3.5921804904937744,
+      "gradientL2Norm": 0.7669734358787537,
+      "validTargets": 2796,
+      "seconds": 0.1163857499777805
+    },
+    {
+      "step": 319,
+      "trainBatchLoss": 3.4378461837768555,
+      "gradientL2Norm": 0.8308653831481934,
+      "validTargets": 3087,
+      "seconds": 0.11636720897513442
+    },
+    {
+      "step": 320,
+      "trainBatchLoss": 3.5663537979125977,
+      "gradientL2Norm": 0.7599602937698364,
+      "validTargets": 3163,
+      "seconds": 0.12145345800672658
+    },
+    {
+      "step": 321,
+      "trainBatchLoss": 3.5605039596557617,
+      "gradientL2Norm": 0.6907749772071838,
+      "validTargets": 3269,
+      "seconds": 0.1195356670068577
+    },
+    {
+      "step": 322,
+      "trainBatchLoss": 3.572964906692505,
+      "gradientL2Norm": 0.8108140230178833,
+      "validTargets": 3327,
+      "seconds": 0.12265820801258087
+    },
+    {
+      "step": 323,
+      "trainBatchLoss": 3.5286049842834473,
+      "gradientL2Norm": 0.777912437915802,
+      "validTargets": 2908,
+      "seconds": 0.11863658300717361
+    },
+    {
+      "step": 324,
+      "trainBatchLoss": 3.5883913040161133,
+      "gradientL2Norm": 0.8263548612594604,
+      "validTargets": 3152,
+      "seconds": 0.12239470798522234
+    },
+    {
+      "step": 325,
+      "trainBatchLoss": 3.591949462890625,
+      "gradientL2Norm": 0.7708624005317688,
+      "validTargets": 3224,
+      "seconds": 0.12560795800527558
+    },
+    {
+      "step": 326,
+      "trainBatchLoss": 3.493173837661743,
+      "gradientL2Norm": 0.8807247877120972,
+      "validTargets": 3128,
+      "seconds": 0.11799866700312123
+    },
+    {
+      "step": 327,
+      "trainBatchLoss": 3.478637456893921,
+      "gradientL2Norm": 0.7277083992958069,
+      "validTargets": 3495,
+      "seconds": 0.11603329199715517
+    },
+    {
+      "step": 328,
+      "trainBatchLoss": 3.5202314853668213,
+      "gradientL2Norm": 0.8001325726509094,
+      "validTargets": 3174,
+      "seconds": 0.11642779200337827
+    },
+    {
+      "step": 329,
+      "trainBatchLoss": 3.610065460205078,
+      "gradientL2Norm": 0.9362095594406128,
+      "validTargets": 3137,
+      "seconds": 0.12208308299886994
+    },
+    {
+      "step": 330,
+      "trainBatchLoss": 3.476079225540161,
+      "gradientL2Norm": 0.7791181206703186,
+      "validTargets": 3485,
+      "seconds": 0.12795679201371968
+    },
+    {
+      "step": 331,
+      "trainBatchLoss": 3.7279067039489746,
+      "gradientL2Norm": 0.8704886436462402,
+      "validTargets": 3073,
+      "seconds": 0.12098991600214504
+    },
+    {
+      "step": 332,
+      "trainBatchLoss": 3.6176815032958984,
+      "gradientL2Norm": 0.9047356843948364,
+      "validTargets": 2841,
+      "seconds": 0.12036050000460818
+    },
+    {
+      "step": 333,
+      "trainBatchLoss": 3.680290460586548,
+      "gradientL2Norm": 0.8129823207855225,
+      "validTargets": 2854,
+      "seconds": 0.11655087501276284
+    },
+    {
+      "step": 334,
+      "trainBatchLoss": 3.49344539642334,
+      "gradientL2Norm": 0.9020479321479797,
+      "validTargets": 3405,
+      "seconds": 0.12201329198433086
+    },
+    {
+      "step": 335,
+      "trainBatchLoss": 3.4494051933288574,
+      "gradientL2Norm": 0.7810824513435364,
+      "validTargets": 3290,
+      "seconds": 0.11794791699503548
+    },
+    {
+      "step": 336,
+      "trainBatchLoss": 3.49261212348938,
+      "gradientL2Norm": 0.8532224893569946,
+      "validTargets": 3354,
+      "seconds": 0.11709683400113136
+    },
+    {
+      "step": 337,
+      "trainBatchLoss": 3.5436360836029053,
+      "gradientL2Norm": 0.7685585021972656,
+      "validTargets": 3230,
+      "seconds": 0.12034662498626858
+    },
+    {
+      "step": 338,
+      "trainBatchLoss": 3.4195635318756104,
+      "gradientL2Norm": 0.749061644077301,
+      "validTargets": 3411,
+      "seconds": 0.11957129198708571
+    },
+    {
+      "step": 339,
+      "trainBatchLoss": 3.602654218673706,
+      "gradientL2Norm": 0.7680736780166626,
+      "validTargets": 3579,
+      "seconds": 0.11832420798600651
+    },
+    {
+      "step": 340,
+      "trainBatchLoss": 3.4463136196136475,
+      "gradientL2Norm": 0.7509724497795105,
+      "validTargets": 3384,
+      "seconds": 0.12088933298946358
+    },
+    {
+      "step": 341,
+      "trainBatchLoss": 3.522953748703003,
+      "gradientL2Norm": 0.7205020189285278,
+      "validTargets": 3311,
+      "seconds": 0.11896483300370164
+    },
+    {
+      "step": 342,
+      "trainBatchLoss": 3.4727962017059326,
+      "gradientL2Norm": 0.8153252601623535,
+      "validTargets": 3418,
+      "seconds": 0.12104066699976102
+    },
+    {
+      "step": 343,
+      "trainBatchLoss": 3.459691047668457,
+      "gradientL2Norm": 0.7359196543693542,
+      "validTargets": 3435,
+      "seconds": 0.11949916701996699
+    },
+    {
+      "step": 344,
+      "trainBatchLoss": 3.586578845977783,
+      "gradientL2Norm": 0.92347252368927,
+      "validTargets": 3009,
+      "seconds": 0.12284133301000111
+    },
+    {
+      "step": 345,
+      "trainBatchLoss": 3.59900164604187,
+      "gradientL2Norm": 0.8889096975326538,
+      "validTargets": 2754,
+      "seconds": 0.11919108300935477
+    },
+    {
+      "step": 346,
+      "trainBatchLoss": 3.435462713241577,
+      "gradientL2Norm": 0.8076886534690857,
+      "validTargets": 3124,
+      "seconds": 0.12097941699903458
+    },
+    {
+      "step": 347,
+      "trainBatchLoss": 3.4749057292938232,
+      "gradientL2Norm": 0.7699170708656311,
+      "validTargets": 3326,
+      "seconds": 0.11830687499605119
+    },
+    {
+      "step": 348,
+      "trainBatchLoss": 3.560159683227539,
+      "gradientL2Norm": 0.7434447407722473,
+      "validTargets": 3475,
+      "seconds": 0.11832966699148528
+    },
+    {
+      "step": 349,
+      "trainBatchLoss": 3.4990341663360596,
+      "gradientL2Norm": 0.7405619621276855,
+      "validTargets": 3219,
+      "seconds": 0.12234850000822917
+    },
+    {
+      "step": 350,
+      "trainBatchLoss": 3.468282699584961,
+      "gradientL2Norm": 0.8202159404754639,
+      "validTargets": 3235,
+      "seconds": 0.1182430420012679
+    },
+    {
+      "step": 351,
+      "trainBatchLoss": 3.4684975147247314,
+      "gradientL2Norm": 0.7745220065116882,
+      "validTargets": 3300,
+      "seconds": 0.11668550001922995
+    },
+    {
+      "step": 352,
+      "trainBatchLoss": 3.3860349655151367,
+      "gradientL2Norm": 0.7704141736030579,
+      "validTargets": 3475,
+      "seconds": 0.12184249999700114
+    },
+    {
+      "step": 353,
+      "trainBatchLoss": 3.56379771232605,
+      "gradientL2Norm": 0.7486684918403625,
+      "validTargets": 3320,
+      "seconds": 0.11995462499908172
+    },
+    {
+      "step": 354,
+      "trainBatchLoss": 3.5277822017669678,
+      "gradientL2Norm": 0.8943861722946167,
+      "validTargets": 3345,
+      "seconds": 0.1144012919976376
+    },
+    {
+      "step": 355,
+      "trainBatchLoss": 3.5240981578826904,
+      "gradientL2Norm": 0.8137140870094299,
+      "validTargets": 2979,
+      "seconds": 0.11668441700749099
+    },
+    {
+      "step": 356,
+      "trainBatchLoss": 3.5815703868865967,
+      "gradientL2Norm": 0.8008084893226624,
+      "validTargets": 3124,
+      "seconds": 0.11737170800915919
+    },
+    {
+      "step": 357,
+      "trainBatchLoss": 3.4604949951171875,
+      "gradientL2Norm": 0.8737696409225464,
+      "validTargets": 3138,
+      "seconds": 0.11734166700625792
+    },
+    {
+      "step": 358,
+      "trainBatchLoss": 3.5161023139953613,
+      "gradientL2Norm": 0.7450740933418274,
+      "validTargets": 3056,
+      "seconds": 0.12227154200081713
+    },
+    {
+      "step": 359,
+      "trainBatchLoss": 3.4078261852264404,
+      "gradientL2Norm": 0.8284639716148376,
+      "validTargets": 3290,
+      "seconds": 0.11752820899710059
+    },
+    {
+      "step": 360,
+      "trainBatchLoss": 3.4525725841522217,
+      "gradientL2Norm": 0.8955199718475342,
+      "validTargets": 2291,
+      "seconds": 0.0750787919969298
+    },
+    {
+      "step": 361,
+      "trainBatchLoss": 3.2738091945648193,
+      "gradientL2Norm": 0.7291203141212463,
+      "validTargets": 3337,
+      "seconds": 0.11570729198865592
+    },
+    {
+      "step": 362,
+      "trainBatchLoss": 3.3417129516601562,
+      "gradientL2Norm": 0.7544631361961365,
+      "validTargets": 3274,
+      "seconds": 0.1176931660156697
+    },
+    {
+      "step": 363,
+      "trainBatchLoss": 3.3270983695983887,
+      "gradientL2Norm": 0.8164169788360596,
+      "validTargets": 3008,
+      "seconds": 0.12133583301329054
+    },
+    {
+      "step": 364,
+      "trainBatchLoss": 3.33154559135437,
+      "gradientL2Norm": 0.7232731580734253,
+      "validTargets": 3214,
+      "seconds": 0.1195834589889273
+    },
+    {
+      "step": 365,
+      "trainBatchLoss": 3.323754072189331,
+      "gradientL2Norm": 0.7021843791007996,
+      "validTargets": 3365,
+      "seconds": 0.12015445900033228
+    },
+    {
+      "step": 366,
+      "trainBatchLoss": 3.4144155979156494,
+      "gradientL2Norm": 0.7464580535888672,
+      "validTargets": 3432,
+      "seconds": 0.12018575001275167
+    },
+    {
+      "step": 367,
+      "trainBatchLoss": 3.3607046604156494,
+      "gradientL2Norm": 0.8137816190719604,
+      "validTargets": 3306,
+      "seconds": 0.11664337498950772
+    },
+    {
+      "step": 368,
+      "trainBatchLoss": 3.4364590644836426,
+      "gradientL2Norm": 0.7636255621910095,
+      "validTargets": 3272,
+      "seconds": 0.12254666598164476
+    },
+    {
+      "step": 369,
+      "trainBatchLoss": 3.233065366744995,
+      "gradientL2Norm": 0.8119486570358276,
+      "validTargets": 3096,
+      "seconds": 0.11888691599597223
+    },
+    {
+      "step": 370,
+      "trainBatchLoss": 3.302617311477661,
+      "gradientL2Norm": 0.8162190914154053,
+      "validTargets": 3267,
+      "seconds": 0.12166441601584665
+    },
+    {
+      "step": 371,
+      "trainBatchLoss": 3.345857620239258,
+      "gradientL2Norm": 0.8058397769927979,
+      "validTargets": 3319,
+      "seconds": 0.11911174998385832
+    },
+    {
+      "step": 372,
+      "trainBatchLoss": 3.322701930999756,
+      "gradientL2Norm": 0.8486447930335999,
+      "validTargets": 2918,
+      "seconds": 0.12320224998984486
+    },
+    {
+      "step": 373,
+      "trainBatchLoss": 3.295271873474121,
+      "gradientL2Norm": 0.850017786026001,
+      "validTargets": 2837,
+      "seconds": 0.11775333300465718
+    },
+    {
+      "step": 374,
+      "trainBatchLoss": 3.2281839847564697,
+      "gradientL2Norm": 0.8060451745986938,
+      "validTargets": 3119,
+      "seconds": 0.1226400829909835
+    },
+    {
+      "step": 375,
+      "trainBatchLoss": 3.3253493309020996,
+      "gradientL2Norm": 0.927326500415802,
+      "validTargets": 2883,
+      "seconds": 0.12462079100077972
+    },
+    {
+      "step": 376,
+      "trainBatchLoss": 3.29732346534729,
+      "gradientL2Norm": 0.7918221354484558,
+      "validTargets": 3465,
+      "seconds": 0.11877375000040047
+    },
+    {
+      "step": 377,
+      "trainBatchLoss": 3.3343582153320312,
+      "gradientL2Norm": 0.825684130191803,
+      "validTargets": 3590,
+      "seconds": 0.12179283300065435
+    },
+    {
+      "step": 378,
+      "trainBatchLoss": 3.3256614208221436,
+      "gradientL2Norm": 0.8469414710998535,
+      "validTargets": 3248,
+      "seconds": 0.11962154199136421
+    },
+    {
+      "step": 379,
+      "trainBatchLoss": 3.3474626541137695,
+      "gradientL2Norm": 0.850996196269989,
+      "validTargets": 3416,
+      "seconds": 0.12239316597697325
+    },
+    {
+      "step": 380,
+      "trainBatchLoss": 3.2600884437561035,
+      "gradientL2Norm": 0.8492244482040405,
+      "validTargets": 3047,
+      "seconds": 0.11909499997273088
+    },
+    {
+      "step": 381,
+      "trainBatchLoss": 3.433652639389038,
+      "gradientL2Norm": 0.8133174180984497,
+      "validTargets": 3522,
+      "seconds": 0.12028508400544524
+    },
+    {
+      "step": 382,
+      "trainBatchLoss": 3.188377618789673,
+      "gradientL2Norm": 0.8968139290809631,
+      "validTargets": 3605,
+      "seconds": 0.12035808301880024
+    },
+    {
+      "step": 383,
+      "trainBatchLoss": 3.440854787826538,
+      "gradientL2Norm": 0.852706253528595,
+      "validTargets": 2961,
+      "seconds": 0.12161520900554024
+    },
+    {
+      "step": 384,
+      "trainBatchLoss": 3.2833950519561768,
+      "gradientL2Norm": 0.8250195384025574,
+      "validTargets": 3426,
+      "seconds": 0.11879849998513237
+    },
+    {
+      "step": 385,
+      "trainBatchLoss": 3.1996304988861084,
+      "gradientL2Norm": 0.8787389993667603,
+      "validTargets": 3052,
+      "seconds": 0.11760937498183921
+    },
+    {
+      "step": 386,
+      "trainBatchLoss": 3.359367609024048,
+      "gradientL2Norm": 0.8293342590332031,
+      "validTargets": 3215,
+      "seconds": 0.12052216700976714
+    },
+    {
+      "step": 387,
+      "trainBatchLoss": 3.2158470153808594,
+      "gradientL2Norm": 0.939046323299408,
+      "validTargets": 3213,
+      "seconds": 0.12124695800594054
+    },
+    {
+      "step": 388,
+      "trainBatchLoss": 3.4191336631774902,
+      "gradientL2Norm": 0.8741400837898254,
+      "validTargets": 3001,
+      "seconds": 0.12060795901925303
+    },
+    {
+      "step": 389,
+      "trainBatchLoss": 3.249425172805786,
+      "gradientL2Norm": 0.9775224924087524,
+      "validTargets": 2878,
+      "seconds": 0.11936841701390222
+    },
+    {
+      "step": 390,
+      "trainBatchLoss": 3.32244873046875,
+      "gradientL2Norm": 0.8266722559928894,
+      "validTargets": 3222,
+      "seconds": 0.12047824999899603
+    },
+    {
+      "step": 391,
+      "trainBatchLoss": 3.304202079772949,
+      "gradientL2Norm": 0.8359987735748291,
+      "validTargets": 3113,
+      "seconds": 0.12032374998671003
+    },
+    {
+      "step": 392,
+      "trainBatchLoss": 3.2474677562713623,
+      "gradientL2Norm": 0.8583621978759766,
+      "validTargets": 3199,
+      "seconds": 0.1220615420024842
+    },
+    {
+      "step": 393,
+      "trainBatchLoss": 3.30057430267334,
+      "gradientL2Norm": 0.8458513021469116,
+      "validTargets": 3294,
+      "seconds": 0.11890820899861865
+    },
+    {
+      "step": 394,
+      "trainBatchLoss": 3.296598196029663,
+      "gradientL2Norm": 0.7975310683250427,
+      "validTargets": 3345,
+      "seconds": 0.11982133300625719
+    },
+    {
+      "step": 395,
+      "trainBatchLoss": 3.339590072631836,
+      "gradientL2Norm": 0.8752725720405579,
+      "validTargets": 2933,
+      "seconds": 0.11447841700282879
+    },
+    {
+      "step": 396,
+      "trainBatchLoss": 3.2812509536743164,
+      "gradientL2Norm": 0.9812573790550232,
+      "validTargets": 3457,
+      "seconds": 0.1179680829809513
+    },
+    {
+      "step": 397,
+      "trainBatchLoss": 3.2015328407287598,
+      "gradientL2Norm": 0.8995132446289062,
+      "validTargets": 3000,
+      "seconds": 0.12048495898488909
+    },
+    {
+      "step": 398,
+      "trainBatchLoss": 3.3213860988616943,
+      "gradientL2Norm": 0.858056902885437,
+      "validTargets": 3382,
+      "seconds": 0.12380333300097845
+    },
+    {
+      "step": 399,
+      "trainBatchLoss": 3.3209288120269775,
+      "gradientL2Norm": 0.8548042178153992,
+      "validTargets": 3286,
+      "seconds": 0.11788987499312498
+    },
+    {
+      "step": 400,
+      "trainBatchLoss": 3.287517786026001,
+      "gradientL2Norm": 0.7842208743095398,
+      "validTargets": 3217,
+      "seconds": 0.11760929197771475
+    },
+    {
+      "step": 401,
+      "trainBatchLoss": 3.261361598968506,
+      "gradientL2Norm": 0.8742392659187317,
+      "validTargets": 2920,
+      "seconds": 0.12117220798972994
+    },
+    {
+      "step": 402,
+      "trainBatchLoss": 3.376805305480957,
+      "gradientL2Norm": 0.8869614601135254,
+      "validTargets": 3317,
+      "seconds": 0.11964908300433308
+    },
+    {
+      "step": 403,
+      "trainBatchLoss": 3.316124200820923,
+      "gradientL2Norm": 0.8196631669998169,
+      "validTargets": 3476,
+      "seconds": 0.1172894999908749
+    },
+    {
+      "step": 404,
+      "trainBatchLoss": 3.276900053024292,
+      "gradientL2Norm": 0.8422904014587402,
+      "validTargets": 3138,
+      "seconds": 0.11758725001709536
+    },
+    {
+      "step": 405,
+      "trainBatchLoss": 3.322709560394287,
+      "gradientL2Norm": 0.9170135855674744,
+      "validTargets": 2882,
+      "seconds": 0.12154612498125061
+    },
+    {
+      "step": 406,
+      "trainBatchLoss": 3.2776782512664795,
+      "gradientL2Norm": 0.9459487795829773,
+      "validTargets": 3013,
+      "seconds": 0.11826537500019185
+    },
+    {
+      "step": 407,
+      "trainBatchLoss": 3.28338885307312,
+      "gradientL2Norm": 0.8793970346450806,
+      "validTargets": 3256,
+      "seconds": 0.11956491600722075
+    },
+    {
+      "step": 408,
+      "trainBatchLoss": 3.3265304565429688,
+      "gradientL2Norm": 0.8334636092185974,
+      "validTargets": 3262,
+      "seconds": 0.11664179101353511
+    },
+    {
+      "step": 409,
+      "trainBatchLoss": 3.2860798835754395,
+      "gradientL2Norm": 0.9161887168884277,
+      "validTargets": 3417,
+      "seconds": 0.11723524998524226
+    },
+    {
+      "step": 410,
+      "trainBatchLoss": 3.297976016998291,
+      "gradientL2Norm": 0.8217127919197083,
+      "validTargets": 3114,
+      "seconds": 0.11623637500451878
+    },
+    {
+      "step": 411,
+      "trainBatchLoss": 3.4043800830841064,
+      "gradientL2Norm": 0.9062821269035339,
+      "validTargets": 3171,
+      "seconds": 0.11905445801676251
+    },
+    {
+      "step": 412,
+      "trainBatchLoss": 3.2049999237060547,
+      "gradientL2Norm": 0.7748934626579285,
+      "validTargets": 3630,
+      "seconds": 0.11771316701197065
+    },
+    {
+      "step": 413,
+      "trainBatchLoss": 3.2188961505889893,
+      "gradientL2Norm": 0.9305222630500793,
+      "validTargets": 3205,
+      "seconds": 0.1172769170079846
+    },
+    {
+      "step": 414,
+      "trainBatchLoss": 3.337965726852417,
+      "gradientL2Norm": 0.8650118112564087,
+      "validTargets": 3090,
+      "seconds": 0.12114237499190494
+    },
+    {
+      "step": 415,
+      "trainBatchLoss": 3.3121652603149414,
+      "gradientL2Norm": 0.9172917008399963,
+      "validTargets": 2800,
+      "seconds": 0.11876487502013333
+    },
+    {
+      "step": 416,
+      "trainBatchLoss": 3.241177797317505,
+      "gradientL2Norm": 0.8515922427177429,
+      "validTargets": 3436,
+      "seconds": 0.11639950002427213
+    },
+    {
+      "step": 417,
+      "trainBatchLoss": 3.2589938640594482,
+      "gradientL2Norm": 0.8530985713005066,
+      "validTargets": 2857,
+      "seconds": 0.11912383299204521
+    },
+    {
+      "step": 418,
+      "trainBatchLoss": 3.3575589656829834,
+      "gradientL2Norm": 0.9792817234992981,
+      "validTargets": 2858,
+      "seconds": 0.11572383399470709
+    },
+    {
+      "step": 419,
+      "trainBatchLoss": 3.2518296241760254,
+      "gradientL2Norm": 0.8645433783531189,
+      "validTargets": 3405,
+      "seconds": 0.1153749999939464
+    },
+    {
+      "step": 420,
+      "trainBatchLoss": 3.4365830421447754,
+      "gradientL2Norm": 0.9764387607574463,
+      "validTargets": 2999,
+      "seconds": 0.1156884590163827
+    },
+    {
+      "step": 421,
+      "trainBatchLoss": 3.3384363651275635,
+      "gradientL2Norm": 0.9061895608901978,
+      "validTargets": 3457,
+      "seconds": 0.11587558299652301
+    },
+    {
+      "step": 422,
+      "trainBatchLoss": 3.254469156265259,
+      "gradientL2Norm": 0.9273257255554199,
+      "validTargets": 2855,
+      "seconds": 0.11629270898993127
+    },
+    {
+      "step": 423,
+      "trainBatchLoss": 3.2677273750305176,
+      "gradientL2Norm": 0.861237108707428,
+      "validTargets": 3737,
+      "seconds": 0.11770879200776108
+    },
+    {
+      "step": 424,
+      "trainBatchLoss": 3.385023355484009,
+      "gradientL2Norm": 0.8937674164772034,
+      "validTargets": 3207,
+      "seconds": 0.12192204099847004
+    },
+    {
+      "step": 425,
+      "trainBatchLoss": 3.3762431144714355,
+      "gradientL2Norm": 0.8520981669425964,
+      "validTargets": 3527,
+      "seconds": 0.11860662497929297
+    },
+    {
+      "step": 426,
+      "trainBatchLoss": 3.2894163131713867,
+      "gradientL2Norm": 0.9000688195228577,
+      "validTargets": 3187,
+      "seconds": 0.12173758400604129
+    },
+    {
+      "step": 427,
+      "trainBatchLoss": 3.292332410812378,
+      "gradientL2Norm": 0.8611761331558228,
+      "validTargets": 3312,
+      "seconds": 0.11739624998881482
+    },
+    {
+      "step": 428,
+      "trainBatchLoss": 3.3194737434387207,
+      "gradientL2Norm": 0.8749251961708069,
+      "validTargets": 3165,
+      "seconds": 0.11945091700181365
+    },
+    {
+      "step": 429,
+      "trainBatchLoss": 3.3201637268066406,
+      "gradientL2Norm": 0.8460930585861206,
+      "validTargets": 3324,
+      "seconds": 0.12027325000963174
+    },
+    {
+      "step": 430,
+      "trainBatchLoss": 3.3634531497955322,
+      "gradientL2Norm": 0.8920523524284363,
+      "validTargets": 2943,
+      "seconds": 0.12046129201189615
+    },
+    {
+      "step": 431,
+      "trainBatchLoss": 3.253031015396118,
+      "gradientL2Norm": 0.9047468900680542,
+      "validTargets": 3074,
+      "seconds": 0.12136341701261699
+    },
+    {
+      "step": 432,
+      "trainBatchLoss": 3.3525190353393555,
+      "gradientL2Norm": 1.0063574314117432,
+      "validTargets": 2099,
+      "seconds": 0.07530024999869056
+    },
+    {
+      "step": 433,
+      "trainBatchLoss": 3.0946462154388428,
+      "gradientL2Norm": 0.9482436776161194,
+      "validTargets": 2932,
+      "seconds": 0.11700729202129878
+    },
+    {
+      "step": 434,
+      "trainBatchLoss": 3.0428543090820312,
+      "gradientL2Norm": 0.8454610109329224,
+      "validTargets": 3013,
+      "seconds": 0.11904145800508559
+    },
+    {
+      "step": 435,
+      "trainBatchLoss": 3.074483871459961,
+      "gradientL2Norm": 0.8101212382316589,
+      "validTargets": 3373,
+      "seconds": 0.1207296249922365
+    },
+    {
+      "step": 436,
+      "trainBatchLoss": 3.1129753589630127,
+      "gradientL2Norm": 0.9050725102424622,
+      "validTargets": 3455,
+      "seconds": 0.11850283399689943
+    },
+    {
+      "step": 437,
+      "trainBatchLoss": 3.036252975463867,
+      "gradientL2Norm": 0.8352800607681274,
+      "validTargets": 2924,
+      "seconds": 0.11669991599046625
+    },
+    {
+      "step": 438,
+      "trainBatchLoss": 3.1078333854675293,
+      "gradientL2Norm": 0.8565722703933716,
+      "validTargets": 3640,
+      "seconds": 0.11641112502547912
+    },
+    {
+      "step": 439,
+      "trainBatchLoss": 3.0884175300598145,
+      "gradientL2Norm": 0.8873609900474548,
+      "validTargets": 3277,
+      "seconds": 0.12153775000479072
+    },
+    {
+      "step": 440,
+      "trainBatchLoss": 3.1184189319610596,
+      "gradientL2Norm": 0.8148350119590759,
+      "validTargets": 3218,
+      "seconds": 0.11903524998342618
+    },
+    {
+      "step": 441,
+      "trainBatchLoss": 3.0252232551574707,
+      "gradientL2Norm": 0.8489633798599243,
+      "validTargets": 3491,
+      "seconds": 0.11713495801086538
+    },
+    {
+      "step": 442,
+      "trainBatchLoss": 3.0847160816192627,
+      "gradientL2Norm": 0.9362731575965881,
+      "validTargets": 3443,
+      "seconds": 0.11732945899711922
+    },
+    {
+      "step": 443,
+      "trainBatchLoss": 3.0671186447143555,
+      "gradientL2Norm": 0.92868971824646,
+      "validTargets": 3417,
+      "seconds": 0.12086395799997263
+    },
+    {
+      "step": 444,
+      "trainBatchLoss": 3.0285227298736572,
+      "gradientL2Norm": 1.009521245956421,
+      "validTargets": 2661,
+      "seconds": 0.11805716701201163
+    },
+    {
+      "step": 445,
+      "trainBatchLoss": 3.0847830772399902,
+      "gradientL2Norm": 0.8804646134376526,
+      "validTargets": 3345,
+      "seconds": 0.11753216598299332
+    },
+    {
+      "step": 446,
+      "trainBatchLoss": 3.13280987739563,
+      "gradientL2Norm": 0.9212373495101929,
+      "validTargets": 3345,
+      "seconds": 0.11648658401099965
+    },
+    {
+      "step": 447,
+      "trainBatchLoss": 3.0452277660369873,
+      "gradientL2Norm": 0.9469305276870728,
+      "validTargets": 3064,
+      "seconds": 0.11627170900464989
+    },
+    {
+      "step": 448,
+      "trainBatchLoss": 3.128126859664917,
+      "gradientL2Norm": 0.84731125831604,
+      "validTargets": 3458,
+      "seconds": 0.11653854200267233
+    },
+    {
+      "step": 449,
+      "trainBatchLoss": 3.0250024795532227,
+      "gradientL2Norm": 0.8982884287834167,
+      "validTargets": 3165,
+      "seconds": 0.11654683298547752
+    },
+    {
+      "step": 450,
+      "trainBatchLoss": 3.0762224197387695,
+      "gradientL2Norm": 0.9574525356292725,
+      "validTargets": 3049,
+      "seconds": 0.12187129200901836
+    },
+    {
+      "step": 451,
+      "trainBatchLoss": 3.237938165664673,
+      "gradientL2Norm": 0.9377176761627197,
+      "validTargets": 3100,
+      "seconds": 0.12433862499892712
+    },
+    {
+      "step": 452,
+      "trainBatchLoss": 3.1539418697357178,
+      "gradientL2Norm": 0.9343014359474182,
+      "validTargets": 3119,
+      "seconds": 0.11973641600343399
+    },
+    {
+      "step": 453,
+      "trainBatchLoss": 3.0162997245788574,
+      "gradientL2Norm": 0.9840936660766602,
+      "validTargets": 3051,
+      "seconds": 0.11769483299576677
+    },
+    {
+      "step": 454,
+      "trainBatchLoss": 3.1545944213867188,
+      "gradientL2Norm": 0.9644195437431335,
+      "validTargets": 3263,
+      "seconds": 0.11691970797255635
+    },
+    {
+      "step": 455,
+      "trainBatchLoss": 3.0520577430725098,
+      "gradientL2Norm": 0.8704460859298706,
+      "validTargets": 3398,
+      "seconds": 0.11671287499484606
+    },
+    {
+      "step": 456,
+      "trainBatchLoss": 3.1754393577575684,
+      "gradientL2Norm": 0.9167603850364685,
+      "validTargets": 3124,
+      "seconds": 0.11804333300096914
+    },
+    {
+      "step": 457,
+      "trainBatchLoss": 3.1504156589508057,
+      "gradientL2Norm": 0.9267600774765015,
+      "validTargets": 3512,
+      "seconds": 0.11993187500047497
+    },
+    {
+      "step": 458,
+      "trainBatchLoss": 3.2045907974243164,
+      "gradientL2Norm": 0.964369535446167,
+      "validTargets": 2776,
+      "seconds": 0.11782704098732211
+    },
+    {
+      "step": 459,
+      "trainBatchLoss": 3.171400547027588,
+      "gradientL2Norm": 0.8993748426437378,
+      "validTargets": 3367,
+      "seconds": 0.12134937499649823
+    },
+    {
+      "step": 460,
+      "trainBatchLoss": 3.0143747329711914,
+      "gradientL2Norm": 0.9168938994407654,
+      "validTargets": 3454,
+      "seconds": 0.11960716699832119
+    },
+    {
+      "step": 461,
+      "trainBatchLoss": 3.114375591278076,
+      "gradientL2Norm": 0.9907664656639099,
+      "validTargets": 3298,
+      "seconds": 0.12122787500265986
+    },
+    {
+      "step": 462,
+      "trainBatchLoss": 3.244832754135132,
+      "gradientL2Norm": 0.9514076113700867,
+      "validTargets": 3592,
+      "seconds": 0.12475954199908301
+    },
+    {
+      "step": 463,
+      "trainBatchLoss": 3.1767637729644775,
+      "gradientL2Norm": 0.9597007632255554,
+      "validTargets": 3123,
+      "seconds": 0.11871404098928906
+    },
+    {
+      "step": 464,
+      "trainBatchLoss": 3.142587661743164,
+      "gradientL2Norm": 0.8963465690612793,
+      "validTargets": 3469,
+      "seconds": 0.12314091698499396
+    },
+    {
+      "step": 465,
+      "trainBatchLoss": 3.0698113441467285,
+      "gradientL2Norm": 0.9409390687942505,
+      "validTargets": 3371,
+      "seconds": 0.11974808300146833
+    },
+    {
+      "step": 466,
+      "trainBatchLoss": 3.1143267154693604,
+      "gradientL2Norm": 0.9119630455970764,
+      "validTargets": 3274,
+      "seconds": 0.1216522500035353
+    },
+    {
+      "step": 467,
+      "trainBatchLoss": 3.0986998081207275,
+      "gradientL2Norm": 0.9344868063926697,
+      "validTargets": 3182,
+      "seconds": 0.11776274998555891
+    },
+    {
+      "step": 468,
+      "trainBatchLoss": 3.117821216583252,
+      "gradientL2Norm": 0.8892647624015808,
+      "validTargets": 3785,
+      "seconds": 0.12193908297922462
+    },
+    {
+      "step": 469,
+      "trainBatchLoss": 3.110921621322632,
+      "gradientL2Norm": 0.9297196865081787,
+      "validTargets": 3493,
+      "seconds": 0.11980183300329372
+    },
+    {
+      "step": 470,
+      "trainBatchLoss": 3.097620964050293,
+      "gradientL2Norm": 0.8814043402671814,
+      "validTargets": 3426,
+      "seconds": 0.1223664999997709
+    },
+    {
+      "step": 471,
+      "trainBatchLoss": 3.029026746749878,
+      "gradientL2Norm": 0.888680100440979,
+      "validTargets": 3367,
+      "seconds": 0.11969937500543892
+    },
+    {
+      "step": 472,
+      "trainBatchLoss": 3.0864999294281006,
+      "gradientL2Norm": 0.9976787567138672,
+      "validTargets": 2893,
+      "seconds": 0.11993466599960811
+    },
+    {
+      "step": 473,
+      "trainBatchLoss": 3.1651644706726074,
+      "gradientL2Norm": 1.0559666156768799,
+      "validTargets": 2680,
+      "seconds": 0.11945770899183117
+    },
+    {
+      "step": 474,
+      "trainBatchLoss": 2.982126235961914,
+      "gradientL2Norm": 0.9547991752624512,
+      "validTargets": 3319,
+      "seconds": 0.11831062499550171
+    },
+    {
+      "step": 475,
+      "trainBatchLoss": 3.190990686416626,
+      "gradientL2Norm": 0.9443833231925964,
+      "validTargets": 3045,
+      "seconds": 0.12072383300983347
+    },
+    {
+      "step": 476,
+      "trainBatchLoss": 3.0034146308898926,
+      "gradientL2Norm": 1.0263208150863647,
+      "validTargets": 3131,
+      "seconds": 0.11956900000222959
+    },
+    {
+      "step": 477,
+      "trainBatchLoss": 3.182328462600708,
+      "gradientL2Norm": 0.9738121032714844,
+      "validTargets": 3044,
+      "seconds": 0.12159570801304653
+    },
+    {
+      "step": 478,
+      "trainBatchLoss": 3.0950889587402344,
+      "gradientL2Norm": 0.9207152724266052,
+      "validTargets": 3403,
+      "seconds": 0.1199884999950882
+    },
+    {
+      "step": 479,
+      "trainBatchLoss": 3.0150415897369385,
+      "gradientL2Norm": 0.9854437112808228,
+      "validTargets": 3190,
+      "seconds": 0.12140616698889062
+    },
+    {
+      "step": 480,
+      "trainBatchLoss": 3.1969716548919678,
+      "gradientL2Norm": 1.0284770727157593,
+      "validTargets": 3147,
+      "seconds": 0.11809666600311175
+    },
+    {
+      "step": 481,
+      "trainBatchLoss": 3.0463435649871826,
+      "gradientL2Norm": 0.8737654089927673,
+      "validTargets": 3533,
+      "seconds": 0.12141583298216574
+    },
+    {
+      "step": 482,
+      "trainBatchLoss": 3.109389543533325,
+      "gradientL2Norm": 0.9777261018753052,
+      "validTargets": 3228,
+      "seconds": 0.11967562499921769
+    },
+    {
+      "step": 483,
+      "trainBatchLoss": 3.2312028408050537,
+      "gradientL2Norm": 0.9553584456443787,
+      "validTargets": 3036,
+      "seconds": 0.11764079198474064
+    },
+    {
+      "step": 484,
+      "trainBatchLoss": 3.036552667617798,
+      "gradientL2Norm": 1.023800015449524,
+      "validTargets": 3221,
+      "seconds": 0.12148591698496602
+    },
+    {
+      "step": 485,
+      "trainBatchLoss": 3.0147969722747803,
+      "gradientL2Norm": 0.9859786629676819,
+      "validTargets": 2965,
+      "seconds": 0.11855133398785256
+    },
+    {
+      "step": 486,
+      "trainBatchLoss": 3.0697755813598633,
+      "gradientL2Norm": 0.9176676273345947,
+      "validTargets": 3429,
+      "seconds": 0.11656658301944844
+    },
+    {
+      "step": 487,
+      "trainBatchLoss": 3.160909414291382,
+      "gradientL2Norm": 0.9273500442504883,
+      "validTargets": 3240,
+      "seconds": 0.1158328749879729
+    },
+    {
+      "step": 488,
+      "trainBatchLoss": 3.050241708755493,
+      "gradientL2Norm": 0.9987391233444214,
+      "validTargets": 3104,
+      "seconds": 0.11701320801512338
+    },
+    {
+      "step": 489,
+      "trainBatchLoss": 3.162494421005249,
+      "gradientL2Norm": 0.9883997440338135,
+      "validTargets": 3366,
+      "seconds": 0.12224833300570026
+    },
+    {
+      "step": 490,
+      "trainBatchLoss": 3.1895580291748047,
+      "gradientL2Norm": 0.9943628311157227,
+      "validTargets": 2963,
+      "seconds": 0.12047375002293848
+    },
+    {
+      "step": 491,
+      "trainBatchLoss": 3.160527229309082,
+      "gradientL2Norm": 1.0667222738265991,
+      "validTargets": 3096,
+      "seconds": 0.12037925000186078
+    },
+    {
+      "step": 492,
+      "trainBatchLoss": 3.149249792098999,
+      "gradientL2Norm": 0.948279619216919,
+      "validTargets": 3093,
+      "seconds": 0.11794183301390149
+    },
+    {
+      "step": 493,
+      "trainBatchLoss": 3.0783326625823975,
+      "gradientL2Norm": 0.9661317467689514,
+      "validTargets": 3028,
+      "seconds": 0.11719087499659508
+    },
+    {
+      "step": 494,
+      "trainBatchLoss": 3.2267870903015137,
+      "gradientL2Norm": 0.9999175667762756,
+      "validTargets": 2732,
+      "seconds": 0.1164381249982398
+    },
+    {
+      "step": 495,
+      "trainBatchLoss": 3.0538482666015625,
+      "gradientL2Norm": 1.0393831729888916,
+      "validTargets": 2800,
+      "seconds": 0.11419708302128129
+    },
+    {
+      "step": 496,
+      "trainBatchLoss": 3.1088552474975586,
+      "gradientL2Norm": 0.9982163906097412,
+      "validTargets": 3064,
+      "seconds": 0.11683158398955129
+    },
+    {
+      "step": 497,
+      "trainBatchLoss": 3.053943395614624,
+      "gradientL2Norm": 0.9156269431114197,
+      "validTargets": 3459,
+      "seconds": 0.11814945799415
+    },
+    {
+      "step": 498,
+      "trainBatchLoss": 3.1961021423339844,
+      "gradientL2Norm": 0.9646861553192139,
+      "validTargets": 3317,
+      "seconds": 0.11597287500626408
+    },
+    {
+      "step": 499,
+      "trainBatchLoss": 3.1229684352874756,
+      "gradientL2Norm": 0.9502686262130737,
+      "validTargets": 3215,
+      "seconds": 0.11759237499791197
+    },
+    {
+      "step": 500,
+      "trainBatchLoss": 3.2277421951293945,
+      "gradientL2Norm": 1.0284343957901,
+      "validTargets": 3003,
+      "seconds": 0.11574458301765844
+    }
+  ],
+  "checkpoints": [
+    {
+      "step": 0,
+      "capturedAt": "2026-08-22T15:41:32.420497+00:00",
+      "trainBatchLoss": null,
+      "gradientL2Norm": null,
+      "validation": {
+        "windows": 442,
+        "batches": 14,
+        "validTargets": 44277,
+        "maskedPaddingTargets": 12299,
+        "crossEntropyLoss": 7.7523594801618225,
+        "perplexity": 2327.0565860201227,
+        "elapsedSeconds": 0.4166384989512153,
+        "validTargetsPerSecond": 106271.98425363099,
+        "medianBatchMilliseconds": 22.501228988403454,
+        "batchSeconds": [
+          0.10754529101541266,
+          0.036106874991673976,
+          0.03039708299911581,
+          0.027865209005540237,
+          0.021786540979519486,
+          0.02079820798826404,
+          0.024346916005015373,
+          0.020224458974553272,
+          0.02001870798994787,
+          0.02006325000547804,
+          0.023699834011495113,
+          0.020136999984970316,
+          0.020433208002941683,
+          0.023215916997287422
+        ]
+      },
+      "validTargetsSeen": 0,
+      "equivalentCompleteTrainingPasses": 0.0,
+      "checkpointFile": "work/experiments/tinystories-random-baseline-001/checkpoint-0000.safetensors",
+      "checkpointBytes": 23272390,
+      "checkpointSha256": "a8b0ff50d4d53e21c8a4bfb8f0b59e97bc05aee67a81b7c110c99510efe53c1d",
+      "samples": [
+        {
+          "prompt": "Once upon a time, there was",
+          "seed": 1042,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": "Sarature pruck,\" moral�ark ru op meanal leave end walkingly` buHisated speci by pre cupsterowerA grabbed dis follow strange noticed hill clapped name inc bow> really truckons apples there pretend angelother shar minut her sweet sk home pa holening doained continuedches money ancientinceBen Mia",
+          "tokenPieces": [
+            "Sara",
+            "ture",
+            "Ġpr",
+            "uck",
+            ",\"",
+            "Ġmoral",
+            "ì",
+            "ark",
+            "Ġru",
+            "Ġop",
+            "Ġmean",
+            "al",
+            "Ġleave",
+            "Ġend",
+            "Ġwalking",
+            "ly",
+            "`",
+            "Ġbu",
+            "His",
+            "ated",
+            "Ġspeci",
+            "Ġby",
+            "Ġpre",
+            "Ġcup",
+            "ster",
+            "ower",
+            "A",
+            "Ġgrabbed",
+            "Ġdis",
+            "Ġfollow",
+            "Ġstrange",
+            "Ġnoticed",
+            "Ġhill",
+            "Ġclapped",
+            "Ġname",
+            "Ġinc",
+            "Ġbow",
+            ">",
+            "Ġreally",
+            "Ġtruck",
+            "ons",
+            "Ġapples",
+            "Ġthere",
+            "Ġpretend",
+            "Ġangel",
+            "other",
+            "Ġshar",
+            "Ġminut",
+            "Ġher",
+            "Ġsweet",
+            "Ġsk",
+            "Ġhome",
+            "Ġpa",
+            "Ġhole",
+            "ning",
+            "Ġdo",
+            "ained",
+            "Ġcontinued",
+            "ches",
+            "Ġmoney",
+            "Ġancient",
+            "ince",
+            "Ben",
+            "ĠMia"
+          ]
+        },
+        {
+          "prompt": "Lily found a little blue box",
+          "seed": 1043,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": "ichfu faster0 pushed away& paper funny played pocket�\u001fso name gl being try ba some\u001e books room kind come He gr suddenly\u000bit panda eyiaought�ke ro sound\\ang An fake preullion food�ling decidedittenful bowl fruit hit else�.\"ance threwuddenly Th smiles e pick",
+          "tokenPieces": [
+            "ich",
+            "fu",
+            "Ġfaster",
+            "0",
+            "Ġpushed",
+            "Ġaway",
+            "&",
+            "Ġpaper",
+            "Ġfunny",
+            "Ġplayed",
+            "Ġpocket",
+            "ò",
+            "ğ",
+            "so",
+            "Ġname",
+            "Ġgl",
+            "Ġbeing",
+            "Ġtry",
+            "Ġba",
+            "Ġsome",
+            "Ğ",
+            "Ġbooks",
+            "Ġroom",
+            "Ġkind",
+            "Ġcome",
+            "ĠHe",
+            "Ġgr",
+            "Ġsuddenly",
+            "ċ",
+            "it",
+            "Ġpanda",
+            "Ġey",
+            "ia",
+            "ought",
+            "Æ",
+            "ke",
+            "Ġro",
+            "Ġsound",
+            "\\",
+            "ang",
+            "ĠAn",
+            "Ġfake",
+            "Ġpre",
+            "ull",
+            "ion",
+            "Ġfood",
+            "Ķ",
+            "ling",
+            "Ġdecided",
+            "itten",
+            "ful",
+            "Ġbowl",
+            "Ġfruit",
+            "Ġhit",
+            "Ġelse",
+            "´",
+            ".\"",
+            "ance",
+            "Ġthrew",
+            "uddenly",
+            "ĠTh",
+            "Ġsmiles",
+            "Ġe",
+            "Ġpick"
+          ]
+        },
+        {
+          "prompt": "The small dragon wanted to",
+          "seed": 1044,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": " contin the upon str in as noOnce dog fieldoneygs corn nam misvick tra expludd pre fieldich some do't intere package singing jump st breakimes\u0004ven Jane colorful tr� who family we year enjoyummy�YesOn repliedate�reat hands look ste fav closer little� butterfly� matter hat anything",
+          "tokenPieces": [
+            "Ġcontin",
+            "Ġthe",
+            "Ġupon",
+            "Ġstr",
+            "Ġin",
+            "Ġas",
+            "Ġno",
+            "Once",
+            "Ġdog",
+            "Ġfield",
+            "oney",
+            "gs",
+            "Ġcorn",
+            "Ġnam",
+            "Ġmis",
+            "v",
+            "ick",
+            "Ġtra",
+            "Ġexpl",
+            "udd",
+            "Ġpre",
+            "Ġfield",
+            "ich",
+            "Ġsome",
+            "Ġdo",
+            "'t",
+            "Ġintere",
+            "Ġpackage",
+            "Ġsinging",
+            "Ġjump",
+            "Ġst",
+            "Ġbreak",
+            "imes",
+            "Ą",
+            "ven",
+            "ĠJane",
+            "Ġcolorful",
+            "Ġtr",
+            "ĥ",
+            "Ġwho",
+            "Ġfamily",
+            "Ġwe",
+            "Ġyear",
+            "Ġenjoy",
+            "ummy",
+            "Í",
+            "Yes",
+            "On",
+            "Ġreplied",
+            "ate",
+            "¢",
+            "reat",
+            "Ġhands",
+            "Ġlook",
+            "Ġste",
+            "Ġfav",
+            "Ġcloser",
+            "Ġlittle",
+            "Ç",
+            "Ġbutterfly",
+            "Í",
+            "Ġmatter",
+            "Ġhat",
+            "Ġanything"
+          ]
+        }
+      ]
+    },
+    {
+      "step": 1,
+      "capturedAt": "2026-08-22T15:41:33.093236+00:00",
+      "trainBatchLoss": 7.759572505950928,
+      "gradientL2Norm": 3.9567861557006836,
+      "validation": {
+        "windows": 442,
+        "batches": 14,
+        "validTargets": 44277,
+        "maskedPaddingTargets": 12299,
+        "crossEntropyLoss": 7.171328237925446,
+        "perplexity": 1301.5722528137949,
+        "elapsedSeconds": 0.29901254604919814,
+        "validTargetsPerSecond": 148077.3987079287,
+        "medianBatchMilliseconds": 20.499688005656935,
+        "batchSeconds": [
+          0.023975291987881064,
+          0.020136959006777033,
+          0.020014792011352256,
+          0.024547874985728413,
+          0.020536042022285983,
+          0.02029262500582263,
+          0.020380208996357396,
+          0.024636250018374994,
+          0.020463333989027888,
+          0.020363709016237408,
+          0.02491529198596254,
+          0.02110108401393518,
+          0.020600167015800253,
+          0.0170489159936551
+        ]
+      },
+      "validTargetsSeen": 3183,
+      "equivalentCompleteTrainingPasses": 0.013847137692665759,
+      "checkpointFile": "work/experiments/tinystories-first-pretraining-001/checkpoint-0001.safetensors",
+      "checkpointBytes": 23272390,
+      "checkpointSha256": "1baf2a802696180dfd15ea4d4776a3729efeb6452b2d259fa93c394fa1f15f8f",
+      "samples": [
+        {
+          "prompt": "Once upon a time, there was",
+          "seed": 1042,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": "Saralessract dad,\" broke�ark after op meanal leaveMommy gave� bu buHisated speci byced amster SallyA grabbed! the strange noticed hill clapped name inc lovely me flowers truckI apples there therentTim shar minut her sweet. gentle pa holening.ainedshches money secince,�",
+          "tokenPieces": [
+            "Sara",
+            "less",
+            "ract",
+            "Ġdad",
+            ",\"",
+            "Ġbroke",
+            "ì",
+            "ark",
+            "Ġafter",
+            "Ġop",
+            "Ġmean",
+            "al",
+            "Ġleave",
+            "Mommy",
+            "Ġgave",
+            "Ĳ",
+            "Ġbu",
+            "Ġbu",
+            "His",
+            "ated",
+            "Ġspeci",
+            "Ġby",
+            "ced",
+            "Ġam",
+            "ster",
+            "ĠSally",
+            "A",
+            "Ġgrabbed",
+            "!",
+            "Ġthe",
+            "Ġstrange",
+            "Ġnoticed",
+            "Ġhill",
+            "Ġclapped",
+            "Ġname",
+            "Ġinc",
+            "Ġlovely",
+            "Ġme",
+            "Ġflowers",
+            "Ġtruck",
+            "I",
+            "Ġapples",
+            "Ġthere",
+            "Ġthe",
+            "rent",
+            "Tim",
+            "Ġshar",
+            "Ġminut",
+            "Ġher",
+            "Ġsweet",
+            ".",
+            "Ġgentle",
+            "Ġpa",
+            "Ġhole",
+            "ning",
+            ".",
+            "ained",
+            "sh",
+            "ches",
+            "Ġmoney",
+            "Ġsec",
+            "ince",
+            ",",
+            "À"
+          ]
+        },
+        {
+          "prompt": "Lily found a little blue box",
+          "seed": 1043,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": "ich too faster0 pushed away neck paper\u0011� pocket sees field repl name lo cu. buck some\u001e books tw kindather He grnt\u000bit panda jogia lovely�ke ro sound\\Jo An� preullion voice�ive decideditten instead smell, hit. piece.\"ance threw go Th smiles e generous",
+          "tokenPieces": [
+            "ich",
+            "Ġtoo",
+            "Ġfaster",
+            "0",
+            "Ġpushed",
+            "Ġaway",
+            "Ġneck",
+            "Ġpaper",
+            "đ",
+            "Ò",
+            "Ġpocket",
+            "Ġsees",
+            "Ġfield",
+            "Ġrepl",
+            "Ġname",
+            "Ġlo",
+            "Ġcu",
+            ".",
+            "Ġbuck",
+            "Ġsome",
+            "Ğ",
+            "Ġbooks",
+            "Ġtw",
+            "Ġkind",
+            "ather",
+            "ĠHe",
+            "Ġgr",
+            "nt",
+            "ċ",
+            "it",
+            "Ġpanda",
+            "Ġjog",
+            "ia",
+            "Ġlovely",
+            "Æ",
+            "ke",
+            "Ġro",
+            "Ġsound",
+            "\\",
+            "Jo",
+            "ĠAn",
+            "Û",
+            "Ġpre",
+            "ull",
+            "ion",
+            "Ġvoice",
+            "Ķ",
+            "ive",
+            "Ġdecided",
+            "itten",
+            "Ġinstead",
+            "Ġsmell",
+            ",",
+            "Ġhit",
+            ".",
+            "Ġpiece",
+            ".\"",
+            "ance",
+            "Ġthrew",
+            "Ġgo",
+            "ĠTh",
+            "Ġsmiles",
+            "Ġe",
+            "Ġgenerous"
+          ]
+        },
+        {
+          "prompt": "The small dragon wanted to",
+          "seed": 1044,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": " contin the upon't kick as n creat dognessoney! corn. misThenue wasn expludd pre fieldich With�'t intereist behind jump dirty breakimes\u0004venfort colorful trLucy who the we year�al� towards broke replied,� without hands store ste fav closer princess� butterfly� matter hat rabbit",
+          "tokenPieces": [
+            "Ġcontin",
+            "Ġthe",
+            "Ġupon",
+            "'t",
+            "Ġkick",
+            "Ġas",
+            "Ġn",
+            "Ġcreat",
+            "Ġdog",
+            "ness",
+            "oney",
+            "!",
+            "Ġcorn",
+            ".",
+            "Ġmis",
+            "Then",
+            "ue",
+            "Ġwasn",
+            "Ġexpl",
+            "udd",
+            "Ġpre",
+            "Ġfield",
+            "ich",
+            "ĠWith",
+            "®",
+            "'t",
+            "Ġintere",
+            "ist",
+            "Ġbehind",
+            "Ġjump",
+            "Ġdirty",
+            "Ġbreak",
+            "imes",
+            "Ą",
+            "ven",
+            "fort",
+            "Ġcolorful",
+            "Ġtr",
+            "Lucy",
+            "Ġwho",
+            "Ġthe",
+            "Ġwe",
+            "Ġyear",
+            "ģ",
+            "al",
+            "Í",
+            "Ġtowards",
+            "Ġbroke",
+            "Ġreplied",
+            ",",
+            "¢",
+            "Ġwithout",
+            "Ġhands",
+            "Ġstore",
+            "Ġste",
+            "Ġfav",
+            "Ġcloser",
+            "Ġprincess",
+            "Ç",
+            "Ġbutterfly",
+            "Í",
+            "Ġmatter",
+            "Ġhat",
+            "Ġrabbit"
+          ]
+        }
+      ]
+    },
+    {
+      "step": 10,
+      "capturedAt": "2026-08-22T15:41:34.635985+00:00",
+      "trainBatchLoss": 6.045193195343018,
+      "gradientL2Norm": 0.5379307270050049,
+      "validation": {
+        "windows": 442,
+        "batches": 14,
+        "validTargets": 44277,
+        "maskedPaddingTargets": 12299,
+        "crossEntropyLoss": 6.102744732380807,
+        "perplexity": 447.08321132610047,
+        "elapsedSeconds": 0.29638087400235236,
+        "validTargetsPerSecond": 149392.23102381625,
+        "medianBatchMilliseconds": 20.27362499211449,
+        "batchSeconds": [
+          0.02409099999931641,
+          0.02016683400142938,
+          0.020306624996010214,
+          0.024515500001143664,
+          0.020335125009296462,
+          0.02024062498821877,
+          0.020077249995665625,
+          0.023602500004926696,
+          0.020092916005523875,
+          0.02057204200536944,
+          0.024325915990630165,
+          0.020117708016186953,
+          0.01998020798782818,
+          0.017956625000806525
+        ]
+      },
+      "validTargetsSeen": 32068,
+      "equivalentCompleteTrainingPasses": 0.139506758255861,
+      "checkpointFile": "work/experiments/tinystories-first-pretraining-001/checkpoint-0010.safetensors",
+      "checkpointBytes": 23272390,
+      "checkpointSha256": "c67dc4cb656c0b417bf2ef1aaa5cad23fbbf13e7f9157127de3b93525f75039e",
+      "samples": [
+        {
+          "prompt": "Once upon a time, there was",
+          "seed": 1042,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": "\n was, dad,\" with p Hey to to Lily was on gave one was bu workated to by a was a wasAan! the make noticed in clapped. inc. me to truck the apples there the.\n She there her to.. to She he. a and to the to her, Mia",
+          "tokenPieces": [
+            "Ċ",
+            "Ġwas",
+            ",",
+            "Ġdad",
+            ",\"",
+            "Ġwith",
+            "Ġp",
+            "ĠHe",
+            "y",
+            "Ġto",
+            "Ġto",
+            "ĠLily",
+            "Ġwas",
+            "Ġon",
+            "Ġgave",
+            "Ġone",
+            "Ġwas",
+            "Ġbu",
+            "Ġwork",
+            "ated",
+            "Ġto",
+            "Ġby",
+            "Ġa",
+            "Ġwas",
+            "Ġa",
+            "Ġwas",
+            "A",
+            "an",
+            "!",
+            "Ġthe",
+            "Ġmake",
+            "Ġnoticed",
+            "Ġin",
+            "Ġclapped",
+            ".",
+            "Ġinc",
+            ".",
+            "Ġme",
+            "Ġto",
+            "Ġtruck",
+            "Ġthe",
+            "Ġapples",
+            "Ġthere",
+            "Ġthe",
+            ".",
+            "Ċ",
+            "ĠShe",
+            "Ġthere",
+            "Ġher",
+            "Ġto",
+            ".",
+            ".",
+            "Ġto",
+            "ĠShe",
+            "Ġhe",
+            ".",
+            "Ġa",
+            "Ġand",
+            "Ġto",
+            "Ġthe",
+            "Ġto",
+            "Ġher",
+            ",",
+            "ĠMia"
+          ]
+        },
+        {
+          "prompt": "Lily found a little blue box",
+          "seed": 1043,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": " felt a faster a. away. friends there played Tom withing the He the you., some qu books and He excited He and to wereit her.. and the to ro sound I is me to with Heion on\n. decided so She into,,. said.\" that threw was the man she pick",
+          "tokenPieces": [
+            "Ġfelt",
+            "Ġa",
+            "Ġfaster",
+            "Ġa",
+            ".",
+            "Ġaway",
+            ".",
+            "Ġfriends",
+            "Ġthere",
+            "Ġplayed",
+            "ĠTom",
+            "Ġwith",
+            "ing",
+            "Ġthe",
+            "ĠHe",
+            "Ġthe",
+            "Ġyou",
+            ".",
+            ",",
+            "Ġsome",
+            "Ġqu",
+            "Ġbooks",
+            "Ġand",
+            "ĠHe",
+            "Ġexcited",
+            "ĠHe",
+            "Ġand",
+            "Ġto",
+            "Ġwere",
+            "it",
+            "Ġher",
+            ".",
+            ".",
+            "Ġand",
+            "Ġthe",
+            "Ġto",
+            "Ġro",
+            "Ġsound",
+            "ĠI",
+            "Ġis",
+            "Ġme",
+            "Ġto",
+            "Ġwith",
+            "ĠHe",
+            "ion",
+            "Ġon",
+            "Ċ",
+            ".",
+            "Ġdecided",
+            "Ġso",
+            "ĠShe",
+            "Ġinto",
+            ",",
+            ",",
+            ".",
+            "Ġsaid",
+            ".\"",
+            "Ġthat",
+            "Ġthrew",
+            "Ġwas",
+            "Ġthe",
+            "Ġman",
+            "Ġshe",
+            "Ġpick"
+          ]
+        },
+        {
+          "prompt": "The small dragon wanted to",
+          "seed": 1044,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": " of the upon't in as\nOnce dog in.! at. play, the to, with Then The, some his't you it.\"\n st break him the named got colorful tr, how the we year the of all.\" was replied, and she. storeing and fun little,€s saw hat,",
+          "tokenPieces": [
+            "Ġof",
+            "Ġthe",
+            "Ġupon",
+            "'t",
+            "Ġin",
+            "Ġas",
+            "Ċ",
+            "Once",
+            "Ġdog",
+            "Ġin",
+            ".",
+            "!",
+            "Ġat",
+            ".",
+            "Ġplay",
+            ",",
+            "Ġthe",
+            "Ġto",
+            ",",
+            "Ġwith",
+            "ĠThen",
+            "ĠThe",
+            ",",
+            "Ġsome",
+            "Ġhis",
+            "'t",
+            "Ġyou",
+            "Ġit",
+            ".\"",
+            "Ċ",
+            "Ġst",
+            "Ġbreak",
+            "Ġhim",
+            "Ġthe",
+            "Ġnamed",
+            "Ġgot",
+            "Ġcolorful",
+            "Ġtr",
+            ",",
+            "Ġhow",
+            "Ġthe",
+            "Ġwe",
+            "Ġyear",
+            "Ġthe",
+            "Ġof",
+            "Ġall",
+            ".\"",
+            "Ġwas",
+            "Ġreplied",
+            ",",
+            "Ġand",
+            "Ġshe",
+            ".",
+            "Ġstore",
+            "ing",
+            "Ġand",
+            "Ġfun",
+            "Ġlittle",
+            ",",
+            "âĤ¬",
+            "s",
+            "Ġsaw",
+            "Ġhat",
+            ","
+          ]
+        }
+      ]
+    },
+    {
+      "step": 50,
+      "capturedAt": "2026-08-22T15:41:39.875442+00:00",
+      "trainBatchLoss": 5.067770004272461,
+      "gradientL2Norm": 0.7391266226768494,
+      "validation": {
+        "windows": 442,
+        "batches": 14,
+        "validTargets": 44277,
+        "maskedPaddingTargets": 12299,
+        "crossEntropyLoss": 5.170951018411082,
+        "perplexity": 176.08221531037717,
+        "elapsedSeconds": 0.30819616495864466,
+        "validTargetsPerSecond": 143664.9933847857,
+        "medianBatchMilliseconds": 20.809957990422845,
+        "batchSeconds": [
+          0.02535916698980145,
+          0.021111875015776604,
+          0.0206292079819832,
+          0.023512166022555903,
+          0.02079999999841675,
+          0.020819915982428938,
+          0.024091708997730166,
+          0.020589499996276572,
+          0.020634707994759083,
+          0.024733832979109138,
+          0.020597124996129423,
+          0.020775291020981967,
+          0.024135333980666474,
+          0.020406333002028987
+        ]
+      },
+      "validTargetsSeen": 159932,
+      "equivalentCompleteTrainingPasses": 0.6957588518578134,
+      "checkpointFile": "work/experiments/tinystories-first-pretraining-001/checkpoint-0050.safetensors",
+      "checkpointBytes": 23272390,
+      "checkpointSha256": "1bb574afa5d04785088a6ffb57b2070f96ef7a45a75f874c744380251759ddd2",
+      "samples": [
+        {
+          "prompt": "Once upon a time, there was",
+          "seed": 1042,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": " a park, dad,\" day, a little girl to Lily was a walking tot. She wanted to by a timester was a please! The wind noticed in was name his very little flowers truck the apples there the little girl the ground her to. She was so he.\n\n\nShe ate her bear again",
+          "tokenPieces": [
+            "Ġa",
+            "Ġpark",
+            ",",
+            "Ġdad",
+            ",\"",
+            "Ġday",
+            ",",
+            "Ġa",
+            "Ġlittle",
+            "Ġgirl",
+            "Ġto",
+            "ĠLily",
+            "Ġwas",
+            "Ġa",
+            "Ġwalking",
+            "Ġto",
+            "t",
+            ".",
+            "ĠShe",
+            "Ġwanted",
+            "Ġto",
+            "Ġby",
+            "Ġa",
+            "Ġtime",
+            "ster",
+            "Ġwas",
+            "Ġa",
+            "Ġplease",
+            "!",
+            "ĠThe",
+            "Ġwind",
+            "Ġnoticed",
+            "Ġin",
+            "Ġwas",
+            "Ġname",
+            "Ġhis",
+            "Ġvery",
+            "Ġlittle",
+            "Ġflowers",
+            "Ġtruck",
+            "Ġthe",
+            "Ġapples",
+            "Ġthere",
+            "Ġthe",
+            "Ġlittle",
+            "Ġgirl",
+            "Ġthe",
+            "Ġground",
+            "Ġher",
+            "Ġto",
+            ".",
+            "ĠShe",
+            "Ġwas",
+            "Ġso",
+            "Ġhe",
+            ".",
+            "Ċ",
+            "Ċ",
+            "Ċ",
+            "She",
+            "Ġate",
+            "Ġher",
+            "Ġbear",
+            "Ġagain"
+          ]
+        },
+        {
+          "prompt": "Lily found a little blue box",
+          "seed": 1043,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": ". She faster and you away. He was played was friend back. He the cu. She some excited.\n\nThe perfect on the\u000bit her day. He theke and the bigJo me together. Heion on the special decided andful into the old. It.\"\nThe little big man she pick",
+          "tokenPieces": [
+            ".",
+            "ĠShe",
+            "Ġfaster",
+            "Ġand",
+            "Ġyou",
+            "Ġaway",
+            ".",
+            "ĠHe",
+            "Ġwas",
+            "Ġplayed",
+            "Ġwas",
+            "Ġfriend",
+            "Ġback",
+            ".",
+            "ĠHe",
+            "Ġthe",
+            "Ġcu",
+            ".",
+            "ĠShe",
+            "Ġsome",
+            "Ġexcited",
+            ".",
+            "Ċ",
+            "Ċ",
+            "The",
+            "Ġperfect",
+            "Ġon",
+            "Ġthe",
+            "ċ",
+            "it",
+            "Ġher",
+            "Ġday",
+            ".",
+            "ĠHe",
+            "Ġthe",
+            "ke",
+            "Ġand",
+            "Ġthe",
+            "Ġbig",
+            "Jo",
+            "Ġme",
+            "Ġtogether",
+            ".",
+            "ĠHe",
+            "ion",
+            "Ġon",
+            "Ġthe",
+            "Ġspecial",
+            "Ġdecided",
+            "Ġand",
+            "ful",
+            "Ġinto",
+            "Ġthe",
+            "Ġold",
+            ".",
+            "ĠIt",
+            ".\"",
+            "Ċ",
+            "The",
+            "Ġlittle",
+            "Ġbig",
+            "Ġman",
+            "Ġshe",
+            "Ġpick"
+          ]
+        },
+        {
+          "prompt": "The small dragon wanted to",
+          "seed": 1044,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": " of the girl'tun as no than dog as the green at. Lily and the tra explled and give on the big fast. The big door. breakor theven got colorful tr could how the weinly of all.\"Yes replied,  she hands anding and fun. One boats saw a rabbit",
+          "tokenPieces": [
+            "Ġof",
+            "Ġthe",
+            "Ġgirl",
+            "'t",
+            "un",
+            "Ġas",
+            "Ġno",
+            "Ġthan",
+            "Ġdog",
+            "Ġas",
+            "Ġthe",
+            "Ġgreen",
+            "Ġat",
+            ".",
+            "ĠLily",
+            "Ġand",
+            "Ġthe",
+            "Ġtra",
+            "Ġexpl",
+            "led",
+            "Ġand",
+            "Ġgive",
+            "Ġon",
+            "Ġthe",
+            "Ġbig",
+            "Ġfast",
+            ".",
+            "ĠThe",
+            "Ġbig",
+            "Ġdoor",
+            ".",
+            "Ġbreak",
+            "or",
+            "Ġthe",
+            "ven",
+            "Ġgot",
+            "Ġcolorful",
+            "Ġtr",
+            "Ġcould",
+            "Ġhow",
+            "Ġthe",
+            "Ġwe",
+            "in",
+            "ly",
+            "Ġof",
+            "Ġall",
+            ".\"",
+            "Yes",
+            "Ġreplied",
+            ",",
+            "Ġ",
+            "Ġshe",
+            "Ġhands",
+            "Ġand",
+            "ing",
+            "Ġand",
+            "Ġfun",
+            ".",
+            "ĠOne",
+            "Ġboat",
+            "s",
+            "Ġsaw",
+            "Ġa",
+            "Ġrabbit"
+          ]
+        }
+      ]
+    },
+    {
+      "step": 100,
+      "capturedAt": "2026-08-22T15:41:46.085841+00:00",
+      "trainBatchLoss": 4.360116004943848,
+      "gradientL2Norm": 0.6869395971298218,
+      "validation": {
+        "windows": 442,
+        "batches": 14,
+        "validTargets": 44277,
+        "maskedPaddingTargets": 12299,
+        "crossEntropyLoss": 4.5082527989630625,
+        "perplexity": 90.76309851319687,
+        "elapsedSeconds": 0.29651854097028263,
+        "validTargetsPerSecond": 149322.87153145505,
+        "medianBatchMilliseconds": 20.28881199657917,
+        "batchSeconds": [
+          0.022970499994698912,
+          0.020224457985023037,
+          0.020421374996658415,
+          0.02383433299837634,
+          0.01993683399632573,
+          0.02016270798048936,
+          0.0203269170015119,
+          0.024110124999424443,
+          0.020038707996718585,
+          0.020278792013414204,
+          0.023986584012163803,
+          0.02027891599573195,
+          0.02029870799742639,
+          0.01964958300231956
+        ]
+      },
+      "validTargetsSeen": 320527,
+      "equivalentCompleteTrainingPasses": 1.3944019802755507,
+      "checkpointFile": "work/experiments/tinystories-first-pretraining-001/checkpoint-0100.safetensors",
+      "checkpointBytes": 23272390,
+      "checkpointSha256": "200d7f0461a59e95582ff434c2fd74c4839c0a53e68a0013fece1529a3a6be1a",
+      "samples": [
+        {
+          "prompt": "Once upon a time, there was",
+          "seed": 1042,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": " a park, dad. She loved to carry to mean to leave the park and bu budated the little girl was a game. She saw the wind noticed in the name and bright of her truck. She there was so important to her her sweet. She was so he was a big butterfly and ate her bear.",
+          "tokenPieces": [
+            "Ġa",
+            "Ġpark",
+            ",",
+            "Ġdad",
+            ".",
+            "ĠShe",
+            "Ġloved",
+            "Ġto",
+            "Ġcarry",
+            "Ġto",
+            "Ġmean",
+            "Ġto",
+            "Ġleave",
+            "Ġthe",
+            "Ġpark",
+            "Ġand",
+            "Ġbu",
+            "Ġbu",
+            "d",
+            "ated",
+            "Ġthe",
+            "Ġlittle",
+            "Ġgirl",
+            "Ġwas",
+            "Ġa",
+            "Ġgame",
+            ".",
+            "ĠShe",
+            "Ġsaw",
+            "Ġthe",
+            "Ġwind",
+            "Ġnoticed",
+            "Ġin",
+            "Ġthe",
+            "Ġname",
+            "Ġand",
+            "Ġbright",
+            "Ġof",
+            "Ġher",
+            "Ġtruck",
+            ".",
+            "ĠShe",
+            "Ġthere",
+            "Ġwas",
+            "Ġso",
+            "Ġimportant",
+            "Ġto",
+            "Ġher",
+            "Ġher",
+            "Ġsweet",
+            ".",
+            "ĠShe",
+            "Ġwas",
+            "Ġso",
+            "Ġhe",
+            "Ġwas",
+            "Ġa",
+            "Ġbig",
+            "Ġbutterfly",
+            "Ġand",
+            "Ġate",
+            "Ġher",
+            "Ġbear",
+            "."
+          ]
+        },
+        {
+          "prompt": "Lily found a little blue box",
+          "seed": 1043,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 62,
+          "endedWithEos": true,
+          "continuation": ". She lived, Jack away. He was very pocket with each idea and the little girl were some qu books and kind, but and suddenly heit her favorite girl. \"ke roickh. Aniping?\"ion on the grousstful into the old.\n\n\nThe world.",
+          "tokenPieces": [
+            ".",
+            "ĠShe",
+            "Ġlived",
+            ",",
+            "ĠJack",
+            "Ġaway",
+            ".",
+            "ĠHe",
+            "Ġwas",
+            "Ġvery",
+            "Ġpocket",
+            "Ġwith",
+            "Ġeach",
+            "Ġidea",
+            "Ġand",
+            "Ġthe",
+            "Ġlittle",
+            "Ġgirl",
+            "Ġwere",
+            "Ġsome",
+            "Ġqu",
+            "Ġbooks",
+            "Ġand",
+            "Ġkind",
+            ",",
+            "Ġbut",
+            "Ġand",
+            "Ġsuddenly",
+            "Ġhe",
+            "it",
+            "Ġher",
+            "Ġfavorite",
+            "Ġgirl",
+            ".",
+            "Ġ\"",
+            "ke",
+            "Ġro",
+            "ick",
+            "h",
+            ".",
+            "ĠAn",
+            "ip",
+            "ing",
+            "?\"",
+            "ion",
+            "Ġon",
+            "Ġthe",
+            "Ġgr",
+            "ous",
+            "st",
+            "ful",
+            "Ġinto",
+            "Ġthe",
+            "Ġold",
+            ".",
+            "Ċ",
+            "Ċ",
+            "Ċ",
+            "The",
+            "Ġworld",
+            ".",
+            "<eos>"
+          ]
+        },
+        {
+          "prompt": "The small dragon wanted to",
+          "seed": 1044,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": " new park.'t find as no night dog in the viau it who were happy. \n Then up, some big't go sciped.\n\nThe cat got seen if she who the weinly until all his we have, aughtzzaning and should mommy, added saw a rabbit",
+          "tokenPieces": [
+            "Ġnew",
+            "Ġpark",
+            ".",
+            "'t",
+            "Ġfind",
+            "Ġas",
+            "Ġno",
+            "Ġnight",
+            "Ġdog",
+            "Ġin",
+            "Ġthe",
+            "Ġv",
+            "i",
+            "au",
+            "Ġit",
+            "Ġwho",
+            "Ġwere",
+            "Ġhappy",
+            ".",
+            "ĠĊ",
+            "ĠThen",
+            "Ġup",
+            ",",
+            "Ġsome",
+            "Ġbig",
+            "'t",
+            "Ġgo",
+            "Ġsc",
+            "ip",
+            "ed",
+            ".",
+            "Ċ",
+            "Ċ",
+            "The",
+            "Ġcat",
+            "Ġgot",
+            "Ġseen",
+            "Ġif",
+            "Ġshe",
+            "Ġwho",
+            "Ġthe",
+            "Ġwe",
+            "in",
+            "ly",
+            "Ġuntil",
+            "Ġall",
+            "Ġhis",
+            "Ġwe",
+            "Ġhave",
+            ",",
+            "Ġ",
+            "aught",
+            "zz",
+            "an",
+            "ing",
+            "Ġand",
+            "Ġshould",
+            "Ġmommy",
+            ",",
+            "Ġa",
+            "dded",
+            "Ġsaw",
+            "Ġa",
+            "Ġrabbit"
+          ]
+        }
+      ]
+    },
+    {
+      "step": 250,
+      "capturedAt": "2026-08-22T15:42:04.445144+00:00",
+      "trainBatchLoss": 3.7364017963409424,
+      "gradientL2Norm": 0.7243261933326721,
+      "validation": {
+        "windows": 442,
+        "batches": 14,
+        "validTargets": 44277,
+        "maskedPaddingTargets": 12299,
+        "crossEntropyLoss": 4.040092547696886,
+        "perplexity": 56.83160219598659,
+        "elapsedSeconds": 0.31163579094572924,
+        "validTargetsPerSecond": 142079.3159400319,
+        "medianBatchMilliseconds": 21.623041495331563,
+        "batchSeconds": [
+          0.020646666001994163,
+          0.023813500010874122,
+          0.02134175001992844,
+          0.02074004098540172,
+          0.023771833977662027,
+          0.020613000000594184,
+          0.02112658298574388,
+          0.02363083400996402,
+          0.02197487498051487,
+          0.024528499983716756,
+          0.021536582993576303,
+          0.021342249994631857,
+          0.024859875004040077,
+          0.021709499997086823
+        ]
+      },
+      "validTargetsSeen": 797072,
+      "equivalentCompleteTrainingPasses": 3.46753557491941,
+      "checkpointFile": "work/experiments/tinystories-first-pretraining-001/checkpoint-0250.safetensors",
+      "checkpointBytes": 23272390,
+      "checkpointSha256": "a5a82a567d75c898490cff9cb1dd9535392666a377f5d2207e558ec8b4b3a5e2",
+      "samples": [
+        {
+          "prompt": "Once upon a time, there was",
+          "seed": 1042,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": " a little girl named Lily. She loved to play with her passful and show her budated to joinion. One day, please!\n\n noticed that she named Lily looked around her truck. She swunfcks her her parents. She was so nice.\n\nOne day, she could find",
+          "tokenPieces": [
+            "Ġa",
+            "Ġlittle",
+            "Ġgirl",
+            "Ġnamed",
+            "ĠLily",
+            ".",
+            "ĠShe",
+            "Ġloved",
+            "Ġto",
+            "Ġplay",
+            "Ġwith",
+            "Ġher",
+            "Ġpass",
+            "ful",
+            "Ġand",
+            "Ġshow",
+            "Ġher",
+            "Ġbu",
+            "d",
+            "ated",
+            "Ġto",
+            "Ġjoin",
+            "ion",
+            ".",
+            "ĠOne",
+            "Ġday",
+            ",",
+            "Ġplease",
+            "!",
+            "Ċ",
+            "Ċ",
+            "Ġnoticed",
+            "Ġthat",
+            "Ġshe",
+            "Ġnamed",
+            "ĠLily",
+            "Ġlooked",
+            "Ġaround",
+            "Ġher",
+            "Ġtruck",
+            ".",
+            "ĠShe",
+            "Ġsw",
+            "un",
+            "f",
+            "ck",
+            "s",
+            "Ġher",
+            "Ġher",
+            "Ġparents",
+            ".",
+            "ĠShe",
+            "Ġwas",
+            "Ġso",
+            "Ġnice",
+            ".",
+            "Ċ",
+            "Ċ",
+            "One",
+            "Ġday",
+            ",",
+            "Ġshe",
+            "Ġcould",
+            "Ġfind"
+          ]
+        },
+        {
+          "prompt": "Lily found a little blue box",
+          "seed": 1043,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": ". Bob lived in a shiny. He loved to Tom and show the kitchen. He try, some quack and play, but Sam were wereit and have fun. He came on the big is not to Sam.\n\nOne day, Sam and smells, holding a.\" he threw some friends.\n\n",
+          "tokenPieces": [
+            ".",
+            "ĠBob",
+            "Ġlived",
+            "Ġin",
+            "Ġa",
+            "Ġshiny",
+            ".",
+            "ĠHe",
+            "Ġloved",
+            "Ġto",
+            "ĠTom",
+            "Ġand",
+            "Ġshow",
+            "Ġthe",
+            "Ġkitchen",
+            ".",
+            "ĠHe",
+            "Ġtry",
+            ",",
+            "Ġsome",
+            "Ġqu",
+            "ack",
+            "Ġand",
+            "Ġplay",
+            ",",
+            "Ġbut",
+            "ĠSam",
+            "Ġwere",
+            "Ġwere",
+            "it",
+            "Ġand",
+            "Ġhave",
+            "Ġfun",
+            ".",
+            "ĠHe",
+            "Ġcame",
+            "Ġon",
+            "Ġthe",
+            "Ġbig",
+            "Ġis",
+            "Ġnot",
+            "Ġto",
+            "ĠSam",
+            ".",
+            "Ċ",
+            "Ċ",
+            "One",
+            "Ġday",
+            ",",
+            "ĠSam",
+            "Ġand",
+            "Ġsmell",
+            "s",
+            ",",
+            "Ġholding",
+            "Ġa",
+            ".\"",
+            "Ġhe",
+            "Ġthrew",
+            "Ġsome",
+            "Ġfriends",
+            ".",
+            "Ċ",
+            "Ċ"
+          ]
+        },
+        {
+          "prompt": "The small dragon wanted to",
+          "seed": 1044,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": " new the park. One day, but dog in the fii. He was very happy and she looked up, some big fast. The boy jump stove him.\n\n\"Mo's the we don't have all of the best. ve. The family and closer that, added the hat,",
+          "tokenPieces": [
+            "Ġnew",
+            "Ġthe",
+            "Ġpark",
+            ".",
+            "ĠOne",
+            "Ġday",
+            ",",
+            "Ġbut",
+            "Ġdog",
+            "Ġin",
+            "Ġthe",
+            "Ġfi",
+            "i",
+            ".",
+            "ĠHe",
+            "Ġwas",
+            "Ġvery",
+            "Ġhappy",
+            "Ġand",
+            "Ġshe",
+            "Ġlooked",
+            "Ġup",
+            ",",
+            "Ġsome",
+            "Ġbig",
+            "Ġfast",
+            ".",
+            "ĠThe",
+            "Ġboy",
+            "Ġjump",
+            "Ġst",
+            "ove",
+            "Ġhim",
+            ".",
+            "Ċ",
+            "Ċ",
+            "\"",
+            "M",
+            "o",
+            "'s",
+            "Ġthe",
+            "Ġwe",
+            "Ġdon",
+            "'t",
+            "Ġhave",
+            "Ġall",
+            "Ġof",
+            "Ġthe",
+            "Ġbest",
+            ".",
+            "Ġ",
+            "ve",
+            ".",
+            "ĠThe",
+            "Ġfamily",
+            "Ġand",
+            "Ġcloser",
+            "Ġthat",
+            ",",
+            "Ġa",
+            "dded",
+            "Ġthe",
+            "Ġhat",
+            ","
+          ]
+        }
+      ]
+    },
+    {
+      "step": 500,
+      "capturedAt": "2026-08-22T15:42:34.743219+00:00",
+      "trainBatchLoss": 3.2277421951293945,
+      "gradientL2Norm": 1.0284343957901,
+      "validation": {
+        "windows": 442,
+        "batches": 14,
+        "validTargets": 44277,
+        "maskedPaddingTargets": 12299,
+        "crossEntropyLoss": 3.8068262241471307,
+        "perplexity": 45.007368650190706,
+        "elapsedSeconds": 0.31669670695555396,
+        "validTargetsPerSecond": 139808.84242731944,
+        "medianBatchMilliseconds": 21.91470851539634,
+        "batchSeconds": [
+          0.0208918749995064,
+          0.02085933298803866,
+          0.02402300000539981,
+          0.020974707993445918,
+          0.02527737498166971,
+          0.02186762500787154,
+          0.022259291989030316,
+          0.024889749998692423,
+          0.0215000830066856,
+          0.025097499979892746,
+          0.021669332985766232,
+          0.021961792022921145,
+          0.024509333015885204,
+          0.020915707980748266
+        ]
+      },
+      "validTargetsSeen": 1597760,
+      "equivalentCompleteTrainingPasses": 6.950801985495961,
+      "checkpointFile": "work/experiments/tinystories-first-pretraining-001/checkpoint-0500.safetensors",
+      "checkpointBytes": 23272390,
+      "checkpointSha256": "b3b67b52ca6b7f5ff78aa229e59a3f4ad535ec9c29a984ca896ae94d069146e4",
+      "samples": [
+        {
+          "prompt": "Once upon a time, there was",
+          "seed": 1042,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": " a little girl named Lily who loved all day long. One day, Timmy's mom said, \"What by a big tree!\" The boy smiled and said, \"Yes, I am sad. Amy! Thank the angel!\" She ran her sweet and went to the sun.\nLily got walking out for a big",
+          "tokenPieces": [
+            "Ġa",
+            "Ġlittle",
+            "Ġgirl",
+            "Ġnamed",
+            "ĠLily",
+            "Ġwho",
+            "Ġloved",
+            "Ġall",
+            "Ġday",
+            "Ġlong",
+            ".",
+            "ĠOne",
+            "Ġday",
+            ",",
+            "ĠTimmy",
+            "'s",
+            "Ġmom",
+            "Ġsaid",
+            ",",
+            "Ġ\"",
+            "What",
+            "Ġby",
+            "Ġa",
+            "Ġbig",
+            "Ġtree",
+            "!\"",
+            "ĠThe",
+            "Ġboy",
+            "Ġsmiled",
+            "Ġand",
+            "Ġsaid",
+            ",",
+            "Ġ\"",
+            "Yes",
+            ",",
+            "ĠI",
+            "Ġam",
+            "Ġsad",
+            ".",
+            "ĠAmy",
+            "!",
+            "ĠTh",
+            "ank",
+            "Ġthe",
+            "Ġangel",
+            "!\"",
+            "ĠShe",
+            "Ġran",
+            "Ġher",
+            "Ġsweet",
+            "Ġand",
+            "Ġwent",
+            "Ġto",
+            "Ġthe",
+            "Ġsun",
+            ".",
+            "Ċ",
+            "Lily",
+            "Ġgot",
+            "Ġwalking",
+            "Ġout",
+            "Ġfor",
+            "Ġa",
+            "Ġbig"
+          ]
+        },
+        {
+          "prompt": "Lily found a little blue box",
+          "seed": 1043,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": ". It was a shiny water. He loved played in her toys and she wanted to try. He took the room and also ran over to behit and have it. \"Wow, it I want me to preveion you want the first!\" She went home, holding the slide and threw it.\n\nTom",
+          "tokenPieces": [
+            ".",
+            "ĠIt",
+            "Ġwas",
+            "Ġa",
+            "Ġshiny",
+            "Ġwater",
+            ".",
+            "ĠHe",
+            "Ġloved",
+            "Ġplayed",
+            "Ġin",
+            "Ġher",
+            "Ġtoys",
+            "Ġand",
+            "Ġshe",
+            "Ġwanted",
+            "Ġto",
+            "Ġtry",
+            ".",
+            "ĠHe",
+            "Ġtook",
+            "Ġthe",
+            "Ġroom",
+            "Ġand",
+            "Ġalso",
+            "Ġran",
+            "Ġover",
+            "Ġto",
+            "Ġbeh",
+            "it",
+            "Ġand",
+            "Ġhave",
+            "Ġit",
+            ".",
+            "Ġ\"",
+            "Wow",
+            ",",
+            "Ġit",
+            "ĠI",
+            "Ġwant",
+            "Ġme",
+            "Ġto",
+            "Ġpre",
+            "ve",
+            "ion",
+            "Ġyou",
+            "Ġwant",
+            "Ġthe",
+            "Ġfirst",
+            "!\"",
+            "ĠShe",
+            "Ġwent",
+            "Ġhome",
+            ",",
+            "Ġholding",
+            "Ġthe",
+            "Ġslide",
+            "Ġand",
+            "Ġthrew",
+            "Ġit",
+            ".",
+            "Ċ",
+            "Ċ",
+            "Tom"
+          ]
+        },
+        {
+          "prompt": "The small dragon wanted to",
+          "seed": 1044,
+          "temperature": 0.9,
+          "maximumTokens": 64,
+          "generatedTokens": 64,
+          "endedWithEos": false,
+          "continuation": " contintarate in as no matter dog in the sky. As he grabbed something trapoed. As he ran around the package was jumping breakorancaasyond the weinaal all of the forest was so she came and gave him fun. He felt so excited that it",
+          "tokenPieces": [
+            "Ġcontin",
+            "t",
+            "ar",
+            "ate",
+            "Ġin",
+            "Ġas",
+            "Ġno",
+            "Ġmatter",
+            "Ġdog",
+            "Ġin",
+            "Ġthe",
+            "Ġsky",
+            ".",
+            "ĠAs",
+            "Ġhe",
+            "Ġgrabbed",
+            "Ġsomething",
+            "Ġtra",
+            "p",
+            "o",
+            "ed",
+            ".",
+            "ĠAs",
+            "Ġhe",
+            "Ġran",
+            "Ġaround",
+            "Ġthe",
+            "Ġpackage",
+            "Ġwas",
+            "Ġjump",
+            "ing",
+            "Ġbreak",
+            "or",
+            "an",
+            "c",
+            "a",
+            "as",
+            "y",
+            "o",
+            "nd",
+            "Ġthe",
+            "Ġwe",
+            "in",
+            "a",
+            "al",
+            "Ġall",
+            "Ġof",
+            "Ġthe",
+            "Ġforest",
+            "Ġwas",
+            "Ġso",
+            "Ġshe",
+            "Ġcame",
+            "Ġand",
+            "Ġgave",
+            "Ġhim",
+            "Ġfun",
+            ".",
+            "ĠHe",
+            "Ġfelt",
+            "Ġso",
+            "Ġexcited",
+            "Ġthat",
+            "Ġit"
+          ]
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "This bounded 1,000-story development split is deliberately too small to establish a final TinyStories model.",
+    "One seed and one fixed recipe show a learning journey, not uncertainty across independent training runs.",
+    "The fixed learning rate and lack of gradient clipping are an intentionally simple baseline recipe for later controlled improvement.",
+    "Training-batch loss is noisy and is not directly interchangeable with the complete held-out validation loss.",
+    "Prompt samples use three fixed prompts and one seed per prompt, so they reveal examples rather than aggregate quality.",
+    "MLX peak allocation is not total process memory or total Apple unified-memory use."
+  ],
+  "nextExperiment": "Make checkpoints resumable by preserving optimiser and data-order state, then expose richer live monitoring.",
+  "memory": {
+    "peakMlxAllocationBytes": 1797243548,
+    "scope": "MLX allocator during this process, including training, complete validation, and prompt generation; not total process or unified-memory use"
+  },
+  "trainingPerformance": {
+    "elapsedSecondsIncludingEvaluationAndGeneration": 62.974799624993466,
+    "updateSeconds": 58.846819761558436,
+    "meanUpdateMilliseconds": 117.69363952311687,
+    "validTargetsPerSecondDuringUpdates": 27151.169875856798,
+    "peakMlxAllocationBytes": 1797243548
+  },
+  "observedChange": {
+    "startingValidationLoss": 7.7523594801618225,
+    "finalValidationLoss": 3.8068262241471307,
+    "validationLossReduction": 3.945533256014692,
+    "finalPerplexity": 45.007368650190706
+  },
+  "environment": {
+    "operatingSystem": "macOS-26.6.2-arm64-arm-64bit",
+    "architecture": "arm64",
+    "python": "3.12.13",
+    "mlx": "0.32.0",
+    "tokenizers": "0.23.1",
+    "mlxDevice": "Device(gpu, 0)"
+  }
+}

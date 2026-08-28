@@ -9,7 +9,7 @@ LearningLLMs is both:
 
 The course starts with a 4,225-weight character model rather than a downloaded black box. It then adds training, context, self-attention, a complete transformer, controlled evaluation, local prompting, optimisation experiments, scaling, and multi-seed confirmation. Later projects move to subword pretraining and parameter-efficient fine-tuning.
 
-> Repository status: the project is being prepared for a future public release. It has not yet been published, and a public licence still needs to be selected before release.
+> Repository status: all three core projects and their reviewed reference dashboards are complete. Public release is still blocked by the owner&apos;s licence/identity decisions, clean-clone platform testing, and the browser-executable Shakespeare parity gate. No GitHub remote or public Cloudflare deployment has been created yet.
 
 ## What you will learn
 
@@ -29,15 +29,15 @@ No previous machine-learning knowledge is assumed. **Beginner Mode** adds deeper
 | Project | Purpose | Starting point | Status in the reference course |
 |---|---|---|---|
 | 01 · Tiny Shakespeare | Expose the complete language-model loop at character scale | Random weights | 12 lessons complete |
-| 02 · TinyStories | Train a small GPT-like model on simple English using subword tokens | Random weights → resumable pretraining | 12 executable lessons complete; reference promotion remains separate |
-| 03 · English → SQL | Contrast pretraining with task adaptation and executable evaluation | Pretrained small model | 5 executable lessons complete; reference evidence not yet promoted |
+| 02 · TinyStories | Train a small GPT-like model on simple English using subword tokens | Random weights → resumable pretraining | 12 lessons and reviewed reference evidence complete |
+| 03 · English → SQL | Contrast pretraining with task adaptation and executable evaluation | Pretrained small model | 5 lessons and reviewed reference evidence complete |
 | 04 · Sentiment laboratory | Independently build a classifier with robustness and calibration checks | Fully scaffolded extension | Optional |
 | 05 · Dialogue summarisation | Ask your coding agent to scaffold a careful sequence-to-sequence project | Agent brief only | Optional |
 | 06 · Your own question | Choose a domain, task, data, baseline, and evidence standard | Themes only | Open exploration |
 
 ## Two evidence modes
 
-The top bar contains a **Reference results / My lab** switch.
+The top bar contains a **Reference results / My lab** switch. On the hosted wiki, Reference results are immediately readable; My lab explains what a learner will create after cloning rather than pretending a public page can train on their machine.
 
 - **Reference results** displays the committed measurements from the original 32 GB Apple-silicon course run. It lets readers inspect completed lessons immediately.
 - **My lab** begins with empty dashboards and reproduction goals. Training scripts write your JSON results to `public/data/local/` and checkpoints to `work/experiments/`. Both are ignored by Git, so your work cannot overwrite the published evidence accidentally.
@@ -183,6 +183,14 @@ A useful opening request is:
 
 See [Agent-assisted learning](docs/agent-workflow.md) for prompts that preserve learning rather than turning the project into an unexplained one-command build.
 
+## Public website and playgrounds
+
+The planned Cloudflare site is a read-first portfolio and learning experience: all 29 completed lessons, Beginner Mode, diagrams, glossary entries, and reviewed Reference dashboards are visible without installing anything. Blank learner evidence is never presented as a completed result.
+
+Local clones can already prompt Shakespeare and TinyStories checkpoints through loopback-only services. The first public release remains gated on a genuine in-browser Shakespeare port with MLX parity; TinyStories browser inference is a documented follow-up because its checkpoints and runtime are much larger. English → SQL remains local-only initially because its pretrained base is hundreds of megabytes, redistribution needs review, and safe browser execution would require a separately tested parser and SQLite sandbox. No hosted general-purpose model will be substituted for a course checkpoint.
+
+See [What the public release will contain](docs/public-experience.md) for the exact visitor experience, omissions, privacy boundary, hardware adaptations, and zero-cost assumptions.
+
 ## Continue independently
 
 After the three core projects, open the wiki’s **Continue yourself** page or read [Independent project extensions](docs/independent-projects.md). The three suggestions deliberately remove scaffolding:
@@ -209,9 +217,11 @@ After the three core projects, open the wiki’s **Continue yourself** page or r
 - [Tiny Shakespeare lesson quality red-team](docs/shakespeare-lesson-red-team.md)
 - [TinyStories and English → SQL lesson quality red-team](docs/tinystories-sql-lesson-red-team.md)
 - [Independent project extensions](docs/independent-projects.md)
+- [Public visitor experience and capability matrix](docs/public-experience.md)
+- [Current public-release readiness report](docs/release-readiness-report.md)
 - [Publishing GitHub and the Cloudflare wiki](docs/publishing-github-and-cloudflare.md)
 - [Future public-release checklist](docs/public-release-checklist.md)
 
 ## Before public release
 
-This repository still needs an explicit licence choice, a final secret/large-file audit, clean-clone testing on the supported hardware paths, dataset-terms review, accessibility QA, and a browser-executable Shakespeare export proven equivalent to the MLX model. GitHub and the public Cloudflare wiki will be released from one reviewed candidate under the [coordinated publication plan](docs/publishing-github-and-cloudflare.md). No remote repository, public site, or deployment is created by the current setup work.
+This repository still needs an explicit licence choice, a final full-history secret scan, clean-clone testing on each hardware path described as verified, dataset-terms review, accessibility QA, and a browser-executable Shakespeare export proven equivalent to the MLX model. Run `python3 scripts/audit_public_repo.py` during preparation and `python3 scripts/audit_public_repo.py --release` for the owner-decision and browser-artifact gates. GitHub and the public Cloudflare wiki will be released from one reviewed candidate under the [coordinated publication plan](docs/publishing-github-and-cloudflare.md). No remote repository, public site, or deployment is created by the current setup work.

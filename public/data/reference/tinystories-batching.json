@@ -1,0 +1,642 @@
+{
+  "status": "Complete",
+  "experimentId": "tinystories-batching-001",
+  "updatedAt": "2026-08-22T15:05:36.990164+00:00",
+  "purpose": "Freeze story-isolated causal sequence batching; no model forward pass or weight updates",
+  "dataset": {
+    "datasetId": "tinystories-development-v1",
+    "trainStories": 1000,
+    "validationStories": 200,
+    "sourceManifestHashes": {
+      "train": "7cc2bc86bf1a11ef1c74531db4fcde2a02da8c1153915f3ffda215ec477026c1",
+      "validation": "5be6ca53915cbad0e42955c619a927cca67237f28d94c16bf858b3f31bee382b"
+    }
+  },
+  "configuration": {
+    "runId": "tinystories-batching-001",
+    "datasetId": "tinystories-development-v1",
+    "sourceManifestHashes": {
+      "train": "7cc2bc86bf1a11ef1c74531db4fcde2a02da8c1153915f3ffda215ec477026c1",
+      "validation": "5be6ca53915cbad0e42955c619a927cca67237f28d94c16bf858b3f31bee382b"
+    },
+    "tokenizerVocabularySize": 2048,
+    "tokenizerSha256": "cf8392263a229b36d3206ae8234496d0d197e9d4aa8f10d0e01c83d210de7c6e",
+    "contextSize": 128,
+    "batchSize": 32,
+    "seed": 42,
+    "boundaryPolicy": "Each story receives BOS/EOS and is windowed independently",
+    "windowPolicy": "context+1 token chunks with stride=context, preserving every adjacent pair exactly once",
+    "paddingPolicy": "Right-pad final story chunk; multiply per-token loss by lossMask before averaging over valid targets",
+    "attentionPolicy": "Standard lower-triangular causal mask; no cross-story positions share a window",
+    "modelTraining": "none"
+  },
+  "isolatedWindows": {
+    "train": {
+      "stories": 1000,
+      "examples": 2292,
+      "contextSize": 128,
+      "validTargetTokens": 229867,
+      "expectedAdjacentStoryPairs": 229867,
+      "paddingTargetPositions": 63509,
+      "targetUtilisation": 0.7835235329406631,
+      "examplesPerStoryMean": 2.292,
+      "maximumChunksForOneStory": 9,
+      "eosTargets": 1000,
+      "bosTargets": 0,
+      "crossStoryTargetPairs": 0,
+      "shapeErrors": 0,
+      "maskErrors": 0,
+      "storyReconstructionErrors": 0,
+      "pairCoverageMatches": true
+    },
+    "validation": {
+      "stories": 200,
+      "examples": 442,
+      "contextSize": 128,
+      "validTargetTokens": 44277,
+      "expectedAdjacentStoryPairs": 44277,
+      "paddingTargetPositions": 12299,
+      "targetUtilisation": 0.7826110011312217,
+      "examplesPerStoryMean": 2.21,
+      "maximumChunksForOneStory": 3,
+      "eosTargets": 200,
+      "bosTargets": 0,
+      "crossStoryTargetPairs": 0,
+      "shapeErrors": 0,
+      "maskErrors": 0,
+      "storyReconstructionErrors": 0,
+      "pairCoverageMatches": true
+    }
+  },
+  "naiveConcatenation": {
+    "train": {
+      "method": "Concatenate complete encoded stories, then slice one continuous stream",
+      "targetPairs": 230866,
+      "crossStoryTargetPairs": 999,
+      "windows": 1804,
+      "targetUtilisation": 0.9998007899113082,
+      "boundaryRisk": "A later story can attend to unrelated earlier-story tokens, and EOS→BOS boundary pairs become optimisation targets"
+    },
+    "validation": {
+      "method": "Concatenate complete encoded stories, then slice one continuous stream",
+      "targetPairs": 44476,
+      "crossStoryTargetPairs": 199,
+      "windows": 348,
+      "targetUtilisation": 0.9984734195402298,
+      "boundaryRisk": "A later story can attend to unrelated earlier-story tokens, and EOS→BOS boundary pairs become optimisation targets"
+    }
+  },
+  "fixedBatches": {
+    "train": {
+      "exampleIndices": [
+        1057,
+        2036,
+        885,
+        2006,
+        314,
+        1536,
+        1653,
+        2159,
+        1935,
+        1394,
+        228,
+        555,
+        1603,
+        1050,
+        926,
+        1616,
+        1549,
+        477,
+        4,
+        1656,
+        266,
+        916,
+        333,
+        1090,
+        1403,
+        1832,
+        288,
+        943,
+        287,
+        1991,
+        1816,
+        1938
+      ],
+      "sourceRows": [
+        457221,
+        1787077,
+        364872,
+        1787063,
+        284845,
+        802446,
+        802499,
+        2095234,
+        1787031,
+        731479,
+        284808,
+        335841,
+        802477,
+        457218,
+        364881,
+        802482,
+        802453,
+        335813,
+        81902,
+        901200,
+        284822,
+        364878,
+        284855,
+        457236,
+        731484,
+        901284,
+        284833,
+        364885,
+        284832,
+        1787057,
+        901276,
+        1787032
+      ],
+      "shapes": {
+        "inputs": [
+          32,
+          128
+        ],
+        "targets": [
+          32,
+          128
+        ],
+        "lossMask": [
+          32,
+          128
+        ]
+      },
+      "dtypes": {
+        "inputs": "mlx.core.int32",
+        "targets": "mlx.core.int32",
+        "lossMask": "mlx.core.float32"
+      },
+      "validTargets": 3183,
+      "paddingTargets": 913,
+      "tensorStorageBytes": 49152
+    },
+    "validation": {
+      "exampleIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "sourceRows": [
+        900,
+        900,
+        900,
+        901,
+        901,
+        902,
+        902,
+        903,
+        903,
+        904,
+        904,
+        905,
+        905,
+        906,
+        906,
+        907,
+        907,
+        908,
+        908,
+        909,
+        909,
+        910,
+        910,
+        911,
+        911,
+        912,
+        912,
+        913,
+        913,
+        914,
+        914,
+        915
+      ],
+      "shapes": {
+        "inputs": [
+          32,
+          128
+        ],
+        "targets": [
+          32,
+          128
+        ],
+        "lossMask": [
+          32,
+          128
+        ]
+      },
+      "dtypes": {
+        "inputs": "mlx.core.int32",
+        "targets": "mlx.core.int32",
+        "lossMask": "mlx.core.float32"
+      },
+      "validTargets": 3203,
+      "paddingTargets": 893,
+      "tensorStorageBytes": 49152
+    }
+  },
+  "paddingBoundaryPreview": {
+    "sourceRow": 900,
+    "chunkIndex": 2,
+    "storyTokenStart": 256,
+    "validTargetCount": 3,
+    "positions": [
+      {
+        "position": 0,
+        "inputId": 591,
+        "inputPiece": "ĠE",
+        "targetId": 265,
+        "targetPiece": "nd",
+        "countsForLoss": true
+      },
+      {
+        "position": 1,
+        "inputId": 265,
+        "inputPiece": "nd",
+        "targetId": 17,
+        "targetPiece": ".",
+        "countsForLoss": true
+      },
+      {
+        "position": 2,
+        "inputId": 17,
+        "inputPiece": ".",
+        "targetId": 3,
+        "targetPiece": "<eos>",
+        "countsForLoss": true
+      },
+      {
+        "position": 3,
+        "inputId": 3,
+        "inputPiece": "<eos>",
+        "targetId": 0,
+        "targetPiece": "<pad>",
+        "countsForLoss": false
+      },
+      {
+        "position": 4,
+        "inputId": 0,
+        "inputPiece": "<pad>",
+        "targetId": 0,
+        "targetPiece": "<pad>",
+        "countsForLoss": false
+      },
+      {
+        "position": 5,
+        "inputId": 0,
+        "inputPiece": "<pad>",
+        "targetId": 0,
+        "targetPiece": "<pad>",
+        "countsForLoss": false
+      },
+      {
+        "position": 6,
+        "inputId": 0,
+        "inputPiece": "<pad>",
+        "targetId": 0,
+        "targetPiece": "<pad>",
+        "countsForLoss": false
+      }
+    ]
+  },
+  "causalMask": {
+    "shapePerExample": [
+      128,
+      128
+    ],
+    "allowedCurrentOrEarlierRelationships": 8256,
+    "blockedFutureRelationships": 8128,
+    "preview": [
+      [
+        {
+          "keyPosition": 0,
+          "allowed": true
+        },
+        {
+          "keyPosition": 1,
+          "allowed": false
+        },
+        {
+          "keyPosition": 2,
+          "allowed": false
+        },
+        {
+          "keyPosition": 3,
+          "allowed": false
+        },
+        {
+          "keyPosition": 4,
+          "allowed": false
+        },
+        {
+          "keyPosition": 5,
+          "allowed": false
+        },
+        {
+          "keyPosition": 6,
+          "allowed": false
+        },
+        {
+          "keyPosition": 7,
+          "allowed": false
+        }
+      ],
+      [
+        {
+          "keyPosition": 0,
+          "allowed": true
+        },
+        {
+          "keyPosition": 1,
+          "allowed": true
+        },
+        {
+          "keyPosition": 2,
+          "allowed": false
+        },
+        {
+          "keyPosition": 3,
+          "allowed": false
+        },
+        {
+          "keyPosition": 4,
+          "allowed": false
+        },
+        {
+          "keyPosition": 5,
+          "allowed": false
+        },
+        {
+          "keyPosition": 6,
+          "allowed": false
+        },
+        {
+          "keyPosition": 7,
+          "allowed": false
+        }
+      ],
+      [
+        {
+          "keyPosition": 0,
+          "allowed": true
+        },
+        {
+          "keyPosition": 1,
+          "allowed": true
+        },
+        {
+          "keyPosition": 2,
+          "allowed": true
+        },
+        {
+          "keyPosition": 3,
+          "allowed": false
+        },
+        {
+          "keyPosition": 4,
+          "allowed": false
+        },
+        {
+          "keyPosition": 5,
+          "allowed": false
+        },
+        {
+          "keyPosition": 6,
+          "allowed": false
+        },
+        {
+          "keyPosition": 7,
+          "allowed": false
+        }
+      ],
+      [
+        {
+          "keyPosition": 0,
+          "allowed": true
+        },
+        {
+          "keyPosition": 1,
+          "allowed": true
+        },
+        {
+          "keyPosition": 2,
+          "allowed": true
+        },
+        {
+          "keyPosition": 3,
+          "allowed": true
+        },
+        {
+          "keyPosition": 4,
+          "allowed": false
+        },
+        {
+          "keyPosition": 5,
+          "allowed": false
+        },
+        {
+          "keyPosition": 6,
+          "allowed": false
+        },
+        {
+          "keyPosition": 7,
+          "allowed": false
+        }
+      ],
+      [
+        {
+          "keyPosition": 0,
+          "allowed": true
+        },
+        {
+          "keyPosition": 1,
+          "allowed": true
+        },
+        {
+          "keyPosition": 2,
+          "allowed": true
+        },
+        {
+          "keyPosition": 3,
+          "allowed": true
+        },
+        {
+          "keyPosition": 4,
+          "allowed": true
+        },
+        {
+          "keyPosition": 5,
+          "allowed": false
+        },
+        {
+          "keyPosition": 6,
+          "allowed": false
+        },
+        {
+          "keyPosition": 7,
+          "allowed": false
+        }
+      ],
+      [
+        {
+          "keyPosition": 0,
+          "allowed": true
+        },
+        {
+          "keyPosition": 1,
+          "allowed": true
+        },
+        {
+          "keyPosition": 2,
+          "allowed": true
+        },
+        {
+          "keyPosition": 3,
+          "allowed": true
+        },
+        {
+          "keyPosition": 4,
+          "allowed": true
+        },
+        {
+          "keyPosition": 5,
+          "allowed": true
+        },
+        {
+          "keyPosition": 6,
+          "allowed": false
+        },
+        {
+          "keyPosition": 7,
+          "allowed": false
+        }
+      ],
+      [
+        {
+          "keyPosition": 0,
+          "allowed": true
+        },
+        {
+          "keyPosition": 1,
+          "allowed": true
+        },
+        {
+          "keyPosition": 2,
+          "allowed": true
+        },
+        {
+          "keyPosition": 3,
+          "allowed": true
+        },
+        {
+          "keyPosition": 4,
+          "allowed": true
+        },
+        {
+          "keyPosition": 5,
+          "allowed": true
+        },
+        {
+          "keyPosition": 6,
+          "allowed": true
+        },
+        {
+          "keyPosition": 7,
+          "allowed": false
+        }
+      ],
+      [
+        {
+          "keyPosition": 0,
+          "allowed": true
+        },
+        {
+          "keyPosition": 1,
+          "allowed": true
+        },
+        {
+          "keyPosition": 2,
+          "allowed": true
+        },
+        {
+          "keyPosition": 3,
+          "allowed": true
+        },
+        {
+          "keyPosition": 4,
+          "allowed": true
+        },
+        {
+          "keyPosition": 5,
+          "allowed": true
+        },
+        {
+          "keyPosition": 6,
+          "allowed": true
+        },
+        {
+          "keyPosition": 7,
+          "allowed": true
+        }
+      ]
+    ]
+  },
+  "decision": {
+    "selectedMethod": "story-isolated-overlap-one-padded-windows-v1",
+    "reason": "Preserves every within-story adjacent target pair exactly once, blocks cross-story context, and masks all padding targets",
+    "tradeoff": "Uses more padded target positions than naïve concatenation; clarity and boundary correctness are prioritised for the development model",
+    "scope": "Frozen for the TinyStories random baseline and initial development training; revisit segment-aware packing during scaling"
+  },
+  "elapsedSeconds": 0.19771929099806584,
+  "environment": {
+    "operatingSystem": "macOS-26.6.2-arm64-arm-64bit",
+    "architecture": "arm64",
+    "python": "3.12.13",
+    "mlxDevice": "Device(gpu, 0)",
+    "peakMlxAllocationBytes": 98304
+  },
+  "limitations": [
+    "The efficiency comparison counts target positions; it does not benchmark model throughput or activation memory.",
+    "Right padding wastes compute because the current model still calculates logits at masked positions.",
+    "Story-isolated windows discard attention context before each 128-token chunk boundary, although overlapping one token preserves every adjacent prediction target.",
+    "The simple lower-triangular attention mask is safe here only because separate stories never share a window.",
+    "Segment-aware packing may recover efficiency later but requires additional attention-mask and position-reset tests."
+  ]
+}

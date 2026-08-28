@@ -93,7 +93,7 @@ export const shakespeareLessons: RichLesson[] = [
           <Code>{`uv run --no-sync python scripts/download_tiny_shakespeare.py
 # Downloaded and verified data/raw/tiny-shakespeare.txt (1,115,394 bytes)`}</Code>
           <p>The downloader writes a temporary file, verifies SHA-256 <code>86c4e6…565ed</code>, then atomically replaces the ignored raw path. An existing file with that hash is reused. This turns the source URL into a reproducible input rather than trusting whichever bytes a direct download happens to return.</p>
-          <p>The upstream repository describes Tiny Shakespeare as a subset of Shakespeare&apos;s works and carries an <Source href="https://github.com/karpathy/char-rnn/blob/master/LICENSE">MIT licence</Source>, but the dataset directory does not separately explain how that grant applies to the compiled corpus. Keep the raw file uncommitted and review corpus and derived-checkpoint redistribution separately before public release.</p>
+          <p>The upstream repository describes Tiny Shakespeare as a subset of Shakespeare&apos;s works and states an <Source href="https://github.com/karpathy/char-rnn#license">MIT licence</Source> in its README, but the dataset directory does not separately explain how that grant applies to the compiled corpus. Keep the raw file uncommitted and review corpus and derived-checkpoint redistribution separately before public release.</p>
         </>,
       },
       {

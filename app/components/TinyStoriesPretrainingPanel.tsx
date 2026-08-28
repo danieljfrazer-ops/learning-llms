@@ -96,6 +96,6 @@ export default function TinyStoriesPretrainingPanel() {
         return <article key={item.step}><small>STEP {item.step} · LOSS {item.validation.crossEntropyLoss.toFixed(3)}</small><strong>{sample?.prompt}</strong><p>{sample?.continuation || '〈no visible continuation before EOS〉'}</p><span>{item.step === 0 ? 'Random control' : `${item.validTargetsSeen.toLocaleString()} targets used for updates`}</span></article>;
       })}</div>
       <p className="evaluation-foot">The latest complete validation uses {latest?.validation.validTargets.toLocaleString()} untrained-on targets. A “data pass” is targets seen divided by the frozen training-target count; shuffled batches can end mid-pass. {evidence.trainingPerformance ? `The full run, including evaluation and generation, took ${evidence.trainingPerformance.elapsedSecondsIncludingEvaluationAndGeneration.toFixed(1)} seconds.` : 'This run is still in progress.'}</p>
-    </> : <p className="evaluation-foot">Run the Lesson 6 command in My Lab to populate staged loss, gradient, memory, checkpoint, and fixed-prompt evidence. Reference mode stays blank until a separate reviewed promotion.</p>}
+    </> : <p className="evaluation-foot">Run Lesson 6 in My Lab to populate your staged loss, gradient, memory, checkpoint, and fixed-prompt evidence. Published Reference evidence is maintained separately.</p>}
   </section>;
 }

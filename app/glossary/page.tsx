@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/app/components/CourseLink';
 import WikiChrome from '@/app/components/WikiChrome';
 import { glossary } from '@/lib/wiki-data';
 import BeginnerGlossaryNote from '@/app/components/BeginnerGlossaryNote';

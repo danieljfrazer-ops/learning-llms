@@ -1,0 +1,32 @@
+{
+  "runId": "sql-base-model-selection-001",
+  "selectionSplit": "dev",
+  "testSplitOpened": false,
+  "sampleSize": 24,
+  "seed": 20260827,
+  "promptStyle": "compact-v1",
+  "generation": {
+    "decoding": "greedy",
+    "maxNewTokens": 96
+  },
+  "eligibility": "ungated pinned model, permissive recorded licence, valid MLX load, and peak MLX allocation below 8 GiB",
+  "selectionRule": "Among eligible candidates, maximize development execution accuracy; break ties by logical-form exact match, then valid SQL, then lower peak memory, then model id.",
+  "candidates": [
+    {
+      "id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+      "revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+      "license": "Apache-2.0",
+      "upstreamParametersBillions": 0.49,
+      "repositoryBytes": 289601064,
+      "upstreamContextTokens": 32768
+    },
+    {
+      "id": "mlx-community/SmolLM2-360M-Instruct-6bit",
+      "revision": "642affd1f9e387d1b56c745894afc83795aebe1d",
+      "license": "Apache-2.0",
+      "upstreamParametersBillions": 0.36,
+      "repositoryBytes": 298985211,
+      "upstreamContextTokens": 8192
+    }
+  ]
+}

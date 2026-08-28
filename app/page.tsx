@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/app/components/CourseLink';
 import { projects as projectRecords } from '@/lib/wiki-data';
 import { BeginnerModeToggle, BeginnerOnly } from '@/app/components/BeginnerMode';
 import { EvidenceMachineCard, EvidenceModeToggle, LocalOnly, ReferenceOnly } from '@/app/components/EvidenceMode';
@@ -40,7 +40,7 @@ export default function Home() {
           </div>
           <div className="terminal-card" aria-label="Current experiment status">
             <div className="terminal-title"><span>● ● ●</span><code>course · progression</code></div>
-            <ReferenceOnly><pre><span className="muted">$ course.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">shakespeare</span>: <span className="value">&quot;complete&quot;</span>,{'\n'}  <span className="key">tinystories</span>: <span className="value">&quot;complete&quot;</span>,{'\n'}  <span className="key">english_to_sql</span>: <span className="value">&quot;complete&quot;</span>,{'\n'}  <span className="key">next</span>: <span className="value">&quot;independent project&quot;</span>{'\n'}{'}'}</pre><div className="terminal-footer"><span className="live-dot" /> Project 3 reference evidence has not been promoted</div></ReferenceOnly>
+            <ReferenceOnly><pre><span className="muted">$ course.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">shakespeare</span>: <span className="value">&quot;complete&quot;</span>,{'\n'}  <span className="key">tinystories</span>: <span className="value">&quot;complete&quot;</span>,{'\n'}  <span className="key">english_to_sql</span>: <span className="value">&quot;complete&quot;</span>,{'\n'}  <span className="key">next</span>: <span className="value">&quot;independent project&quot;</span>{'\n'}{'}'}</pre><div className="terminal-footer"><span className="live-dot" /> Reviewed evidence published for all three core projects</div></ReferenceOnly>
             <LocalOnly><pre><span className="muted">$ my_lab.status()</span>{'\n'}{'{'}{'\n'}  <span className="key">evidence</span>: <span className="value">&quot;your local result files&quot;</span>,{'\n'}  <span className="key">writes_to</span>: <span className="value">&quot;ignored local workspace&quot;</span>,{'\n'}  <span className="key">continue</span>: <span className="value">&quot;open a project lesson&quot;</span>{'\n'}{'}'}</pre><div className="terminal-footer"><span className="live-dot" /> Dashboards show “Not run yet” until each script completes</div></LocalOnly>
           </div>
         </section>
@@ -50,6 +50,15 @@ export default function Home() {
           <CourseMapVisual />
           <div className="project-grid">
             {projects.map((project) => <Link href={project.href} className="project-card" key={project.name}><div className="project-card-top"><span className="project-number">{project.number}</span><span className={`status status-${project.progress ? 'active' : 'planned'}`}>{project.status}</span></div><h3>{project.name}</h3><p>{project.description}</p><div className="progress-label"><span>{project.stage}</span><span>{project.progress}%</span></div><div className="progress-track"><span style={{ width: `${Math.max(project.progress, 2)}%` }} /></div></Link>)}
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="section-heading"><div><p className="kicker">PUBLIC EXPERIENCE</p><h2>Read here; reproduce in your own lab</h2></div><p>The hosted wiki shows every completed core lesson and reviewed result. Training, checkpoints, datasets, and learner prompts remain on the visitor&apos;s own machine.</p></div>
+          <div className="project-grid">
+            <article className="project-card"><div className="project-card-top"><span className="project-number">WEB</span><span className="status status-active">READ</span></div><h3>Complete reference course</h3><p>Twenty-nine core lessons, Beginner Mode, diagrams, glossary, measured dashboards, limitations, and sources—without blank results masquerading as evidence.</p></article>
+            <article className="project-card"><div className="project-card-top"><span className="project-number">LAB</span><span className="status status-active">RUN</span></div><h3>Clone and reproduce</h3><p>Hardware-aware setup, verified downloads, readable experiments, ignored local evidence, and loopback-only Shakespeare and TinyStories playgrounds.</p></article>
+            <article className="project-card"><div className="project-card-top"><span className="project-number">AI</span><span className="status status-planned">GATED</span></div><h3>Honest browser models</h3><p>Public Shakespeare prompting will ship only after the genuine checkpoints pass MLX/browser parity. TinyStories and SQL show their current local-only boundaries explicitly.</p></article>
           </div>
         </section>
 

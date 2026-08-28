@@ -2,6 +2,8 @@
 
 Do not publish solely because the code builds. Complete this checklist deliberately.
 
+For the current completed work and remaining blockers, see the [public-release readiness report](release-readiness-report.md). Run `python3 scripts/audit_public_repo.py --release` immediately before freezing a candidate; its owner-decision and browser-artifact failures are intentional until those gates are closed.
+
 ## Legal and provenance
 
 - [ ] Choose and add an explicit repository licence.

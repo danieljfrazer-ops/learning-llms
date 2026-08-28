@@ -1,0 +1,39 @@
+{
+  "experimentId": "tinystories-scaling-budget-001",
+  "selection": {
+    "selectedCandidateId": "reference",
+    "selectedLabel": "Reference · 256 wide × 6 blocks",
+    "referenceValidationLoss": 4.739446234783296,
+    "selectedProbeValidationLoss": 4.739446234783296,
+    "improvementOverReference": 0.0,
+    "reason": "no feasible alternative cleared the threshold; retained the reference architecture",
+    "selectedCheckpointDirectory": "work/experiments/tinystories-scaling-budget-001/selected-long-run/checkpoint-0700"
+  },
+  "configuration": {
+    "datasetId": "tinystories-development-v1",
+    "dataHashes": {
+      "train": "7cc2bc86bf1a11ef1c74531db4fcde2a02da8c1153915f3ffda215ec477026c1",
+      "validation": "5be6ca53915cbad0e42955c619a927cca67237f28d94c16bf858b3f31bee382b"
+    },
+    "tokenizerSha256": "cf8392263a229b36d3206ae8234496d0d197e9d4aa8f10d0e01c83d210de7c6e",
+    "vocabularySize": 2048,
+    "batchSize": 32,
+    "seed": 42,
+    "batchSeed": 4242,
+    "probeUpdates": 100,
+    "longRunUpdates": 700,
+    "optimiser": "AdamW",
+    "learningRate": 0.0003,
+    "weightDecay": 0.01,
+    "resourceCeilings": {
+      "peakMlxAllocationBytes": 4294967296,
+      "meanUpdateMilliseconds": 250.0
+    },
+    "selectionRule": {
+      "metric": "complete held-out cross-entropy after 100 updates",
+      "minimumImprovementOverReference": 0.01,
+      "fallback": "retain reference architecture"
+    },
+    "recipeEvidence": "tinystories-training-recipe-001"
+  }
+}

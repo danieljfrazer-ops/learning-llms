@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from './CourseLink';
 import { BeginnerModeToggle } from './BeginnerMode';
 import { EvidenceMachineCard, EvidenceModeToggle } from './EvidenceMode';
 

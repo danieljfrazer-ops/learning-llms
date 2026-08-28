@@ -66,6 +66,6 @@ export default function SqlDatasetAuditPanel() {
       </tbody></table>
       <aside className="lesson-caveat"><strong>Do not cross this boundary</strong><p>{audit.taskContract.prohibitedUse}. The audit uses {audit.referenceExecution.safety.toLowerCase()}.</p></aside>
       <p className="evaluation-foot">No model was selected, invoked, or trained. Audit runtime: {audit.elapsedSeconds.toFixed(2)} seconds.</p>
-    </> : <p className="evaluation-foot">Run the downloader and audit in My Lab. Reference results remain “Not run yet” until a separate reviewed promotion.</p>}
+    </> : <p className="evaluation-foot">Run the downloader and audit in My Lab to create your evidence. Published Reference results are maintained separately.</p>}
   </section>;
 }

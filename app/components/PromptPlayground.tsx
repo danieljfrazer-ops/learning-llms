@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 
 type Health = { status: string; runs: { id: string; checkpoints: number[]; contextSize: number }[]; device: string };
 type Completion = { prompt: string; continuation: string; run: string; checkpoint: number; temperature: number; seed: number; generatedCharacters: number; contextCharactersUsed: number; elapsedSeconds: number };
@@ -17,6 +17,11 @@ function checkpointLabel(run: string, step: number) {
 }
 
 export default function PromptPlayground() {
+  const isLocalSite = useSyncExternalStore(
+    () => () => undefined,
+    () => ['localhost', '127.0.0.1'].includes(window.location.hostname),
+    () => null,
+  );
   const [health, setHealth] = useState<Health | null>(null);
   const [prompt, setPrompt] = useState(presets[0]);
   const [selection, setSelection] = useState('final:3000');
@@ -28,6 +33,7 @@ export default function PromptPlayground() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    if (!isLocalSite) return;
     fetch(`${endpoint}/health`)
       .then(response => response.ok ? response.json() : Promise.reject(new Error('Inference service did not respond')))
       .then((nextHealth: Health) => {
@@ -37,7 +43,7 @@ export default function PromptPlayground() {
         if (firstRun && firstCheckpoint !== undefined) setSelection(`${firstRun.id}:${firstCheckpoint}`);
       })
       .catch(() => setError('The local inference service is offline. Start it with the command shown below.'));
-  }, []);
+  }, [isLocalSite]);
 
   const hasCheckpoints = Boolean(health?.runs.some(run => run.checkpoints.length));
 
@@ -67,7 +73,7 @@ export default function PromptPlayground() {
   }
 
   return <section className="playground" id="prompt-playground">
-    <div className="playground-heading"><div><p className="kicker">LIVE LOCAL INFERENCE</p><h2>Prompt the model yourself</h2><p>Every completion comes from a checkpoint you trained locally. Comparing checkpoints keeps the prompt, temperature and seed fixed so training is the variable you can see.</p></div><span className={`service-state ${hasCheckpoints ? 'ready' : 'offline'}`}>{hasCheckpoints ? `● Ready · ${health?.device}` : health ? '○ No local checkpoints' : '○ Service offline'}</span></div>
+    <div className="playground-heading"><div><p className="kicker">CHECKPOINT PLAYGROUND</p><h2>Prompt the model yourself</h2><p>In a local clone, every completion comes from a checkpoint on your machine. The public release will enable this control only after the same course checkpoints pass browser/MLX parity.</p></div><span className={`service-state ${hasCheckpoints ? 'ready' : 'offline'}`}>{hasCheckpoints ? `● Ready · ${health?.device}` : isLocalSite === false ? '○ Browser export pending' : health ? '○ No local checkpoints' : '○ Service offline'}</span></div>
     <div className="playground-grid">
       <div className="playground-controls">
         <label>Beginning of the passage<textarea value={prompt} maxLength={2000} rows={5} onChange={event => setPrompt(event.target.value)} /></label>
@@ -77,7 +83,8 @@ export default function PromptPlayground() {
         <label>Random seed<input type="number" value={seed} onChange={event => setSeed(Number(event.target.value))} /></label>
         <div className="playground-actions"><button type="button" className="run-button" disabled={busy || !prompt || !hasCheckpoints} onClick={() => generate(false)}>{busy ? 'Generating…' : 'Complete with selected checkpoint'}</button><button type="button" className="compare-button" disabled={busy || !prompt || !hasCheckpoints} onClick={() => generate(true)}>Compare every checkpoint</button></div>
         {health && !hasCheckpoints && <aside className="playground-error"><strong>This is the intended blank-canvas state.</strong><span>Complete the Tiny transformer lesson to create your first local checkpoints, then restart this service.</span><code>uv run --no-sync python ml/shakespeare_transformer.py</code></aside>}
-        {error && <aside className="playground-error"><strong>{error}</strong><code>uv run --no-sync python ml/shakespeare_inference_server.py</code></aside>}
+        {isLocalSite === false && <aside className="playground-error"><strong>The public browser model is not packaged yet.</strong><span>Read the reviewed checkpoint samples here, or clone the repository to prompt your own local checkpoints. Your prompt is not sent to a hosted model.</span></aside>}
+        {isLocalSite !== false && error && <aside className="playground-error"><strong>{error}</strong><code>uv run --no-sync python ml/shakespeare_inference_server.py</code></aside>}
       </div>
       <div className="completion-list" aria-live="polite">{results.length ? results.map(result => <article className="completion-card" key={`${result.run}:${result.checkpoint}`}><div><strong>{checkpointLabel(result.run, result.checkpoint)}</strong><span>{result.elapsedSeconds.toFixed(3)} s · {result.contextCharactersUsed}/64 prompt characters visible</span></div><pre><mark>{result.prompt}</mark>{result.continuation}</pre></article>) : <div className="completion-empty"><strong>Your continuation will appear here.</strong><p>Try the improved checkpoint first, then compare it with random weights using the same prompt.</p></div>}</div>
     </div>

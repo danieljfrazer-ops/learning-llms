@@ -21,8 +21,8 @@ export const sqlLessons: RichLesson[] = [
     slug: 'task-and-dataset-audit',
     title: 'Define the task before adapting a model',
     summary: 'Freeze what the model may see, what it must emit, how correctness will be measured, and what WikiSQL can and cannot support before choosing pretrained weights.',
-    outcome: 'Executable guide ready; no reviewed Reference result has been promoted.',
-    evidence: 'My Lab command available · reference evidence remains Not run yet · no model training',
+    outcome: 'The reviewed audit validated all 80,654 WikiSQL questions and safely executed 100 sampled reference queries from each split without failure.',
+    evidence: 'Reference complete · sql-task-dataset-audit-001 · no model training · dataset redistribution still blocked',
     sections: [
     {
       id: 'departure', title: 'Change the learning question after pretraining', body: <>
@@ -78,7 +78,7 @@ export const sqlLessons: RichLesson[] = [
       id: 'run', title: 'Run the audit and keep the evidence local', body: <>
         <Code>{`uv run --no-sync python ml/sql_task_dataset_audit.py`}</Code>
         <p>The program verifies every source hash and structured example, then executes a seeded sample of 100 reference queries from each split. It writes dashboard JSON to <code>public/data/local/sql-task-dataset-audit.json</code> and configuration to <code>work/experiments/sql-task-dataset-audit-001/config.json</code>.</p>
-        <p>Neither output is committed automatically. Reference mode stays blank until a maintainer separately reviews and explicitly promotes a run.</p>
+        <p>Neither output is committed automatically. The displayed Reference result is a separately reviewed, path-sanitised copy; a learner rerun cannot replace it.</p>
         <SqlDatasetAuditPanel />
       </>,
     },
@@ -94,8 +94,8 @@ export const sqlLessons: RichLesson[] = [
     slug: 'base-model-selection',
     title: 'Choose the smallest defensible pretrained base',
     summary: 'Compare pinned, permissively licensed MLX models under one development-only protocol before any task training.',
-    outcome: 'Executable guide ready; learner evidence selects a local base model without opening test.',
-    evidence: 'My Lab command available · two pinned candidates · reference evidence remains Not run yet',
+    outcome: 'The reviewed development-only screen selected pinned Qwen2.5 0.5B Instruct 4-bit from two locally feasible candidates without opening the test split.',
+    evidence: 'Reference complete · sql-base-model-selection-001 · two pinned Apache-2.0 candidates · test unopened',
     sections: [
       { id: 'question', title: 'Turn model choice into a controlled experiment', body: <><p>A larger or more famous model is not automatically the right base. This lesson asks which candidate fits the laptop, follows the restricted output contract and produces the strongest zero-training development result.</p><p>The candidates are pinned MLX conversions of <Source href="https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct">Qwen2.5 0.5B Instruct</Source> and <Source href="https://huggingface.co/HuggingFaceTB/SmolLM2-360M-Instruct">SmolLM2 360M Instruct</Source>. Both upstream model cards record Apache-2.0 licences.</p></> },
       { id: 'boundary', title: 'Keep the final exam sealed', body: <><p>A seeded sample comes only from <code>dev</code>, the development split used for choices. The test file is not loaded. The same questions, compact schema representation, greedy decoding and 96-token limit apply to both models.</p><aside className="lesson-caveat"><strong>Development is for decisions</strong><p>Choosing a model after viewing test accuracy would tune the course to its final exam. That makes the reported test result less trustworthy.</p></aside></> },
@@ -110,8 +110,8 @@ export const sqlLessons: RichLesson[] = [
     slug: 'prompt-formatting',
     title: 'Treat the prompt as a versioned interface',
     summary: 'Hold the base model fixed while comparing three schema serializations that preserve the same information boundary.',
-    outcome: 'Executable guide ready; learner evidence freezes one prompt format without test leakage.',
-    evidence: 'My Lab command available · model held fixed · reference evidence remains Not run yet',
+    outcome: 'The reviewed matched comparison selected the DDL-style schema prompt while holding the model, questions, decoder and information boundary fixed.',
+    evidence: 'Reference complete · sql-prompt-formatting-001 · three prompt styles · test unopened',
     sections: [
       { id: 'inherit', title: 'Inherit the selected model without reopening the choice', body: <><p>Lesson 3 reads Lesson 2&apos;s selected model ID and exact revision. It does not add another candidate or reinterpret the earlier score. This isolates prompt representation as the changed variable.</p><p>The model-specific chat template still wraps every prompt because instruction-tuned models use different control tokens. The semantic content remains matched.</p></> },
       { id: 'three-formats', title: 'Compare three views of the same schema', body: <><table className="lesson-table"><tbody><tr><th>Compact</th><td><code>col0: Player [text] | col1: No. [text]</code></td></tr><tr><th>DDL</th><td>A <code>CREATE TABLE data</code> declaration with original names in comments</td></tr><tr><th>JSON</th><td>Objects containing table, column ID, name and type</td></tr></tbody></table><p>No format contains table rows, a reference query or expected result.</p></> },
@@ -126,8 +126,8 @@ export const sqlLessons: RichLesson[] = [
     slug: 'lora-fine-tuning',
     title: 'Adapt frozen weights through a low-rank path',
     summary: 'Compare the base, a zero-effect random LoRA checkpoint and a bounded trained adapter while test remains closed.',
-    outcome: 'Executable guide ready; learner evidence preserves before and after adapter checkpoints.',
-    evidence: 'My Lab command available · 512 training examples · 100 updates · reference evidence remains Not run yet',
+    outcome: 'The reviewed 100-update LoRA run raised development execution correctness from 2/24 to 6/24; its zero-effect adapter exactly matched the base before training.',
+    evidence: 'Reference complete · sql-lora-fine-tuning-001 · 512 training examples · 1.466M trainable parameters',
     sections: [
       { id: 'why-lora', title: 'Change a small path instead of every base weight', body: <><p><Source href="https://arxiv.org/abs/2106.09685">Low-Rank Adaptation</Source>, or LoRA, freezes each pretrained weight matrix and learns two much smaller matrices whose product adds a task-specific update. The adapter depends on the base; it is not a complete standalone model.</p><p><Source href="https://github.com/ml-explore/mlx-lm/blob/main/mlx_lm/LORA.md">MLX-LM&apos;s LoRA guide</Source> supports this route directly on Apple silicon.</p></> },
       { id: 'before-state', title: 'Save the adapter before it can learn', body: <><p>MLX-LM initializes the first low-rank matrix randomly and the second to zero. Their initial product is therefore zero, so the random adapter should reproduce the base model exactly. The lesson saves and invokes this checkpoint instead of merely assuming the property.</p><p>Any output difference at this point would reveal a configuration or loading error.</p></> },
@@ -142,8 +142,8 @@ export const sqlLessons: RichLesson[] = [
     slug: 'execution-evaluation',
     title: 'Open the test split once and judge returned answers',
     summary: 'Evaluate the frozen base and adapter cohort with restricted parsing, read-only execution and an explicit failure taxonomy.',
-    outcome: 'Executable final lesson ready; learner test evidence closes the English-to-SQL project.',
-    evidence: 'My Lab command available · no post-test selection · reference evidence remains Not run yet',
+    outcome: 'On the frozen 100-example test sample, the trained adapter improved execution correctness from 11 to 36 and valid restricted SQL from 59 to 99, with no post-test selection.',
+    evidence: 'Reference complete · sql-execution-evaluation-001 · base versus frozen adapter · sampled test evidence',
     sections: [
       { id: 'freeze', title: 'Lock every decision before the final run', body: <><p>The model revision, adapter checksum, prompt style, greedy decoder, token limit, evaluator, sample size and seed are written before test examples are loaded. Only the base and trained adapter enter the cohort.</p><p>After observing test results, the command marks <code>noFurtherSelection</code>. A new recipe would require a new development cycle and a separately declared final evaluation.</p></> },
       { id: 'metric', title: 'Make execution primary and exact match diagnostic', body: <><p>Generated output first becomes a checked logical form. Execution accuracy compares its returned rows with the reference query&apos;s rows. Logical-form exact match remains useful for structure, while valid-SQL rate shows whether the model followed the interface at all.</p><p>The dashboard reports counts and a 95% <Term id="wilson-interval">Wilson interval</Term> for each execution proportion. The interval shows how imprecise a 100-example sample is under repeated sampling; it does not remove benchmark bias or turn this sample into a full-test result. Rows are compared without relying on result order because WikiSQL queries do not include <code>ORDER BY</code>.</p></> },

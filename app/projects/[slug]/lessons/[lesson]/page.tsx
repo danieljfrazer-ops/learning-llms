@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/app/components/CourseLink';
 import { notFound } from 'next/navigation';
 import WikiChrome from '@/app/components/WikiChrome';
 import ModelComparison from '@/app/components/ModelComparison';

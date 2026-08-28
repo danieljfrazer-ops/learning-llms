@@ -1,0 +1,34 @@
+{
+  "runId": "tinystories-tokenizer-001",
+  "datasetId": "tinystories-development-v1",
+  "sourceManifestHashes": {
+    "train": "7cc2bc86bf1a11ef1c74531db4fcde2a02da8c1153915f3ffda215ec477026c1",
+    "validation": "5be6ca53915cbad0e42955c619a927cca67237f28d94c16bf858b3f31bee382b"
+  },
+  "tokenizersVersion": "0.23.1",
+  "candidateVocabularySizes": [
+    512,
+    1024,
+    2048,
+    4096
+  ],
+  "specialTokens": [
+    "<pad>",
+    "<unk>",
+    "<bos>",
+    "<eos>"
+  ],
+  "normalisation": "NFKC",
+  "preTokenizer": "ByteLevel(add_prefix_space=False)",
+  "minimumMergeFrequency": 2,
+  "selectionPolicy": {
+    "hardGates": "fixed special-token IDs, zero unknown tokens, and zero NFKC round-trip mismatches on both splits",
+    "smallerCandidateRule": "select the smallest passing candidate with no more than 10% extra validation tokens versus 2,048",
+    "largerCandidateRule": "otherwise select the smallest passing candidate with at least 20% fewer validation tokens versus 2,048",
+    "fallback": "retain 2,048"
+  },
+  "modelWidthProxy": 256,
+  "modelTraining": "none",
+  "selectedVocabularySize": 2048,
+  "selectedTokenizerSha256": "cf8392263a229b36d3206ae8234496d0d197e9d4aa8f10d0e01c83d210de7c6e"
+}

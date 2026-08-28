@@ -29,7 +29,7 @@ export function LocalOnly({ children }: { children: React.ReactNode }) {
 }
 
 export function LocalEvidencePlaceholder({ title }: { title: string }) {
-  return <LocalOnly><div className="local-evidence-placeholder"><strong>Your evidence goes here</strong><p>Run this stage with My Lab selected. The training script writes ignored local results, and the matching dashboard refreshes without altering the published reference evidence. Until then, use the surrounding lesson as the procedure and compare your measurements afterward.</p><small>Waiting for: {title}</small></div></LocalOnly>;
+  return <LocalOnly><div className="local-evidence-placeholder"><strong>Your evidence goes here</strong><p>Clone the repository and run this stage locally. The training script writes ignored results on your machine, and the matching dashboard refreshes without altering published Reference evidence. A visit to the hosted wiki does not train a model or upload your prompts.</p><small>Waiting for: {title}</small></div></LocalOnly>;
 }
 
 export function StageState({ reference }: { reference: string }) {
@@ -40,7 +40,7 @@ export function StageState({ reference }: { reference: string }) {
 export function EvidenceModeToggle() {
   const { mode, setMode } = useEvidenceMode();
   const local = mode === 'local';
-  return <label className="evidence-toggle"><span><strong>{local ? 'My lab' : 'Reference results'}</strong><small>{local ? 'Your runs and blank states' : 'Published course evidence'}</small></span><input type="checkbox" checked={local} onChange={event => setMode(event.target.checked ? 'local' : 'reference')} aria-label="Show my local experiment results" /><i aria-hidden="true" /></label>;
+  return <label className="evidence-toggle"><span><strong>{local ? 'My lab' : 'Reference results'}</strong><small>{local ? 'Your clone, runs and blank states' : 'Published course evidence'}</small></span><input type="checkbox" checked={local} onChange={event => setMode(event.target.checked ? 'local' : 'reference')} aria-label="Show my local experiment results" /><i aria-hidden="true" /></label>;
 }
 
 export function EvidenceMachineCard() {

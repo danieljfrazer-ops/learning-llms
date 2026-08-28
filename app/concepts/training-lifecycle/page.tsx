@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/app/components/CourseLink';
 import WikiChrome from '@/app/components/WikiChrome';
 import { BeginnerOnly } from '@/app/components/BeginnerMode';
 import { LearningVisual } from '@/app/components/LearningVisual';

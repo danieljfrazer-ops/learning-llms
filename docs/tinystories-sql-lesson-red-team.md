@@ -62,7 +62,7 @@ The SQL final evaluation also now reports a 95% Wilson interval beside each exec
 - English → SQL reports a seeded 100-example sample, not the complete WikiSQL test split, and the unresolved redistribution licence remains a publication blocker.
 - Automated surface metrics, failure groups, and intervals support diagnosis but do not measure human usefulness, production security, or broad language understanding.
 - Run contracts describe expected state; the scripts and evidence manifests remain the executable source of truth.
-- English → SQL reference evidence remains unpromoted until a separate maintainer review. Learner-local results must never be copied into the reference mode automatically.
+- English → SQL reference evidence was promoted only after a separate maintainer review. Learner-local results are still never copied into Reference mode automatically.
 
 ## Ongoing quality gate
 

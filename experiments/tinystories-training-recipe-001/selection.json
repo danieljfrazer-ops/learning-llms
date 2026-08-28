@@ -1,0 +1,63 @@
+{
+  "experimentId": "tinystories-training-recipe-001",
+  "selection": {
+    "selectedCandidateId": "cosine-3e-4-to-3e-5",
+    "selectedLabel": "Cosine decay · 3e-4 → 3e-5",
+    "reason": "Lowest validation loss cleared the predeclared improvement threshold",
+    "selectedCheckpointDirectory": "work/experiments/tinystories-training-recipe-001/cosine-3e-4-to-3e-5/checkpoint-0700"
+  },
+  "comparison": {
+    "identicalBatchSequences": true,
+    "comparedBatchesPerCandidate": 100,
+    "startingValidationLossRange": 0.0,
+    "controlValidationLoss": 3.8685277618388216,
+    "lowestObservedValidationLoss": 3.7904150248365402,
+    "lowestObservedCandidateId": "cosine-3e-4-to-3e-5",
+    "improvementOverControl": 0.07811273700228138,
+    "minimumRequiredImprovement": 0.001
+  },
+  "configuration": {
+    "sourceExperimentId": "tinystories-checkpoint-resume-001",
+    "sourceAbsoluteStep": 600,
+    "sourceCheckpointManifestSha256": "f09b14a27c2dc548485d54b39a6f088c54957802ef2582b7f300ca57954f054a",
+    "datasetId": "tinystories-development-v1",
+    "dataHashes": {
+      "train": "7cc2bc86bf1a11ef1c74531db4fcde2a02da8c1153915f3ffda215ec477026c1",
+      "validation": "5be6ca53915cbad0e42955c619a927cca67237f28d94c16bf858b3f31bee382b"
+    },
+    "tokenizerSha256": "cf8392263a229b36d3206ae8234496d0d197e9d4aa8f10d0e01c83d210de7c6e",
+    "vocabularySize": 2048,
+    "contextSize": 128,
+    "batchSize": 32,
+    "modelSize": 256,
+    "attentionHeads": 8,
+    "transformerBlocks": 6,
+    "parameterCount": 5816320,
+    "optimiser": "AdamW",
+    "sourceLearningRate": 0.0003,
+    "weightDecay": 0.01,
+    "updatesPerCandidate": 100,
+    "controlledVariables": [
+      "source model weights",
+      "source AdamW state",
+      "source data-order cursor",
+      "architecture",
+      "dataset and tokenizer",
+      "batch sequence",
+      "weight decay",
+      "update count",
+      "validation protocol",
+      "prompts and generation seeds"
+    ],
+    "changedVariable": "learning-rate policy",
+    "selectionRule": {
+      "metric": "complete held-out validation cross-entropy at step 700",
+      "minimumImprovementOverControl": 0.001,
+      "fallback": "Retain constant 3e-4 control if no candidate clears the threshold"
+    },
+    "lesson7CrossProcessValidationDifference": 3.0084044763789564e-05,
+    "generationSeed": 2042,
+    "generationTokens": 64,
+    "temperature": 0.9
+  }
+}

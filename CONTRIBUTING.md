@@ -19,10 +19,12 @@ Browser-model contributions must preserve checkpoint provenance and compare toke
 ## Validation
 
 ```sh
-python3 ~/.codex/skills/learning-llm-wiki/scripts/audit_beginner_guidance.py
-python3 ~/.codex/skills/learning-llm-wiki/scripts/audit_lesson_visuals.py
+python3 scripts/audit_beginner_guidance.py
+python3 scripts/audit_lesson_visuals.py
 python3 scripts/audit_comparison_evidence.py
+python3 scripts/audit_lesson_engineering_briefs.py
 python3 scripts/audit_public_repo.py
+python3 scripts/audit_git_history.py
 python3 -m compileall -q ml scripts
 npm run lint
 npm run build

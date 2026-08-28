@@ -1,0 +1,48 @@
+{
+  "experimentId": "tinystories-checkpoint-resume-001",
+  "createdAt": "2026-08-22T16:23:44.937143+00:00",
+  "protocolPath": "work/experiments/tinystories-checkpoint-resume-001/protocol.json",
+  "runDir": "work/experiments/tinystories-checkpoint-resume-001",
+  "metricsPath": "public/data/local/tinystories-checkpoints-dashboard.json",
+  "dataDir": "data/raw/tinystories-sample",
+  "tokenizer": "work/experiments/tinystories-tokenizer-001/tokenizer.json",
+  "sourceCheckpoint": "work/experiments/tinystories-first-pretraining-001/checkpoint-0500.safetensors",
+  "configuration": {
+    "sourceRunId": "tinystories-first-pretraining-001",
+    "sourceAbsoluteStep": 500,
+    "sourceCheckpointSha256": "b3b67b52ca6b7f5ff78aa229e59a3f4ad535ec9c29a984ca896ae94d069146e4",
+    "datasetId": "tinystories-development-v1",
+    "dataHashes": {
+      "train": "7cc2bc86bf1a11ef1c74531db4fcde2a02da8c1153915f3ffda215ec477026c1",
+      "validation": "5be6ca53915cbad0e42955c619a927cca67237f28d94c16bf858b3f31bee382b"
+    },
+    "tokenizerSha256": "cf8392263a229b36d3206ae8234496d0d197e9d4aa8f10d0e01c83d210de7c6e",
+    "vocabularySize": 2048,
+    "contextSize": 128,
+    "batchSize": 32,
+    "modelSize": 256,
+    "attentionHeads": 8,
+    "transformerBlocks": 6,
+    "parameterCount": 5816320,
+    "optimiser": "AdamW",
+    "learningRate": 0.0003,
+    "weightDecay": 0.01,
+    "optimizerStateAtSegmentStart": "Freshly initialised; Lesson 6 did not save optimiser state",
+    "dataOrderSeed": 4242,
+    "segmentStartStep": 500,
+    "interruptionStep": 550,
+    "segmentEndStep": 600,
+    "checkpointSchemaVersion": 1,
+    "progressInterval": 10,
+    "numericalTolerances": {
+      "trainBatchLoss": 0.001,
+      "gradientL2Norm": 0.001,
+      "finalWeight": 0.02,
+      "finalOptimizerState": 0.001,
+      "finalValidationLoss": 0.001
+    },
+    "generationSeed": 1042,
+    "generationTokens": 64,
+    "temperature": 0.9
+  }
+}

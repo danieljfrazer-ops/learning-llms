@@ -1,0 +1,93 @@
+{
+  "experimentId": "tinystories-scaling-budget-001",
+  "createdAt": "2026-08-22T19:08:20.267761+00:00",
+  "protocolPath": "work/experiments/tinystories-scaling-budget-001/protocol.json",
+  "runDir": "work/experiments/tinystories-scaling-budget-001",
+  "metricsPath": "public/data/local/tinystories-scaling-budget.json",
+  "dataDir": "data/raw/tinystories-sample",
+  "tokenizer": "work/experiments/tinystories-tokenizer-001/tokenizer.json",
+  "configuration": {
+    "datasetId": "tinystories-development-v1",
+    "dataHashes": {
+      "train": "7cc2bc86bf1a11ef1c74531db4fcde2a02da8c1153915f3ffda215ec477026c1",
+      "validation": "5be6ca53915cbad0e42955c619a927cca67237f28d94c16bf858b3f31bee382b"
+    },
+    "tokenizerSha256": "cf8392263a229b36d3206ae8234496d0d197e9d4aa8f10d0e01c83d210de7c6e",
+    "vocabularySize": 2048,
+    "batchSize": 32,
+    "seed": 42,
+    "batchSeed": 4242,
+    "probeUpdates": 100,
+    "longRunUpdates": 700,
+    "optimiser": "AdamW",
+    "learningRate": 0.0003,
+    "weightDecay": 0.01,
+    "resourceCeilings": {
+      "peakMlxAllocationBytes": 4294967296,
+      "meanUpdateMilliseconds": 250.0
+    },
+    "selectionRule": {
+      "metric": "complete held-out cross-entropy after 100 updates",
+      "minimumImprovementOverReference": 0.01,
+      "fallback": "retain reference architecture"
+    },
+    "recipeEvidence": "tinystories-training-recipe-001"
+  },
+  "candidates": [
+    {
+      "id": "reference",
+      "label": "Reference · 256 wide × 6 blocks",
+      "modelSize": 256,
+      "attentionHeads": 8,
+      "transformerBlocks": 6,
+      "contextSize": 128,
+      "trainingFraction": 1.0,
+      "axis": "control",
+      "parameterCount": 5816320
+    },
+    {
+      "id": "wider",
+      "label": "Wider · 320 wide × 6 blocks",
+      "modelSize": 320,
+      "attentionHeads": 8,
+      "transformerBlocks": 6,
+      "contextSize": 128,
+      "trainingFraction": 1.0,
+      "axis": "width",
+      "parameterCount": 8744448
+    },
+    {
+      "id": "deeper",
+      "label": "Deeper · 256 wide × 8 blocks",
+      "modelSize": 256,
+      "attentionHeads": 8,
+      "transformerBlocks": 8,
+      "contextSize": 128,
+      "trainingFraction": 1.0,
+      "axis": "depth",
+      "parameterCount": 7393792
+    },
+    {
+      "id": "longer-context",
+      "label": "Longer context · 256 wide × 6 blocks",
+      "modelSize": 256,
+      "attentionHeads": 8,
+      "transformerBlocks": 6,
+      "contextSize": 256,
+      "trainingFraction": 1.0,
+      "axis": "context",
+      "parameterCount": 5849088
+    },
+    {
+      "id": "half-data",
+      "label": "Half the training stories · reference model",
+      "modelSize": 256,
+      "attentionHeads": 8,
+      "transformerBlocks": 6,
+      "contextSize": 128,
+      "trainingFraction": 0.5,
+      "axis": "data coverage",
+      "parameterCount": 5816320
+    }
+  ]
+}

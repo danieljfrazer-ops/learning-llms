@@ -1,0 +1,9 @@
+{
+  "runId": "sql-task-dataset-audit-001",
+  "dataset": "WikiSQL 1.1",
+  "archiveSha256": "755c728ab188e364575705c8641f3fafd86fb089cb8b08e8c03f01832aae0881",
+  "seed": 42,
+  "executionSamplePerSplit": 100,
+  "modelTraining": "none",
+  "resultPath": "public/data/local/sql-task-dataset-audit.json"
+}

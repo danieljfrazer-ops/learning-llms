@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "status": "complete",
+  "lesson": "base-model-selection",
+  "protocol": {
+    "runId": "sql-base-model-selection-001",
+    "selectionSplit": "dev",
+    "testSplitOpened": false,
+    "sampleSize": 24,
+    "seed": 20260827,
+    "promptStyle": "compact-v1",
+    "generation": {
+      "decoding": "greedy",
+      "maxNewTokens": 96
+    },
+    "eligibility": "ungated pinned model, permissive recorded licence, valid MLX load, and peak MLX allocation below 8 GiB",
+    "selectionRule": "Among eligible candidates, maximize development execution accuracy; break ties by logical-form exact match, then valid SQL, then lower peak memory, then model id.",
+    "candidates": [
+      {
+        "id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+        "revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+        "license": "Apache-2.0",
+        "upstreamParametersBillions": 0.49,
+        "repositoryBytes": 289601064,
+        "upstreamContextTokens": 32768
+      },
+      {
+        "id": "mlx-community/SmolLM2-360M-Instruct-6bit",
+        "revision": "642affd1f9e387d1b56c745894afc83795aebe1d",
+        "license": "Apache-2.0",
+        "upstreamParametersBillions": 0.36,
+        "repositoryBytes": 298985211,
+        "upstreamContextTokens": 8192
+      }
+    ]
+  },
+  "environment": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "python": "3.12.13",
+    "backend": "MLX"
+  },
+  "results": [
+    {
+      "candidate": {
+        "id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+        "revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+        "license": "Apache-2.0",
+        "upstreamParametersBillions": 0.49,
+        "repositoryBytes": 289601064,
+        "upstreamContextTokens": 32768
+      },
+      "loadSeconds": 0.187923000077717,
+      "peakMemoryBytes": 457569046,
+      "sampleSize": 24,
+      "validSql": 6,
+      "logicalFormExact": 0,
+      "executionCorrect": 0,
+      "meanGenerationSeconds": 0.1648398228668763,
+      "meanPromptTokens": 164.33333333333334,
+      "tokenizerClass": "TokenizerWrapper",
+      "chatTemplateApplied": true,
+      "eligible": true
+    },
+    {
+      "candidate": {
+        "id": "mlx-community/SmolLM2-360M-Instruct-6bit",
+        "revision": "642affd1f9e387d1b56c745894afc83795aebe1d",
+        "license": "Apache-2.0",
+        "upstreamParametersBillions": 0.36,
+        "repositoryBytes": 298985211,
+        "upstreamContextTokens": 8192
+      },
+      "loadSeconds": 124.36761283304077,
+      "peakMemoryBytes": 465710088,
+      "sampleSize": 24,
+      "validSql": 2,
+      "logicalFormExact": 0,
+      "executionCorrect": 0,
+      "meanGenerationSeconds": 0.2715720919513842,
+      "meanPromptTokens": 172.95833333333334,
+      "tokenizerClass": "TokenizerWrapper",
+      "chatTemplateApplied": true,
+      "eligible": true
+    }
+  ],
+  "selectedModel": {
+    "id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+    "revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+    "license": "Apache-2.0",
+    "upstreamParametersBillions": 0.49,
+    "repositoryBytes": 289601064,
+    "upstreamContextTokens": 32768
+  },
+  "selectionEvidence": {
+    "executionCorrect": 0,
+    "logicalFormExact": 0,
+    "validSql": 6,
+    "sampleSize": 24
+  },
+  "limits": [
+    "The seeded development sample is a model-selection screen, not a test-set result.",
+    "The provisional compact prompt is held constant semantically, but each tokenizer applies its model-specific chat template.",
+    "Execution equivalence on one frozen table does not prove universal SQL equivalence or production safety."
+  ],
+  "nextExperiment": "Hold the selected model fixed and compare prompt serializations on a separate frozen development sample."
+}

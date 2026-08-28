@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import Link from './CourseLink';
 import type { ReactNode } from 'react';
 import { glossary } from '@/lib/wiki-data';
 import { useBeginnerMode } from './BeginnerMode';

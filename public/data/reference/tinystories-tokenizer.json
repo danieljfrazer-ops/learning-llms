@@ -1,0 +1,478 @@
+{
+  "status": "Complete",
+  "experimentId": "tinystories-tokenizer-001",
+  "updatedAt": "2026-08-22T14:44:12.335073+00:00",
+  "purpose": "Tokenizer comparison and freeze; no neural-model weights or optimiser updates",
+  "dataset": {
+    "datasetId": "tinystories-development-v1",
+    "trainStories": 1000,
+    "validationStories": 200,
+    "sourceManifestHashes": {
+      "train": "7cc2bc86bf1a11ef1c74531db4fcde2a02da8c1153915f3ffda215ec477026c1",
+      "validation": "5be6ca53915cbad0e42955c619a927cca67237f28d94c16bf858b3f31bee382b"
+    }
+  },
+  "configuration": {
+    "runId": "tinystories-tokenizer-001",
+    "datasetId": "tinystories-development-v1",
+    "sourceManifestHashes": {
+      "train": "7cc2bc86bf1a11ef1c74531db4fcde2a02da8c1153915f3ffda215ec477026c1",
+      "validation": "5be6ca53915cbad0e42955c619a927cca67237f28d94c16bf858b3f31bee382b"
+    },
+    "tokenizersVersion": "0.23.1",
+    "candidateVocabularySizes": [
+      512,
+      1024,
+      2048,
+      4096
+    ],
+    "specialTokens": [
+      "<pad>",
+      "<unk>",
+      "<bos>",
+      "<eos>"
+    ],
+    "normalisation": "NFKC",
+    "preTokenizer": "ByteLevel(add_prefix_space=False)",
+    "minimumMergeFrequency": 2,
+    "selectionPolicy": {
+      "hardGates": "fixed special-token IDs, zero unknown tokens, and zero NFKC round-trip mismatches on both splits",
+      "smallerCandidateRule": "select the smallest passing candidate with no more than 10% extra validation tokens versus 2,048",
+      "largerCandidateRule": "otherwise select the smallest passing candidate with at least 20% fewer validation tokens versus 2,048",
+      "fallback": "retain 2,048"
+    },
+    "modelWidthProxy": 256,
+    "modelTraining": "none",
+    "selectedVocabularySize": 2048,
+    "selectedTokenizerSha256": "cf8392263a229b36d3206ae8234496d0d197e9d4aa8f10d0e01c83d210de7c6e"
+  },
+  "candidates": [
+    {
+      "requestedVocabularySize": 512,
+      "actualVocabularySize": 512,
+      "algorithm": "byte-level BPE with NFKC normalisation and minimum pair frequency 2",
+      "trainedOn": "tinystories-development-v1 training split only",
+      "specialTokens": [
+        "<pad>",
+        "<unk>",
+        "<bos>",
+        "<eos>"
+      ],
+      "specialTokenIds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "trainingSeconds": 0.05562370899133384,
+      "artifact": {
+        "filename": "candidate-512.json",
+        "bytes": 21358,
+        "sha256": "02423d19c6dc7d8ddc900a57e3e9ff8f8a64b5a3139ba21a9be0ecf8388c93c7"
+      },
+      "train": {
+        "stories": 1000,
+        "characters": 839030,
+        "tokens": 361626,
+        "charactersPerToken": 2.320159501805733,
+        "tokensPerStory": {
+          "minimum": 109,
+          "median": 327.0,
+          "mean": 361.626,
+          "p95": 660,
+          "maximum": 1588
+        },
+        "unknownTokens": 0,
+        "nfkcRoundTripMismatches": 0
+      },
+      "validation": {
+        "stories": 200,
+        "characters": 157955,
+        "tokens": 69655,
+        "charactersPerToken": 2.2676764051396168,
+        "tokensPerStory": {
+          "minimum": 161,
+          "median": 336.5,
+          "mean": 348.275,
+          "p95": 486,
+          "maximum": 559
+        },
+        "unknownTokens": 0,
+        "nfkcRoundTripMismatches": 0
+      },
+      "modelCostProxy": {
+        "assumedModelWidth": 256,
+        "tokenEmbeddingParameters": 131072,
+        "outputProjectionParameters": 131584,
+        "totalVocabularyDependentParameters": 262656,
+        "scope": "Exact for the course's untied embedding/output design at this width; not a final architecture parameter count"
+      },
+      "promptPieces": [
+        {
+          "text": "Once upon a time, there was",
+          "tokens": [
+            "Once",
+            "Ġupon",
+            "Ġa",
+            "Ġtime",
+            ",",
+            "Ġthere",
+            "Ġwas"
+          ]
+        },
+        {
+          "text": "Lily found a small blue box",
+          "tokens": [
+            "L",
+            "ily",
+            "Ġf",
+            "ound",
+            "Ġa",
+            "Ġsm",
+            "all",
+            "Ġb",
+            "l",
+            "u",
+            "e",
+            "Ġbo",
+            "x"
+          ]
+        },
+        {
+          "text": "The little dragon wanted to help",
+          "tokens": [
+            "The",
+            "Ġlittle",
+            "Ġd",
+            "ra",
+            "g",
+            "on",
+            "Ġwanted",
+            "Ġto",
+            "Ġhelp"
+          ]
+        }
+      ],
+      "passesIntegrityGates": true
+    },
+    {
+      "requestedVocabularySize": 1024,
+      "actualVocabularySize": 1024,
+      "algorithm": "byte-level BPE with NFKC normalisation and minimum pair frequency 2",
+      "trainedOn": "tinystories-development-v1 training split only",
+      "specialTokens": [
+        "<pad>",
+        "<unk>",
+        "<bos>",
+        "<eos>"
+      ],
+      "specialTokenIds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "trainingSeconds": 0.060555458010639995,
+      "artifact": {
+        "filename": "candidate-1024.json",
+        "bytes": 54498,
+        "sha256": "3f478236534243dd5072b9f59279578c7a0e40bb8655131c5566e270353ed606"
+      },
+      "train": {
+        "stories": 1000,
+        "characters": 839030,
+        "tokens": 272097,
+        "charactersPerToken": 3.0835694623608494,
+        "tokensPerStory": {
+          "minimum": 86,
+          "median": 244.5,
+          "mean": 272.097,
+          "p95": 505,
+          "maximum": 1250
+        },
+        "unknownTokens": 0,
+        "nfkcRoundTripMismatches": 0
+      },
+      "validation": {
+        "stories": 200,
+        "characters": 157955,
+        "tokens": 52165,
+        "charactersPerToken": 3.0279881146362504,
+        "tokensPerStory": {
+          "minimum": 122,
+          "median": 253.5,
+          "mean": 260.825,
+          "p95": 368,
+          "maximum": 429
+        },
+        "unknownTokens": 0,
+        "nfkcRoundTripMismatches": 0
+      },
+      "modelCostProxy": {
+        "assumedModelWidth": 256,
+        "tokenEmbeddingParameters": 262144,
+        "outputProjectionParameters": 263168,
+        "totalVocabularyDependentParameters": 525312,
+        "scope": "Exact for the course's untied embedding/output design at this width; not a final architecture parameter count"
+      },
+      "promptPieces": [
+        {
+          "text": "Once upon a time, there was",
+          "tokens": [
+            "Once",
+            "Ġupon",
+            "Ġa",
+            "Ġtime",
+            ",",
+            "Ġthere",
+            "Ġwas"
+          ]
+        },
+        {
+          "text": "Lily found a small blue box",
+          "tokens": [
+            "Lily",
+            "Ġfound",
+            "Ġa",
+            "Ġsmall",
+            "Ġbl",
+            "ue",
+            "Ġbox"
+          ]
+        },
+        {
+          "text": "The little dragon wanted to help",
+          "tokens": [
+            "The",
+            "Ġlittle",
+            "Ġd",
+            "ra",
+            "g",
+            "on",
+            "Ġwanted",
+            "Ġto",
+            "Ġhelp"
+          ]
+        }
+      ],
+      "passesIntegrityGates": true
+    },
+    {
+      "requestedVocabularySize": 2048,
+      "actualVocabularySize": 2048,
+      "algorithm": "byte-level BPE with NFKC normalisation and minimum pair frequency 2",
+      "trainedOn": "tinystories-development-v1 training split only",
+      "specialTokens": [
+        "<pad>",
+        "<unk>",
+        "<bos>",
+        "<eos>"
+      ],
+      "specialTokenIds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "trainingSeconds": 0.07462225001654588,
+      "artifact": {
+        "filename": "candidate-2048.json",
+        "bytes": 124030,
+        "sha256": "cf8392263a229b36d3206ae8234496d0d197e9d4aa8f10d0e01c83d210de7c6e"
+      },
+      "train": {
+        "stories": 1000,
+        "characters": 839030,
+        "tokens": 228867,
+        "charactersPerToken": 3.6660156335338865,
+        "tokensPerStory": {
+          "minimum": 77,
+          "median": 206.0,
+          "mean": 228.867,
+          "p95": 431,
+          "maximum": 1034
+        },
+        "unknownTokens": 0,
+        "nfkcRoundTripMismatches": 0
+      },
+      "validation": {
+        "stories": 200,
+        "characters": 157955,
+        "tokens": 44077,
+        "charactersPerToken": 3.5836150373210516,
+        "tokensPerStory": {
+          "minimum": 105,
+          "median": 216.0,
+          "mean": 220.385,
+          "p95": 303,
+          "maximum": 368
+        },
+        "unknownTokens": 0,
+        "nfkcRoundTripMismatches": 0
+      },
+      "modelCostProxy": {
+        "assumedModelWidth": 256,
+        "tokenEmbeddingParameters": 524288,
+        "outputProjectionParameters": 526336,
+        "totalVocabularyDependentParameters": 1050624,
+        "scope": "Exact for the course's untied embedding/output design at this width; not a final architecture parameter count"
+      },
+      "promptPieces": [
+        {
+          "text": "Once upon a time, there was",
+          "tokens": [
+            "Once",
+            "Ġupon",
+            "Ġa",
+            "Ġtime",
+            ",",
+            "Ġthere",
+            "Ġwas"
+          ]
+        },
+        {
+          "text": "Lily found a small blue box",
+          "tokens": [
+            "Lily",
+            "Ġfound",
+            "Ġa",
+            "Ġsmall",
+            "Ġblue",
+            "Ġbox"
+          ]
+        },
+        {
+          "text": "The little dragon wanted to help",
+          "tokens": [
+            "The",
+            "Ġlittle",
+            "Ġdragon",
+            "Ġwanted",
+            "Ġto",
+            "Ġhelp"
+          ]
+        }
+      ],
+      "passesIntegrityGates": true
+    },
+    {
+      "requestedVocabularySize": 4096,
+      "actualVocabularySize": 4096,
+      "algorithm": "byte-level BPE with NFKC normalisation and minimum pair frequency 2",
+      "trainedOn": "tinystories-development-v1 training split only",
+      "specialTokens": [
+        "<pad>",
+        "<unk>",
+        "<bos>",
+        "<eos>"
+      ],
+      "specialTokenIds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "trainingSeconds": 0.0955725829990115,
+      "artifact": {
+        "filename": "candidate-4096.json",
+        "bytes": 265684,
+        "sha256": "6bb217792013eda896d4f705740eee025049c10d82065f20ef4491494e76744f"
+      },
+      "train": {
+        "stories": 1000,
+        "characters": 839030,
+        "tokens": 207859,
+        "charactersPerToken": 4.036534381479753,
+        "tokensPerStory": {
+          "minimum": 74,
+          "median": 187.0,
+          "mean": 207.859,
+          "p95": 402,
+          "maximum": 941
+        },
+        "unknownTokens": 0,
+        "nfkcRoundTripMismatches": 0
+      },
+      "validation": {
+        "stories": 200,
+        "characters": 157955,
+        "tokens": 40449,
+        "charactersPerToken": 3.9050409157210315,
+        "tokensPerStory": {
+          "minimum": 85,
+          "median": 196.0,
+          "mean": 202.245,
+          "p95": 276,
+          "maximum": 341
+        },
+        "unknownTokens": 0,
+        "nfkcRoundTripMismatches": 0
+      },
+      "modelCostProxy": {
+        "assumedModelWidth": 256,
+        "tokenEmbeddingParameters": 1048576,
+        "outputProjectionParameters": 1052672,
+        "totalVocabularyDependentParameters": 2101248,
+        "scope": "Exact for the course's untied embedding/output design at this width; not a final architecture parameter count"
+      },
+      "promptPieces": [
+        {
+          "text": "Once upon a time, there was",
+          "tokens": [
+            "Once",
+            "Ġupon",
+            "Ġa",
+            "Ġtime",
+            ",",
+            "Ġthere",
+            "Ġwas"
+          ]
+        },
+        {
+          "text": "Lily found a small blue box",
+          "tokens": [
+            "Lily",
+            "Ġfound",
+            "Ġa",
+            "Ġsmall",
+            "Ġblue",
+            "Ġbox"
+          ]
+        },
+        {
+          "text": "The little dragon wanted to help",
+          "tokens": [
+            "The",
+            "Ġlittle",
+            "Ġdragon",
+            "Ġwanted",
+            "Ġto",
+            "Ġhelp"
+          ]
+        }
+      ],
+      "passesIntegrityGates": true
+    }
+  ],
+  "decision": {
+    "selectedVocabularySize": 2048,
+    "selectedTokenizer": "tokenizer.json",
+    "selectedTokenizerSha256": "cf8392263a229b36d3206ae8234496d0d197e9d4aa8f10d0e01c83d210de7c6e",
+    "rationale": "Retain 2,048: smaller candidates cost more than 10% extra validation tokens and larger candidates save less than 20%",
+    "scope": "Frozen for the next TinyStories batching and development-model lessons; revisit if the training corpus is scaled or normalisation changes"
+  },
+  "elapsedSeconds": 1.069067291013198,
+  "environment": {
+    "operatingSystem": "macOS-26.6.2-arm64-arm-64bit",
+    "architecture": "arm64",
+    "python": "3.12.13",
+    "tokenizers": "0.23.1"
+  },
+  "limitations": [
+    "Tokenizer compression and vocabulary-dependent parameter cost do not measure downstream language-model quality.",
+    "The selected vocabulary is fitted to a 1,000-story development sample and must be reconsidered for a larger final corpus.",
+    "The 10% and 20% selection thresholds express a documented course preference, not a universal optimum.",
+    "The 256-wide model-cost proxy is not the final architecture parameter count.",
+    "NFKC normalisation can erase distinctions that matter in other languages or tasks."
+  ]
+}

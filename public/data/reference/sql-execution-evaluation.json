@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "status": "complete",
+  "lesson": "execution-evaluation",
+  "protocol": {
+    "runId": "sql-execution-evaluation-001",
+    "split": "test",
+    "openedOnlyAfterSelectionAndTraining": true,
+    "sampleSize": 100,
+    "seed": 20260830,
+    "model": {
+      "id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+      "revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+      "license": "Apache-2.0",
+      "upstreamParametersBillions": 0.49,
+      "repositoryBytes": 289601064,
+      "upstreamContextTokens": 32768
+    },
+    "modelPath": "<HOME>/.cache/huggingface/hub/models--mlx-community--Qwen2.5-0.5B-Instruct-4bit/snapshots/a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+    "trainedAdapterPath": "work/experiments/sql-lora-fine-tuning-001/trained-adapter",
+    "trainedAdapterSha256": "d0cd78550957cff43984160079df4c6ab62240d6eed525df636eecde619a3b2a",
+    "promptStyle": "ddl",
+    "maxTokens": 96,
+    "decoding": "greedy",
+    "primaryMetric": "execution accuracy",
+    "secondaryMetrics": [
+      "logical-form exact match",
+      "valid restricted SQL",
+      "failure taxonomy",
+      "latency",
+      "peak MLX allocation"
+    ],
+    "noFurtherSelection": true
+  },
+  "cohort": [
+    {
+      "checkpoint": "base",
+      "sampleSize": 100,
+      "validSql": 59,
+      "logicalFormExact": 2,
+      "executionCorrect": 11,
+      "meanGenerationSeconds": 0.17503351875464432,
+      "peakMemoryBytes": 527267570,
+      "failureGroups": {
+        "invalid restricted SQL": 41,
+        "wrong selected column": 28,
+        "wrong aggregation": 9,
+        "wrong condition column, operator, or value": 6,
+        "wrong condition count": 5
+      }
+    },
+    {
+      "checkpoint": "trained-adapter",
+      "sampleSize": 100,
+      "validSql": 99,
+      "logicalFormExact": 21,
+      "executionCorrect": 36,
+      "meanGenerationSeconds": 0.17492221829132176,
+      "peakMemoryBytes": 604148108,
+      "failureGroups": {
+        "wrong selected column": 31,
+        "wrong condition column, operator, or value": 21,
+        "wrong aggregation": 8,
+        "invalid restricted SQL": 1,
+        "wrong condition count": 3
+      }
+    }
+  ],
+  "comparison": {
+    "executionCorrectDelta": 25,
+    "exactMatchDelta": 19,
+    "validSqlDelta": 40
+  },
+  "limits": [
+    "The result estimates behavior on a seeded 100-example test sample, not all WikiSQL test examples.",
+    "WikiSQL contains restricted single-table queries and does not establish behavior on joins, nested queries, private schemas, or adversarial prompts.",
+    "Generated text is parsed into an allowlisted logical form and rebuilt as parameterized SQL; it is never sent directly to SQLite.",
+    "No further model, prompt, or checkpoint selection is permitted after observing this test result."
+  ],
+  "projectConclusion": "The complete course path now contrasts random-weight pretraining with parameter-efficient adaptation and execution-grounded evaluation."
+}

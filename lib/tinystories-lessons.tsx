@@ -191,8 +191,8 @@ export const tinyStoriesLessons: RichLesson[] = [
     slug: 'tokenizer-experiment',
     title: 'Compare and freeze the subword tokenizer',
     summary: 'Train four byte-level BPE vocabularies on the same frozen stories, test representation integrity and sequence compression on held-out stories, expose model-interface cost, and use a declared rule to select one tokenizer.',
-    outcome: 'The completed My Lab run compared four vocabularies and selected 2,048 pieces: smaller candidates exceeded the allowed validation-token penalty, while 4,096 saved less than the required 20%. Reference promotion remains a separate review.',
-    evidence: 'My Lab complete · tinystories-tokenizer-001 · four candidate vocabularies · no neural-model updates',
+    outcome: 'The reviewed run compared four vocabularies and selected 2,048 pieces: smaller candidates exceeded the allowed validation-token penalty, while 4,096 saved less than the required 20%.',
+    evidence: 'Reference complete · tinystories-tokenizer-001 · four candidate vocabularies · no neural-model updates',
     sections: [
       {
         id: 'question', title: 'Why can the tokenizer change the model experiment?', body: <>
@@ -271,7 +271,7 @@ validation_metrics = evaluate_split(tokenizer, validation_rows)`}</Code>
     title: 'Build causal batches without mixing stories',
     summary: 'Turn differently sized tokenised stories into fixed 32 × 128 input, target, and loss-mask tensors while preserving every legitimate next-token pair and excluding padding.',
     outcome: 'The completed My Lab run preserved all 229,867 legitimate training targets with zero cross-story targets. Story isolation used 78.4% of tensor positions; naïve concatenation reached 100.0% by introducing 999 false boundaries.',
-    evidence: 'My Lab complete · tinystories-batching-001 · story-isolated windows · no model or optimiser updates',
+    evidence: 'Reference complete · tinystories-batching-001 · story-isolated windows · no model or optimiser updates',
     sections: [
       {
         id: 'why-batching', title: 'Why does the model need batches?', body: <>
@@ -340,7 +340,7 @@ validation_metrics = evaluate_split(tokenizer, validation_rows)`}</Code>
     title: 'Freeze and invoke the random GPT baseline',
     summary: 'Select the smallest architecture inside the declared 5–15M range, materialise seeded random weights, evaluate every frozen validation window, inspect prompt probabilities, and prove checkpoint-zero reload parity before training.',
     outcome: 'The completed My Lab run materialised the 5,816,320-parameter GPT, measured 7.7524 complete-validation loss before training, and proved exact checkpoint-zero reload behaviour.',
-    evidence: 'My Lab complete · tinystories-random-baseline-001 · checkpoint step 0 · zero optimiser updates',
+    evidence: 'Reference complete · tinystories-random-baseline-001 · checkpoint step 0 · zero optimiser updates',
     sections: [
       {
         id: 'why-baseline', title: 'Why freeze an official random baseline?', body: <>
@@ -419,7 +419,7 @@ validation_metrics = evaluate_split(tokenizer, validation_rows)`}</Code>
     title: 'Run the first TinyStories pretraining journey',
     summary: 'Load the exact checkpoint-zero control, add masked gradients and AdamW, traverse shuffled training windows, and preserve the model at seven stages so numerical and visible learning can be inspected together.',
     outcome: 'The completed My Lab run applied 500 optimiser updates from the frozen random baseline. Complete-validation loss fell from 7.7524 to 3.8068 while seven staged checkpoints retained the behavioural path.',
-    evidence: 'My Lab complete · tinystories-first-pretraining-001 · 500 updates · seven staged checkpoints',
+    evidence: 'Reference complete · tinystories-first-pretraining-001 · 500 updates · seven staged checkpoints',
     sections: [
       {
         id: 'meaning', title: 'What does “pretraining” mean in this small experiment?', body: <>
@@ -497,7 +497,7 @@ mx.eval(model.parameters(), optimiser.state)`}</Code>
     title: 'Make training resumable and observable',
     summary: 'Replace weight-only milestones with a four-part checkpoint, reconstruct training in a fresh process, compare it with an uninterrupted control, and expose live operational metrics without confusing them with evaluation.',
     outcome: 'The completed My Lab run saved and reloaded full training state at step 550. All 50 subsequent batches matched; fresh-process arithmetic was not bitwise identical but stayed within the declared parity tolerances.',
-    evidence: 'My Lab complete · tinystories-checkpoint-resume-001 · steps 500→600 · fresh-process restart at step 550',
+    evidence: 'Reference complete · tinystories-checkpoint-resume-001 · steps 500→600 · fresh-process restart at step 550',
     sections: [
       {
         id: 'reliability-question', title: 'Why is a weight file not yet a training save?', body: <>
@@ -579,7 +579,7 @@ optimiser.state = tree_unflatten(mx.load("optimizer.safetensors"))`}</Code>
     title: 'Scale within the laptop budget',
     summary: 'Measure how width, depth, context and story coverage trade learning against memory and time, then commit the laptop to one evidence-selected 700-update run.',
     outcome: 'The 5.82M-parameter reference learned fastest in the 100-update screen. Larger models did not clear the quality threshold, context 256 exceeded the speed ceiling, and the selected fresh 700-update run reached 3.8216 validation loss.',
-    evidence: 'Complete · tinystories-scaling-budget-001 · 5 × 100-update probes + 1 × 700-update selected run · learner-local evidence only',
+    evidence: 'Reference complete · tinystories-scaling-budget-001 · 5 × 100-update probes + 1 × 700-update selected run',
     sections: [
       {
         id: 'budget-question', title: 'Treat scaling as a budget allocation problem', body: <>
@@ -645,7 +645,7 @@ optimiser.state = tree_unflatten(mx.load("optimizer.safetensors"))`}</Code>
     title: 'Improve the training recipe',
     summary: 'Branch one complete step-600 checkpoint into three matched 100-update continuations, change only learning-rate policy, and select with a threshold fixed before seeing validation results.',
     outcome: 'Cosine decay improved complete held-out loss from the shared 3.8312 start to 3.7904, beating the constant-rate control by 0.0781 while all 100 batch identities matched.',
-    evidence: 'Complete · tinystories-training-recipe-001 · 3 × 100 updates · selected checkpoint 700 · reference evidence intentionally unpromoted',
+    evidence: 'Reference complete · tinystories-training-recipe-001 · 3 × 100 updates · selected checkpoint 700',
     sections: [
       {
         id: 'recipe-question', title: 'Ask whether the correction size—not the model—is now the problem', body: <>
@@ -674,7 +674,7 @@ optimiser.state = tree_unflatten(mx.load("optimizer.safetensors"))`}</Code>
       },
       {
         id: 'schedule-mechanism', title: 'Turn one fixed number into a learning-rate schedule', body: <>
-          <p>A <Term id="learning-rate-schedule">learning-rate schedule</Term> supplies a rate for each update instead of using one constant. MLX exposes both optimiser schedules and mutable optimiser learning-rate state in its <Source href="https://ml-explore.github.io/mlx/build/html/python/optimizers/schedules.html">official schedule API</Source>. Because this experiment restores an existing optimiser step, the script explicitly calculates the segment-relative rate before each update and assigns it to the loaded AdamW state.</p>
+          <p>A <Term id="learning-rate-schedule">learning-rate schedule</Term> supplies a rate for each update instead of using one constant. MLX exposes schedulers such as cosine decay and mutable optimiser learning-rate state in its <Source href="https://ml-explore.github.io/mlx/build/html/python/optimizers.html">official optimiser API</Source>. Because this experiment restores an existing optimiser step, the script explicitly calculates the segment-relative rate before each update and assigns it to the loaded AdamW state.</p>
           <Code>{`progress = (segment_update - 1) / 99
 rate = end + 0.5 * (start - end) * (1 + cos(pi * progress))
 optimiser.learning_rate = rate

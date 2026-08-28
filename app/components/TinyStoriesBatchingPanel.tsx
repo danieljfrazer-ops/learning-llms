@@ -77,6 +77,6 @@ export default function TinyStoriesBatchingPanel() {
         <article><strong>Frozen boundary</strong><p>{evidence.decision.scope}. {evidence.decision.tradeoff}.</p></article>
       </div>
       <p className="evaluation-foot">Batching audit runtime: {evidence.elapsedSeconds.toFixed(2)} seconds. This stage performed no model forward pass or weight update.</p>
-    </> : <p className="evaluation-foot">Run the sequence-batching command in My Lab to populate this panel. Reference mode stays blank until a maintainer separately reviews and promotes course evidence.</p>}
+    </> : <p className="evaluation-foot">Run the sequence-batching command in My Lab to populate this panel. Published Reference evidence is maintained separately.</p>}
   </section>;
 }

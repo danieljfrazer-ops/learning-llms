@@ -1,0 +1,30 @@
+{
+  "runId": "sql-execution-evaluation-001",
+  "split": "test",
+  "openedOnlyAfterSelectionAndTraining": true,
+  "sampleSize": 100,
+  "seed": 20260830,
+  "model": {
+    "id": "mlx-community/Qwen2.5-0.5B-Instruct-4bit",
+    "revision": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+    "license": "Apache-2.0",
+    "upstreamParametersBillions": 0.49,
+    "repositoryBytes": 289601064,
+    "upstreamContextTokens": 32768
+  },
+  "modelPath": "<HOME>/.cache/huggingface/hub/models--mlx-community--Qwen2.5-0.5B-Instruct-4bit/snapshots/a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+  "trainedAdapterPath": "work/experiments/sql-lora-fine-tuning-001/trained-adapter",
+  "trainedAdapterSha256": "d0cd78550957cff43984160079df4c6ab62240d6eed525df636eecde619a3b2a",
+  "promptStyle": "ddl",
+  "maxTokens": 96,
+  "decoding": "greedy",
+  "primaryMetric": "execution accuracy",
+  "secondaryMetrics": [
+    "logical-form exact match",
+    "valid restricted SQL",
+    "failure taxonomy",
+    "latency",
+    "peak MLX allocation"
+  ],
+  "noFurtherSelection": true
+}
