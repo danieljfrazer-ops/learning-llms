@@ -14,14 +14,17 @@ Status date: 28 August 2026. This report describes the prepared working tree; it
 - The Cloudflare runbook now matches the actual Workers + static-assets build instead of describing a Pages-only deployment.
 - The production build removes any ignored `public/data/local/` copies from `dist`, preventing a maintainer's My Lab evidence or prompts from entering a deploy artifact.
 - Internal course links use durable document navigation because rendered QA found errors in Vinext beta's client prefetch/router path; this trades speculative transitions for reliable deep links and back/forward navigation.
+- A clean clone on 32 GB Apple silicon completed dependency setup, the verified Tiny Shakespeare download, a real 400-step bigram run, all course audits, lint, and a production build. Linux remains unverified rather than being implied by that result.
+- All 52 unique external links resolved during the release-candidate check. Desktop, mobile, local, and public-like hosted states were rendered and smoke-tested, including the SQL evidence view and disabled hosted playground controls.
+- The Next, React, Vinext, Vite, Cloudflare, and Wrangler dependency set was upgraded together; a clean `npm ci` and `npm audit --audit-level=low` now report zero known vulnerabilities. ESLint remains on its compatible 9.x line because the React lint plugin in the current Next release fails under ESLint 10.
 
 ## Deliberate release blockers
 
 1. **Owner choices:** public display name, GitHub username/repository slug, source/course licence, whether public issues and pull requests are welcome, and `workers.dev` versus a purchased custom domain.
 2. **Browser Shakespeare:** export selected checkpoints, publish manifests/checksums, implement WebAssembly-compatible inference off the main thread, and prove tokenizer/logit/greedy parity with MLX.
 3. **Legal review:** decide the licence scope for original code and course prose; keep WikiSQL itself unredistributed; confirm whether derived Shakespeare/TinyStories weights may be distributed.
-4. **Independent clean-clone QA:** test the Apple path and at least one Linux path before changing “available” to “verified”; record timings and disk use.
-5. **Final security and UX QA:** supplement the repository's high-confidence history audit with an independent maintained secret scanner, then run an external-link check, accessibility/keyboard/responsive/reduced-motion pass, production preview smoke test, and rollback rehearsal.
+4. **Remaining platform QA:** test at least one Linux path before changing Linux from “available” to “verified”; record timings and disk use.
+5. **Final security and UX QA:** supplement the repository's high-confidence history audit with an independent maintained secret scanner, then complete accessibility/keyboard/reduced-motion QA and a production rollback rehearsal.
 
 `python3 scripts/audit_public_repo.py` enforces preparation invariants. `python3 scripts/audit_public_repo.py --release` intentionally fails until the licence and browser-model manifest exist.
 

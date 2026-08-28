@@ -9,7 +9,7 @@ LearningLLMs is both:
 
 The course starts with a 4,225-weight character model rather than a downloaded black box. It then adds training, context, self-attention, a complete transformer, controlled evaluation, local prompting, optimisation experiments, scaling, and multi-seed confirmation. Later projects move to subword pretraining and parameter-efficient fine-tuning.
 
-> Repository status: all three core projects and their reviewed reference dashboards are complete. Public release is still blocked by the owner&apos;s licence/identity decisions, clean-clone platform testing, and the browser-executable Shakespeare parity gate. No GitHub remote or public Cloudflare deployment has been created yet.
+> Repository status: all three core projects and their reviewed reference dashboards are complete. The Apple-silicon clean-clone path is verified; public release is still blocked by the owner&apos;s licence/identity decisions, Linux clean-clone testing, and the browser-executable Shakespeare parity gate. No GitHub remote or public Cloudflare deployment has been created yet.
 
 ## What you will learn
 
@@ -224,4 +224,4 @@ After the three core projects, open the wiki’s **Continue yourself** page or r
 
 ## Before public release
 
-This repository still needs an explicit licence choice, a final full-history secret scan, clean-clone testing on each hardware path described as verified, dataset-terms review, accessibility QA, and a browser-executable Shakespeare export proven equivalent to the MLX model. Run `python3 scripts/audit_public_repo.py` during preparation and `python3 scripts/audit_public_repo.py --release` for the owner-decision and browser-artifact gates. GitHub and the public Cloudflare wiki will be released from one reviewed candidate under the [coordinated publication plan](docs/publishing-github-and-cloudflare.md). No remote repository, public site, or deployment is created by the current setup work.
+This repository still needs an explicit licence choice, an independent maintained secret-scanner pass, Linux clean-clone testing, dataset-terms review, accessibility QA, and a browser-executable Shakespeare export proven equivalent to the MLX model. The Apple-silicon clean-clone path and the repository's full-history credential audit have passed. Run `python3 scripts/audit_public_repo.py` during preparation and `python3 scripts/audit_public_repo.py --release` for the owner-decision and browser-artifact gates. GitHub and the public Cloudflare wiki will be released from one reviewed candidate under the [coordinated publication plan](docs/publishing-github-and-cloudflare.md). No remote repository, public site, or deployment is created by the current setup work.
