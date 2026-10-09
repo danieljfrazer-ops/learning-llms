@@ -4,12 +4,12 @@ version = "0.1.0"
 description = "Small language-model experiments explained by a living wiki"
 requires-python = ">=3.12,<3.14"
 dependencies = [
-  "mlx-lm[train]==0.31.3",
-  "tokenizers==0.23.1",
+  "mlx-lm[train]==0.32.0",
+  "tokenizers==0.23.2",
 ]
 
 [project.optional-dependencies]
-apple = ["mlx==0.32.0; sys_platform == 'darwin' and platform_machine == 'arm64'"]
+apple = ["mlx==0.32.3; sys_platform == 'darwin' and platform_machine == 'arm64'"]
 linux-cpu = ["mlx[cpu]==0.32.0; sys_platform == 'linux'"]
 linux-cuda12 = ["mlx[cuda12]==0.32.0; sys_platform == 'linux'"]
 linux-cuda13 = ["mlx[cuda13]==0.32.0; sys_platform == 'linux'"]
@@ -18,4 +18,4 @@ linux-cuda13 = ["mlx[cuda13]==0.32.0; sys_platform == 'linux'"]
 package = false
 
 [dependency-groups]
-export = ["onnx==1.22.0"]
+export = ["onnx==1.23.2"]
